@@ -34,4 +34,12 @@
 #
 ###############################################################################
 
-# Currently nothing are here :)
+#
+# Java ignores
+#
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
