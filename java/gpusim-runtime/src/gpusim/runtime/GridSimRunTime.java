@@ -136,6 +136,7 @@ public class GridSimRunTime {
         // Total configuration
         //
         GridSimConfig config = new GridSimConfig();
+        config.setLinkBaudRate(560.0f);
         config.setName("GridSimRunTime test configuration");
         config.setResources(resources);
         config.setGridlets(gridlets);
@@ -223,7 +224,7 @@ public class GridSimRunTime {
     public void createUser() throws Exception {
         printRuntimeMessage("Creating user");
 
-        _gpuSimUser = new GpuSimUser(_gridlets);
+        _gpuSimUser = new GpuSimUser(_config.getLinkBaudRate(), _gridlets);
 
         printRuntimeMessage("User created");
     }

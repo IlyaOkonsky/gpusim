@@ -7,14 +7,13 @@ import java.util.LinkedList;
 
 public class GpuSimUser extends GridSim {
     public static final String GPUSIM_USER_NAME = "GpuSimUser";
-    public static final double GPUSIM_LINK_BAUD_RATE = 560.00;
 
     private int _gpuSimUserID;
     private LinkedList<Integer> _resourcesIDs;
     private GridletList _gridlets;
 
-    public GpuSimUser(GridletList gridlets) throws Exception {
-        super(GPUSIM_USER_NAME, GPUSIM_LINK_BAUD_RATE);
+    public GpuSimUser(double linkBaudRate, GridletList gridlets) throws Exception {
+        super(GPUSIM_USER_NAME, linkBaudRate);
         
         _gpuSimUserID = GridSim.getEntityId(GPUSIM_USER_NAME);
         _gridlets = gridlets;
