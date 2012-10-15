@@ -34,7 +34,6 @@
 #
 ###############################################################################
 
-# Currently nothing are here :)
-GridSim_stat.txt
-sim_report
-sim_trace
+# Ignore Experiments directory
+#
+Experiments/
