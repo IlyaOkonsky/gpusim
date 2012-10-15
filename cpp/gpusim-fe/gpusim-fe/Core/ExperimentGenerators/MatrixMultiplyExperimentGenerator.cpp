@@ -8,23 +8,10 @@ using namespace Core::GridSimConfig;
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Private constants
 const QString CMatrixMultiplyExperimentGenerator::c_genName           = QString("Matrix multiply Experiment Generator");
-const QString CMatrixMultiplyExperimentGenerator::c_expDirNameFormat  = QString("MME_#%1_[%2; %3]_Inc_%4");
-const QString CMatrixMultiplyExperimentGenerator::c_expNameFormat     = QString("Matrix Multiply Experiment (Size %1, Block size [%2; %3], Increment %4)");
-const QString CMatrixMultiplyExperimentGenerator::c_simNameFormat     = QString("Sim #%1(BlockSize %2)");
+const QString CMatrixMultiplyExperimentGenerator::c_expDirNameFormat  = QString("MME_[%1; %2]_Inc_%3_Block_%4");
+const QString CMatrixMultiplyExperimentGenerator::c_expNameFormat     = QString("Matrix Multiply Experiment (Size [%1; %2], Increment %3, Block size %4)");
+const QString CMatrixMultiplyExperimentGenerator::c_simNameFormat     = QString("Sim #%1(Size %2)");
 const QString CMatrixMultiplyExperimentGenerator::c_configPostfix     = QString(".config");
-
-const quint32 CMatrixMultiplyExperimentGenerator::c_cpuMachinePECount  = 8;
-const quint32 CMatrixMultiplyExperimentGenerator::c_cpuMachinePERating = 100;
-const quint32 CMatrixMultiplyExperimentGenerator::c_gpuMachinePECount  = 128;
-const quint32 CMatrixMultiplyExperimentGenerator::c_gpuMachinePERating = 20;
-
-const QString CMatrixMultiplyExperimentGenerator::c_resourceArch       = QString("Matrix Multiply Experiment Arch");
-const QString CMatrixMultiplyExperimentGenerator::c_resourceOS         = QString("Matrix Multiply Experiment OS");
-const double  CMatrixMultiplyExperimentGenerator::c_resourceBaudRate   = 10000000000.0f; // (10 Gbps)
-const double  CMatrixMultiplyExperimentGenerator::c_resourceCostPerSec = 1.0f; // default cost?
-
-const double  CMatrixMultiplyExperimentGenerator::c_loadOperationCost  = 10.0f;
-const double  CMatrixMultiplyExperimentGenerator::c_saveOperationCost  = 100.0f;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -32,15 +19,19 @@ const double  CMatrixMultiplyExperimentGenerator::c_saveOperationCost  = 100.0f;
 ////////////////////////////////////////////////////////////////////////// 
 
 #pragma region Constructor
-CMatrixMultiplyExperimentGenerator::CMatrixMultiplyExperimentGenerator(quint64 matrixSize, quint64 minBlockSize,
-    quint64 maxBlockSize, quint64 blockSizeIncrement /*= 1*/)
-    : IExperimentGenerator("Matrix multiply Experiment Generator"), m_matrixSize(matrixSize),
-    m_minBlockSize(minBlockSize), m_maxBlockSize(maxBlockSize), m_blockSizeIncrement(blockSizeIncrement)
+CMatrixMultiplyExperimentGenerator::CMatrixMultiplyExperimentGenerator(
+    const Settings::CMatrixMultiplyExperimentGeneratorSettings &settings,
+    quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement, quint64 blockSize)
+    : IExperimentGenerator(c_genName), m_settings(settings), m_minMatrixSize(minMatrixSize),
+    m_maxMatrixSize(maxMatrixSize), m_matrixSizeIncrement(matrixSizeIncrement), m_blockSize(blockSize)
+
 {
-    Q_ASSERT(m_minBlockSize >= 2);
-    Q_ASSERT(m_maxBlockSize <= m_matrixSize / 2);
-    Q_ASSERT(m_minBlockSize <= maxBlockSize);
-    Q_ASSERT(blockSizeIncrement > 0);
+    Q_ASSERT(m_minMatrixSize >= 2);
+    Q_ASSERT(m_maxMatrixSize <= 5000);
+    Q_ASSERT(m_minMatrixSize <= m_maxMatrixSize);
+    Q_ASSERT(m_matrixSizeIncrement > 0);
+    Q_ASSERT(m_blockSize >= m_minMatrixSize);
+    Q_ASSERT(m_blockSize <= m_maxMatrixSize);
 }
 #pragma endregion
 
@@ -49,29 +40,21 @@ CMatrixMultiplyExperimentGenerator::CMatrixMultiplyExperimentGenerator(quint64 m
 #pragma region Experiment generation
 CExperiment CMatrixMultiplyExperimentGenerator::generate()
 {
-    // Short large matrix size with add k postfix
-    //
-    QString sMatrixSize;
-    if (m_matrixSize <= 1000)
-        sMatrixSize = QString::number(m_matrixSize);
-    else
-        sMatrixSize = QString("%1k").arg(QString::number(m_matrixSize));
-
     // Build experiment name and directory name
     //
-    QString expDirName = c_expDirNameFormat.arg(sMatrixSize, QString::number(m_minBlockSize),
-        QString::number(m_maxBlockSize), QString::number(m_blockSizeIncrement));
-    QString expName = c_expNameFormat.arg(sMatrixSize, QString::number(m_minBlockSize), QString::number(m_maxBlockSize),
-        QString::number(m_blockSizeIncrement));
+    QString expDirName = c_expDirNameFormat.arg(getMatrixSizeString(m_minMatrixSize),
+        getMatrixSizeString(m_maxMatrixSize), getMatrixSizeString(m_matrixSizeIncrement), QString::number(m_blockSize));
+    QString expName = c_expNameFormat.arg(getMatrixSizeString(m_minMatrixSize),
+        getMatrixSizeString(m_maxMatrixSize), getMatrixSizeString(m_matrixSizeIncrement), QString::number(m_blockSize));
 
     // Generate simulations
     //
     CSimulationsList sims;
     quint32 simNumber = 0;
-    for (quint64 currentBlockSize = m_minBlockSize; currentBlockSize <= m_maxBlockSize;
-        currentBlockSize += m_blockSizeIncrement)
+    for (quint64 currentMatrixSize = m_minMatrixSize; currentMatrixSize <= m_maxMatrixSize;
+        currentMatrixSize += m_matrixSizeIncrement)
     {
-        sims.append(createSim(simNumber, m_matrixSize, currentBlockSize));
+        sims.append(createSim(simNumber, currentMatrixSize, m_blockSize));
         ++simNumber;
     }
     
@@ -83,9 +66,18 @@ CExperiment CMatrixMultiplyExperimentGenerator::generate()
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Tools
+QString CMatrixMultiplyExperimentGenerator::getMatrixSizeString(quint64 matrixSize)
+{
+    if (matrixSize <= 1000)
+        return QString::number(matrixSize);
+        
+    return QString("%1k").arg(QString::number(matrixSize / 1000));
+}
+
+
 CSimulation CMatrixMultiplyExperimentGenerator::createSim(quint32 simNumber, quint64 matrixSize, quint64 blockSize)
 {
-    QString simName = c_simNameFormat.arg(QString::number(simNumber), QString::number(blockSize));
+    QString simName = c_simNameFormat.arg(QString::number(simNumber), QString::number(matrixSize));
     QString configName = simName + c_configPostfix;
     return CSimulation(simNumber, simName, createConfig(configName, matrixSize, blockSize));
 }
@@ -96,17 +88,17 @@ CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &n
     // Machines list (2 machines: one for CPU and one for GPU)
     //
     CGridSimMachinesConfig machines;
-    machines.append(CGridSimMachineConfig(0, c_cpuMachinePECount, c_cpuMachinePERating));
-    machines.append(CGridSimMachineConfig(1, c_gpuMachinePECount, c_gpuMachinePERating));
+    machines.append(CGridSimMachineConfig(0, m_settings.getCPUMachinePECount(), m_settings.getCPUMachinePERating()));
+    machines.append(CGridSimMachineConfig(1, m_settings.getGPUMachinePECount(), m_settings.getGPUMachinePERating()));
 
     //
     // Resources list with only one resource
     //
     CGridSimResourceConfig resource;
-    resource.setArch(c_resourceArch);
-    resource.setOS(c_resourceOS);
-    resource.setBaudRate(c_resourceBaudRate);
-    resource.setCostPerSec(c_resourceCostPerSec);
+    resource.setArch(m_settings.getResourceArch());
+    resource.setOS(m_settings.getResourceOS());
+    resource.setBaudRate(m_settings.getResourceBaudRate());
+    resource.setCostPerSec(m_settings.getResourceCostPerSec());
     resource.setMachines(machines);
 
     CGridSimResourcesConfig resources;
@@ -116,13 +108,18 @@ CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &n
     //
     CGridSimGridletsConfig gridltes;
     quint32 gridletsCount = matrixSize / blockSize;
+    if (!gridletsCount)
+    {
+        gridletsCount = 1;
+        blockSize = matrixSize;
+    }
 
     for (quint32 i = 0; i < gridletsCount; ++i)
         gridltes.append(createGridlet(i, matrixSize, blockSize));
 
     // And finally config
     //
-    return CGridSimConfig(name, resources, gridltes);
+    return CGridSimConfig(name, m_settings.getLinkBaudRate(), resources, gridltes);
 }
 
 CGridSimGridletConfig CMatrixMultiplyExperimentGenerator::createGridlet(quint32 id, quint64 matrixSize,
@@ -135,8 +132,8 @@ CGridSimGridletConfig CMatrixMultiplyExperimentGenerator::createGridlet(quint32 
 
     double fMatrixSize = matrixSize;
     double fBlockSize = blockSize;
-    double length = fBlockSize * pow(fMatrixSize, 2) * c_saveOperationCost + 
-        2 * pow(fMatrixSize, 3) * c_loadOperationCost;
+    double length = fBlockSize * pow(fMatrixSize, 2) * m_settings.getSaveOperationCost() + 
+        2 * pow(fMatrixSize, 3) * m_settings.getLoadOperationCost();
 
     quint64 inputSize = 3 * blockSize;
     quint64 outputSize = blockSize;

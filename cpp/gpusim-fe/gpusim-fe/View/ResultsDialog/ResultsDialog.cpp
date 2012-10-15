@@ -24,7 +24,7 @@ CResultsDialog::CResultsDialog(const Core::CExperiment &exp, QWidget *pParent /*
 
 
     QwtPlotCurve *pCurve = new QwtPlotCurve(tr("Simulations time"));
-    pCurve->setPen(QPen(Qt::blue));
+    pCurve->setPen(QPen(Qt::blue, 2.0f));
 
     QwtPlotGrid *pGrid = new QwtPlotGrid();
     pGrid->setPen(QPen(Qt::lightGray));

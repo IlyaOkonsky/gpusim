@@ -87,6 +87,9 @@
     <Filter Include="View\ResultsDialog">
       <UniqueIdentifier>{026cd837-1dd1-4375-95fc-3a26e62566c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\ExperimentGenerators\MatrixMultiply\Settings">
+      <UniqueIdentifier>{21fc6e12-f86c-4567-a93b-ececfc58779d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_Resources.cpp">
@@ -192,6 +195,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ResultsDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Core\ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.cpp">
+      <Filter>Core\ExperimentGenerators\MatrixMultiply\Settings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Resources.qrc">
@@ -284,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_ResultsDialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.h">
+      <Filter>Core\ExperimentGenerators\MatrixMultiply\Settings</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

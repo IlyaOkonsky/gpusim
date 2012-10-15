@@ -11,8 +11,10 @@ using namespace Core;
 ////////////////////////////////////////////////////////////////////////// 
 
 #pragma region Private constants
-const QString CModel::c_simulatorJarPath      = QString("../Simulator/gpusim-runtime.jar");
-const QString CModel::c_experimentsWorkingDir = QString("../Experiments");
+const QString CModel::c_mmegSettingsFilePath      = QString("MMEGSettings.xml");
+const QString CModel::c_simulatorJarPath          = QString("../Simulator/gpusim-runtime.jar");
+const QString CModel::c_experimentsWorkingDir     = QString("../Experiments");
+
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,10 +56,18 @@ void CModel::close()
     thread()->quit();
 }
 
-void CModel::performExperiment(quint64 matrixSize, quint64 minBlockSize, quint64 maxBlockSize,
-    quint64 blockSizeIncrement)
+void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement,
+    quint64 blockSize)
 {
-    CMatrixMultiplyExperimentGenerator gen(matrixSize, minBlockSize, maxBlockSize, blockSizeIncrement);
+    Settings::CMatrixMultiplyExperimentGeneratorSettings settings;
+    if (!settings.loadFromFile(c_mmegSettingsFilePath))
+    {
+        qWarning() << "Failed to load MMEG settings.";
+        emit experimentProgress(100);
+        emit experimentResult(EC_Error);
+    }
+
+    CMatrixMultiplyExperimentGenerator gen(settings, minMatrixSize, maxMatrixSize, matrixSizeIncrement, blockSize);
     m_experimenter.execute(gen.generate());
 }
 

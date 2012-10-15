@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>280</width>
-    <height>227</height>
+    <height>252</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,14 +33,14 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="lbMatrixSize">
+       <widget class="QLabel" name="lbBlockSize">
         <property name="text">
-         <string>Matrix size:</string>
+         <string>Block size</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="sbMatrixSize">
+       <widget class="QSpinBox" name="sbBlockSize">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -51,33 +51,33 @@
          <number>1000</number>
         </property>
         <property name="value">
-         <number>10000</number>
+         <number>16</number>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="lbMinBlockSize">
+       <widget class="QLabel" name="lbMinMatrixSize">
         <property name="text">
-         <string>Min block size:</string>
+         <string>Min matrix size:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="lbMaxBlockSize">
+       <widget class="QLabel" name="lbMaxMatrixSize">
         <property name="text">
-         <string>Max block size:</string>
+         <string>Max matrix size:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="lbBlockIncrement">
+       <widget class="QLabel" name="lbMatrixSizeIncrement">
         <property name="text">
          <string>Block size increment:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="sbMinBlockSize">
+       <widget class="QSpinBox" name="sbMinMatrixSize">
         <property name="minimum">
          <number>2</number>
         </property>
@@ -87,7 +87,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QSpinBox" name="sbMaxBlockSize">
+       <widget class="QSpinBox" name="sbMaxMatrixSize">
         <property name="minimum">
          <number>2</number>
         </property>
@@ -95,17 +95,20 @@
          <number>999999999</number>
         </property>
         <property name="value">
-         <number>16</number>
+         <number>5000</number>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QSpinBox" name="sbBlockIncrement">
+       <widget class="QSpinBox" name="sbMatrixSizeIncrement">
         <property name="minimum">
          <number>1</number>
         </property>
         <property name="maximum">
          <number>999999999</number>
+        </property>
+        <property name="value">
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -194,10 +197,10 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>sbMatrixSize</tabstop>
-  <tabstop>sbMinBlockSize</tabstop>
-  <tabstop>sbMaxBlockSize</tabstop>
-  <tabstop>sbBlockIncrement</tabstop>
+  <tabstop>sbBlockSize</tabstop>
+  <tabstop>sbMinMatrixSize</tabstop>
+  <tabstop>sbMaxMatrixSize</tabstop>
+  <tabstop>sbMatrixSizeIncrement</tabstop>
   <tabstop>btnExecExperiment</tabstop>
   <tabstop>btnCancelExperiment</tabstop>
  </tabstops>

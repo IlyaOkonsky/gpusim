@@ -84,6 +84,7 @@
     <ClCompile Include="Core\Experiment.cpp" />
     <ClCompile Include="Core\Experimenter.cpp" />
     <ClCompile Include="Core\ExperimentGenerators\MatrixMultiplyExperimentGenerator.cpp" />
+    <ClCompile Include="Core\ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.cpp" />
     <ClCompile Include="Core\ExperimentGenerators\TestExperimentGenerator.cpp" />
     <ClCompile Include="Core\IExperimentGenerator.cpp" />
     <ClCompile Include="Core\Simulation.cpp" />
@@ -237,6 +238,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Enums.h" />
     <ClInclude Include="Core\Experiment.h" />
+    <ClInclude Include="Core\ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.h" />
     <ClInclude Include="GeneratedFiles\ui_Mainwindow.h" />
     <ClInclude Include="GeneratedFiles\ui_ResultsDialog.h" />
     <ClInclude Include="Model\ModelThread.h" />

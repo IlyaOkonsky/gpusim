@@ -173,7 +173,7 @@ void CSimulator::onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     GridSimConfig::CGridSimOutput output;
     if (!output.loadFromFile(m_outputFilePath))
     {
-        qWarning() << "[CSimulator::onJavaProcessFinished]. Failed to load configuration from file.";
+        qWarning() << "[CSimulator::onJavaProcessFinished]. Failed to load output from file.";
         processExecuted(EC_Error);
     }
     m_simulation.setOutput(output);

@@ -1,27 +1,34 @@
 #pragma once
 
 #include "../IExperimentGenerator.h"
+#include "MatrixMultiplyExperimentGeneratorSettings.h"
 
 namespace Core
 {
     class CMatrixMultiplyExperimentGenerator : public IExperimentGenerator
     {
     public:
-        CMatrixMultiplyExperimentGenerator(quint64 matrixSize, quint64 minBlockSize, quint64 maxBlockSize,
-            quint64 blockSizeIncrement = 1);
+        CMatrixMultiplyExperimentGenerator(const Settings::CMatrixMultiplyExperimentGeneratorSettings &settings,
+            quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement,
+            quint64 blockSize);
 
         virtual CExperiment generate();
 
     private:
-        static CSimulation createSim(quint32 simNumber, quint64 matrixSize, quint64 blockSize);
-        static GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 matrixSize, quint64 blockSize);
-        static GridSimConfig::CGridSimGridletConfig createGridlet(quint32 id, quint64 matrixSize, quint64 blockSize);
+        // Shorts large matrix size with add k postfix
+        static QString getMatrixSizeString(quint64 matrixSize);
+
+        CSimulation createSim(quint32 simNumber, quint64 matrixSize, quint64 blockSize);
+        GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 matrixSize, quint64 blockSize);
+        GridSimConfig::CGridSimGridletConfig createGridlet(quint32 id, quint64 matrixSize, quint64 blockSize);
 
     private:
-        quint64 m_matrixSize;
-        quint64 m_minBlockSize;
-        quint64 m_maxBlockSize;
-        quint64 m_blockSizeIncrement;
+        Settings::CMatrixMultiplyExperimentGeneratorSettings m_settings;
+
+        quint64 m_minMatrixSize;
+        quint64 m_maxMatrixSize;
+        quint64 m_matrixSizeIncrement;
+        quint64 m_blockSize;
 
     private:
         static const QString c_genName;
@@ -29,18 +36,5 @@ namespace Core
         static const QString c_expNameFormat;
         static const QString c_simNameFormat;
         static const QString c_configPostfix;
-
-        static const quint32 c_cpuMachinePECount;
-        static const quint32 c_cpuMachinePERating;
-        static const quint32 c_gpuMachinePECount;
-        static const quint32 c_gpuMachinePERating;
-
-        static const QString c_resourceArch;
-        static const QString c_resourceOS;
-        static const double  c_resourceBaudRate;
-        static const double  c_resourceCostPerSec;
-
-        static const double  c_loadOperationCost;
-        static const double  c_saveOperationCost;
     };
 }

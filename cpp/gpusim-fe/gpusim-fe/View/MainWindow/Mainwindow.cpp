@@ -51,8 +51,8 @@ void CMainWindow::onExperimentResult(Core::CExitCode ec, const Core::CExperiment
 
 void CMainWindow::executeClick()
 {
-    emit performExperiment(ui.sbMatrixSize->value(), ui.sbMinBlockSize->value(), ui.sbMaxBlockSize->value(),
-        ui.sbBlockIncrement->value());
+    emit performExperiment(ui.sbMinMatrixSize->value(), ui.sbMaxMatrixSize->value(), ui.sbMatrixSizeIncrement->value(),
+        ui.sbBlockSize->value());
 
     ui.gbParameters->setEnabled(false);
     ui.btnExecExperiment->setEnabled(false);

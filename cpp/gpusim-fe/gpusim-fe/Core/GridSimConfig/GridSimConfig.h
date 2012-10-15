@@ -11,12 +11,15 @@ namespace Core
         {
         public:
             static const quint32 c_minVersion;
+            static const double  c_minLinkBaudRate;
 
             static const quint32 c_currentConfigVersion;
             static const QString c_defaultName;
+            static const double  c_defaultLinkBaudRate;
 
         public:
             CGridSimConfig(const QString &name = c_defaultName,
+                double linkBaudRate = c_defaultLinkBaudRate,
                 const CGridSimResourcesConfig &resources =  CGridSimResourcesConfig(),
                 const CGridSimGridletsConfig &gridlets = CGridSimGridletsConfig());
 
@@ -28,6 +31,9 @@ namespace Core
 
             QString getName() const;
             void setName(const QString &name);
+
+            double getLinkBaudRate() const;
+            void setLinkBaudRate(double linkBaudRate);
 
             CGridSimResourcesConfig getResources() const;
             const CGridSimResourcesConfig &getResourcesRef() const;
@@ -56,6 +62,7 @@ namespace Core
         private:
             quint32 m_version;
             QString m_name;
+            double m_linkBaudRate;
             CGridSimResourcesConfig m_resources;
             CGridSimGridletsConfig m_gridlets;
 
@@ -63,6 +70,7 @@ namespace Core
             static const QString c_className;
             static const QString c_versionPropName;
             static const QString c_namePropName;
+            static const QString c_linkBaudRatePropName;
             static const QString c_resourcesPropName;
             static const QString c_gridletsPropName;
         };

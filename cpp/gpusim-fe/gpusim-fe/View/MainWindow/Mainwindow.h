@@ -18,7 +18,7 @@ public slots:
     void onExperimentResult(Core::CExitCode ec, const Core::CExperiment &exp = Core::CExperiment());
 
 signals:
-    void performExperiment(quint64 matrixSize, quint64 minBlockSize, quint64 maxBlockSize, quint64 blockSizeIncrement);
+    void performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement, quint64 blockSize);
     void cancelExperiment();
 
 private slots:
