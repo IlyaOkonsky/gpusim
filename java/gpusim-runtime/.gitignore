@@ -37,4 +37,6 @@
 #
 # Builds ingore
 #
-dist/*
+nbproject/private/
+build/
+dist/
