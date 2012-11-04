@@ -185,6 +185,9 @@
     <ClInclude Include="Serialization\JavaXMLListSerialize.hpp">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Experimenter.h">

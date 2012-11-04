@@ -6,8 +6,55 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{bfb08c1a-e1a4-4b36-ae89-4005f2ee6434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Original">
+      <UniqueIdentifier>{e89c14d4-42a9-48bb-b9a3-d59b15ad6c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\OriginalsReader">
+      <UniqueIdentifier>{9d151ca1-50a8-4711-a78d-a3fac0356e0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{8b9b0912-8e69-41b8-ae65-a926aaa91909}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{bbaadb96-b1e5-4125-8fa8-6458a8f709cc}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model\Original.cpp">
+      <Filter>Model\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\OriginalsReader.cpp">
+      <Filter>Model\OriginalsReader</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Optimizer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Optimizer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Optimizer.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Model\Original.h">
+      <Filter>Model\Original</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Model\OriginalsReader.h">
+      <Filter>Model\OriginalsReader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Model\Optimizer.h">
+      <Filter>Model</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

@@ -4,21 +4,29 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gpusim-fe", "gpusim-fe\gpusim-fe.vcxproj", "{957294B9-CF08-4543-8F92-A916B799AEF4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{909F470E-2BD5-4605-91A0-239E04B68B0B} = {909F470E-2BD5-4605-91A0-239E04B68B0B}
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC} = {8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205} = {E4F7AC5E-C845-4FA8-9402-CCD15D92A205}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gpusim-fe.Core", "gpusim-fe.Core\gpusim-fe.Core.vcxproj", "{909F470E-2BD5-4605-91A0-239E04B68B0B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC} = {8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205} = {E4F7AC5E-C845-4FA8-9402-CCD15D92A205}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gpusim-fe.ConstsOptimizer", "gpusim-fe.ConstsOptimizer\gpusim-fe.ConstsOptimizer.vcxproj", "{7F0B8E23-1241-4C2B-A202-3D7AE0C26890}"
 	ProjectSection(ProjectDependencies) = postProject
 		{909F470E-2BD5-4605-91A0-239E04B68B0B} = {909F470E-2BD5-4605-91A0-239E04B68B0B}
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC} = {8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205} = {E4F7AC5E-C845-4FA8-9402-CCD15D92A205}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gpusim-fe.Tools", "gpusim-fe.Tools\gpusim-fe.Tools.vcxproj", "{E4F7AC5E-C845-4FA8-9402-CCD15D92A205}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC} = {8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QLogger", "QLogger\QLogger.vcxproj", "{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +50,10 @@ Global
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205}.Debug|Win32.Build.0 = Debug|Win32
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205}.Release|Win32.ActiveCfg = Release|Win32
 		{E4F7AC5E-C845-4FA8-9402-CCD15D92A205}.Release|Win32.Build.0 = Release|Win32
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}.Debug|Win32.Build.0 = Debug|Win32
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}.Release|Win32.ActiveCfg = Release|Win32
+		{8F36C240-2A64-44BC-811F-4DF5AD4B2EDC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
