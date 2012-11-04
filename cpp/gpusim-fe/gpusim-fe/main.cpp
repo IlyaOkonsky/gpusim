@@ -2,9 +2,12 @@
 
 #include "../gpusim-fe.Core/MetaTypes.h"
 
-#include "Model/ModelThread.h"
 #include "Model/Model.h"
 #include "View/MainWindow/Mainwindow.h"
+
+#include "../gpusim-fe.Tools/ModelThread.hpp"
+
+typedef Tools::CModelThread<CModel> CModelThreadImpl;
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +15,7 @@ int main(int argc, char *argv[])
 
     Core::registerMetaTypes();
 
-    CModelThread modelThread;
+    CModelThreadImpl modelThread;
     modelThread.start();
     modelThread.waitForModelReady();
 
@@ -49,12 +52,7 @@ int main(int argc, char *argv[])
     mainWindow.disconnect(modelThread.getModel().data());
     modelThread.getModel().data()->disconnect(&mainWindow);
 
-    // After user closed application we must close model, but closing must be async, so call close slot from model
-    // thread and wait for  model thread ends.
-    //
-    QEventLoop eventLoop;
-    eventLoop.connect(&modelThread, SIGNAL(finished()), SLOT(quit()), Qt::QueuedConnection);
-    QMetaObject::invokeMethod(modelThread.getModel().data(), "close", Qt::QueuedConnection);
-    eventLoop.exec();
+    modelThread.waitForFinish();
+
     return iRes;
 }

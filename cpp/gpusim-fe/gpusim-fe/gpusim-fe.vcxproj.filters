@@ -30,12 +30,6 @@
     <Filter Include="Model">
       <UniqueIdentifier>{01de501d-32d1-4a6c-af13-171616fc9d84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\QThreadEx">
-      <UniqueIdentifier>{ec5958bb-ac4f-4392-8768-514db4bacad6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Model\ModelThread">
-      <UniqueIdentifier>{f39d6e5b-d831-4800-b97b-c8e7cbf63c00}</UniqueIdentifier>
-    </Filter>
     <Filter Include="View\ResultsDialog">
       <UniqueIdentifier>{026cd837-1dd1-4375-95fc-3a26e62566c5}</UniqueIdentifier>
     </Filter>
@@ -52,18 +46,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_Model.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\QThreadEx.cpp">
-      <Filter>Model\QThreadEx</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\ModelThread.cpp">
-      <Filter>Model\ModelThread</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QThreadEx.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QThreadEx.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="View\MainWindow\Mainwindow.cpp">
@@ -92,9 +74,6 @@
     <CustomBuild Include="Model\Model.h">
       <Filter>Model</Filter>
     </CustomBuild>
-    <CustomBuild Include="Model\QThreadEx.h">
-      <Filter>Model\QThreadEx</Filter>
-    </CustomBuild>
     <CustomBuild Include="View\MainWindow\Mainwindow.h">
       <Filter>View\MainWindow</Filter>
     </CustomBuild>
@@ -114,9 +93,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model\ModelThread.h">
-      <Filter>Model\ModelThread</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_Mainwindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{20a240c5-6230-4a94-be43-7db8fa9f0a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModelThread">
+      <UniqueIdentifier>{3d7a01d5-e791-45d5-a8df-68571fd2ec6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QThreadEx">
+      <UniqueIdentifier>{004f7035-cec1-4ac0-a6ba-940d891c1692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{fecfc484-e1c7-4d67-9393-0a80882d6dc3}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{16a8dd05-ff43-480f-80d5-4b39cde163ef}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MetaTypes.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="QThreadEx.cpp">
+      <Filter>QThreadEx</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_QThreadEx.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_QThreadEx.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tools_global.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaTypes.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="QThreadEx.h">
+      <Filter>QThreadEx</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ModelThread.hpp">
+      <Filter>ModelThread</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

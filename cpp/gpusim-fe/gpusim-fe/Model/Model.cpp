@@ -38,12 +38,12 @@ CModel::CModel(QObject *pParent /*= nullptr*/)
 
 void CModel::close()
 {
-    Q_ASSERT(!m_closing);
-    if (m_closing)
-    {
-        qWarning() << "[CModel::close()] Already canceling";
-        return;
-    }
+    //Q_ASSERT(!m_closing);
+//     if (m_closing)
+//     {
+//         qWarning() << "[CModel::close()] Already canceling";
+//         return;
+//     }
 
     if (m_experimenter.isExecuting())
     {

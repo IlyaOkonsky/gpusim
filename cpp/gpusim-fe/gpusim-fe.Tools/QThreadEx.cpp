@@ -1,4 +1,6 @@
-#include "qthreadex.h"
+#include "QThreadEx.h"
+
+using namespace Tools;
 
 QThreadEx::QThreadEx(QObject *pParent /*= nullptr*/)
     :QThread(pParent)
