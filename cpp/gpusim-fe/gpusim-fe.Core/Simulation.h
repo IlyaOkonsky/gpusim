@@ -5,7 +5,7 @@
 
 namespace Core
 {
-    class CSimulation
+    class GPUSIM_FE_CORE_EXPORT CSimulation
     {
     public:
         static const quint32 c_defaultNumber;

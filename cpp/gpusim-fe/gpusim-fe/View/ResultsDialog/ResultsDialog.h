@@ -4,7 +4,7 @@
 #include "ui_ResultsDialog.h"
 
 #include <qwt_plot_curve.h>
-#include "Core/Experiment.h"
+#include "../../../gpusim-fe.Core/Experiment.h"
 
 class CResultsDialog : public QDialog
 {

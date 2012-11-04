@@ -5,7 +5,7 @@
 
 namespace Core
 {
-    class CMatrixMultiplyExperimentGenerator : public IExperimentGenerator
+    class GPUSIM_FE_CORE_EXPORT CMatrixMultiplyExperimentGenerator : public IExperimentGenerator
     {
     public:
         CMatrixMultiplyExperimentGenerator(const Settings::CMatrixMultiplyExperimentGeneratorSettings &settings,

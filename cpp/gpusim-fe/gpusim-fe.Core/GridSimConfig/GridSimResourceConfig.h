@@ -6,7 +6,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class CGridSimResourceConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimResourceConfig: public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const double  c_minCostPerSec;

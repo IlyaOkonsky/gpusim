@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Experiment.h"
-#include "Core/Enums.h"
+#include "../../../gpusim-fe.Core/Experiment.h"
+#include "../../../gpusim-fe.Core/Enums.h"
 
 #include <QDialog>
 #include "ui_Mainwindow.h"

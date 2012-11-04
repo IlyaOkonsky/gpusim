@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Experimenter.h"
+#include "../../gpusim-fe.Core/Experimenter.h"
 
 class CModel : public QObject
 {

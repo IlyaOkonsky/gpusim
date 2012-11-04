@@ -1,5 +1,5 @@
 #include "Model.h"
-#include "Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
+#include "../../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
 
 #include <QThread>
 #include <QDebug>

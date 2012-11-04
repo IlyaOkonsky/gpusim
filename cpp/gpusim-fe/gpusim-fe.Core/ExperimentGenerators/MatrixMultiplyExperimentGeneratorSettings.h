@@ -6,7 +6,8 @@ namespace Core
 {
     namespace Settings
     {
-        class CMatrixMultiplyExperimentGeneratorSettings: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CMatrixMultiplyExperimentGeneratorSettings:
+            public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const quint32 c_defaultCPUMachinePECount;

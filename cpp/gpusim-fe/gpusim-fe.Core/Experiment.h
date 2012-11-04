@@ -4,7 +4,7 @@
 
 namespace Core
 {
-    class CExperiment
+    class GPUSIM_FE_CORE_EXPORT CExperiment
     {
     public:
         static const QString c_defaultName;

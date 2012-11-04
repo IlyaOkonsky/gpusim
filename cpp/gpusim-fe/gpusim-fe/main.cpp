@@ -1,6 +1,6 @@
 #include <QtGui/QApplication>
 
-#include "Core/MetaTypes.h"
+#include "../gpusim-fe.Core/MetaTypes.h"
 
 #include "Model/ModelThread.h"
 #include "Model/Model.h"

@@ -4,7 +4,7 @@
 
 namespace Core
 {
-    class IExperimentGenerator
+    class GPUSIM_FE_CORE_EXPORT IExperimentGenerator
     {
     public:
         QString getName() const;

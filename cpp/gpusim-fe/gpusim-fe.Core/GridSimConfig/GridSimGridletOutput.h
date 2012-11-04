@@ -9,7 +9,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class CGridSimGridletOutput: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimGridletOutput: public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const double  c_minTime;

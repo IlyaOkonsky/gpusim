@@ -5,7 +5,7 @@
 
 namespace Core
 {
-    class CExperimenter: public QObject
+    class GPUSIM_FE_CORE_EXPORT CExperimenter: public QObject
     {
         Q_OBJECT;
 

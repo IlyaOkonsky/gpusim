@@ -1,12 +1,14 @@
 #pragma once
 
+#include "../Core_global.h"
+
 #include <QDomDocument>
 
 namespace Core
 {
     namespace Serialization
     {
-        class CJavaXMLHelper
+        class GPUSIM_FE_CORE_EXPORT CJavaXMLHelper
         {
         public:
             static bool loadDocumentFromFile(QDomDocument &doc, const QString &filePath);

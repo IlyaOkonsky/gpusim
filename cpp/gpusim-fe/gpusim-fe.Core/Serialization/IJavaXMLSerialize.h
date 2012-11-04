@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Core_global.h"
+
 #include <QDomElement>
 #include <QSharedPointer>
 
@@ -10,7 +12,7 @@ namespace Core
         class IJavaXMLSerialize;
         typedef QSharedPointer<IJavaXMLSerialize> IJavaXMLSerializePtr;
 
-        class IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT IJavaXMLSerialize
         {
         public:
             QString getClassName();

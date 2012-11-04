@@ -9,7 +9,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class CGridSimGridletConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimGridletConfig: public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const double  c_minLength;

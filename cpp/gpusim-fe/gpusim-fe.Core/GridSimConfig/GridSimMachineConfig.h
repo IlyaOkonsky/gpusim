@@ -9,7 +9,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class CGridSimMachineConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimMachineConfig: public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const quint32 c_minPECount;

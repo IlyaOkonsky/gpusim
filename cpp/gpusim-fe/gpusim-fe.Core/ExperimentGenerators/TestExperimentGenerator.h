@@ -4,7 +4,7 @@
 
 namespace Core
 {
-    class CTestExperimentGenerator : public IExperimentGenerator
+    class GPUSIM_FE_CORE_EXPORT CTestExperimentGenerator : public IExperimentGenerator
     {
     public:
         CTestExperimentGenerator();

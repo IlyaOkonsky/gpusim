@@ -7,7 +7,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class CGridSimConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimConfig: public Core::Serialization::IJavaXMLSerialize
         {
         public:
             static const quint32 c_minVersion;

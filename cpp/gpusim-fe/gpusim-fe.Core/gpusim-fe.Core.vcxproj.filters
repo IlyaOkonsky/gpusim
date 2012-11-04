@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{1d9baaff-51f8-432f-a113-f35507768f46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Experiment">
+      <UniqueIdentifier>{dbe2a80f-c175-4350-a0ee-8fc2593fd2e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Experimenter">
+      <UniqueIdentifier>{a1c17f35-4f7b-4a62-9435-4609faf51f46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExperimentGenerators">
+      <UniqueIdentifier>{21fe76ff-5d56-4aff-8b49-86820a3426ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExperimentGenerators\MatrixMultiply">
+      <UniqueIdentifier>{a8569cc1-8af8-4a0b-8196-e947578b6c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExperimentGenerators\MatrixMultiply\Settings">
+      <UniqueIdentifier>{559daf6f-f219-4242-8c5d-7f6a8e58de97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExperimentGenerators\Test">
+      <UniqueIdentifier>{b02a42b4-089b-4174-8f07-e956d80e79f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig">
+      <UniqueIdentifier>{d66a6bbd-d6f1-459c-948b-86ae698e0bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimConfig">
+      <UniqueIdentifier>{e35dc55d-fd0c-46e8-8fdc-098c4a418e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimGridletConfig">
+      <UniqueIdentifier>{f73a856f-8cda-4c27-8b40-71d520cdc028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimGridletOutput">
+      <UniqueIdentifier>{d2dd1cd0-6c5d-458e-9114-a445bb0716fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimMachineConfig">
+      <UniqueIdentifier>{48c4f655-0961-4d0e-a467-d6cc5bff6b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimOutput">
+      <UniqueIdentifier>{2ee2e72f-63d4-4da8-a71b-2e6d0289db4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GridSimConfig\GridSimResourceConfig">
+      <UniqueIdentifier>{5e88077d-521b-4f6b-b6d6-dfbca793fbe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization">
+      <UniqueIdentifier>{e42a6aba-9b4b-4b69-9fd4-a7f5e8e76b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simulation">
+      <UniqueIdentifier>{553d9508-70f9-4ccd-8693-b5547ae2a6cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simulator">
+      <UniqueIdentifier>{60d178d1-f896-45d7-96dc-1d4e8cf8d365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{5fc0957e-d046-4951-89a5-ba8aaa885628}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{5b0d45d7-6d05-4698-b89f-d95f78e9ffa3}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MetaTypes.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Experiment.cpp">
+      <Filter>Experiment</Filter>
+    </ClCompile>
+    <ClCompile Include="Experimenter.cpp">
+      <Filter>Experimenter</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Experimenter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Experimenter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="IExperimentGenerator.cpp">
+      <Filter>ExperimentGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentGenerators\TestExperimentGenerator.cpp">
+      <Filter>ExperimentGenerators\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.cpp">
+      <Filter>ExperimentGenerators\MatrixMultiply</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.cpp">
+      <Filter>ExperimentGenerators\MatrixMultiply\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimConfig.cpp">
+      <Filter>GridSimConfig\GridSimConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimGridletConfig.cpp">
+      <Filter>GridSimConfig\GridSimGridletConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimGridletOutput.cpp">
+      <Filter>GridSimConfig\GridSimGridletOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimMachineConfig.cpp">
+      <Filter>GridSimConfig\GridSimMachineConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimOutput.cpp">
+      <Filter>GridSimConfig\GridSimOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\GridSimResourceConfig.cpp">
+      <Filter>GridSimConfig\GridSimResourceConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulator.cpp">
+      <Filter>Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Simulator.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Simulator.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\IJavaXMLSerialize.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization\JavaXMLHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MetaTypes.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_global.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Experiment.h">
+      <Filter>Experiment</Filter>
+    </ClInclude>
+    <ClInclude Include="IExperimentGenerator.h">
+      <Filter>ExperimentGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentGenerators\TestExperimentGenerator.h">
+      <Filter>ExperimentGenerators\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.h">
+      <Filter>ExperimentGenerators\MatrixMultiply</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.h">
+      <Filter>ExperimentGenerators\MatrixMultiply\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimConfig.h">
+      <Filter>GridSimConfig\GridSimConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimGridletConfig.h">
+      <Filter>GridSimConfig\GridSimGridletConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimGridletOutput.h">
+      <Filter>GridSimConfig\GridSimGridletOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimMachineConfig.h">
+      <Filter>GridSimConfig\GridSimMachineConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimOutput.h">
+      <Filter>GridSimConfig\GridSimOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSimConfig\GridSimResourceConfig.h">
+      <Filter>GridSimConfig\GridSimResourceConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\IJavaXMLSerialize.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\JavaXMLHelper.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization\JavaXMLListSerialize.hpp">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Experimenter.h">
+      <Filter>Experimenter</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Simulator.h">
+      <Filter>Simulator</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

@@ -10,7 +10,7 @@ namespace Core
 {
     // TODO: add error reporting mechanism (to log and to UI)
     //
-    class CSimulator: public QObject
+    class GPUSIM_FE_CORE_EXPORT CSimulator: public QObject
     {
         Q_OBJECT;
 
