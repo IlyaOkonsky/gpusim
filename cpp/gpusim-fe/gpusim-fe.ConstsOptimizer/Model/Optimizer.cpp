@@ -1,5 +1,5 @@
 #include "Optimizer.h"
-#include "OriginalsReader.h"
+#include "Originals/OriginalsReader.h"
 
 #include "../../QLogger/QLog"
 
@@ -39,6 +39,13 @@ void COptimizer::optimize()
         return;
     }
 
+    if (!readConfig())
+    {
+        qLog_CriticalMsg() << "Failed to read config.";
+        qApp->quit();
+        return;
+    }
+    
     qApp->quit();
 }
 
@@ -57,6 +64,14 @@ bool COptimizer::readOriginals()
     qLog_DebugMsg() << "Reading originals from " << m_originalsFilePath << " file...";
     COriginalsReader reader(m_originals);
     bool res = reader.readOriginals(m_originalsFilePath);
+    qLog_DebugMsg() << "..." << res;
+    return res;
+}
+
+bool COptimizer::readConfig()
+{
+    qLog_DebugMsg() << "Reading configuration from " << m_configFilePath << " file...";
+    bool res = COptimizerConfig::readFromFile(m_configFilePath, m_config);
     qLog_DebugMsg() << "..." << res;
     return res;
 }

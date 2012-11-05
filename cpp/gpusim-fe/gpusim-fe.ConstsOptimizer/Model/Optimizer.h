@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Original.h"
+#include "Originals/Original.h"
+#include "Config/OptimizerConfig.h"
 
 #include <QObject>
 
@@ -24,6 +25,7 @@ namespace Model
         void processOptimize();
 
         bool readOriginals();
+        bool readConfig();
 
         // Checks result for true, writes it into debug with "..." prefix and quits if check fails.
         void checkResult(bool res);
@@ -34,5 +36,6 @@ namespace Model
         QString m_outputFilePath;
 
         COriginalsList m_originals;
+        COptimizerConfig m_config;
     };
 }

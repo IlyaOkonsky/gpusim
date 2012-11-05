@@ -30,7 +30,7 @@ int process(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     Core::registerMetaTypes();
-    Model::COptimizer optimizer("matrmul.txt", QString(), QString());
+    Model::COptimizer optimizer("matrmul.txt", "gpusim-fe.ConstsOptimizer.cfg", QString());
     QMetaObject::invokeMethod(&optimizer, "optimize", Qt::QueuedConnection);
     return app.exec();
 }
