@@ -1,4 +1,5 @@
 #include "OptimizerConfig.h"
+#include "MMEGSettingsHelpers.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -89,6 +90,11 @@ static bool parseProperty(QTextStream &in, CDoublePropInfo &info)
     *info.m_pEndValue   = vEndValue.toDouble(&okEndValue);
     *info.m_pIncrement  = vIncrement.toDouble(&okIncrement);
 
+    // Check and correct increment value
+    //
+    if (*info.m_pIncrement < 0.0f)
+        *info.m_pIncrement = 0.0f;
+
     return (okStartValue && okEndValue && okIncrement);
 }
 
@@ -103,7 +109,13 @@ static bool parseProperty(QTextStream &in, CUInt32PropInfo &info)
     bool okStartValue, okEndValue, okIncrement;
     *info.m_pStartValue = vStartValue.toUInt(&okStartValue);
     *info.m_pEndValue   = vEndValue.toUInt(&okEndValue);
-    *info.m_pIncrement  = vIncrement.toUInt(&okIncrement);
+
+    // Check and correct increment value
+    //
+    qint32 increment = vIncrement.toInt(&okIncrement);
+    if (increment < 0)
+        increment = 0;
+    *info.m_pIncrement = increment;
 
     return (okStartValue && okEndValue && okIncrement);
 }
@@ -133,7 +145,6 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
-
     QTextStream in(&file);
     if (!parseHeader(in))
         return false;
@@ -144,27 +155,27 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     // Fill uint properties info
     //
     static QVector<CUInt32PropInfo> uintPropsInfo;
-    uintPropsInfo.push_back(CUInt32PropInfo("cpuMachinePECount",
+    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePECount),
         &cfg.m_cpuMachinePECountS, &cfg.m_cpuMachinePECountE, &cfg.m_cpuMachinePECountI));
-    uintPropsInfo.push_back(CUInt32PropInfo("cpuMachinePERating",
+    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePERating),
         &cfg.m_cpuMachinePERatingS, &cfg.m_cpuMachinePERatingE, &cfg.m_cpuMachinePERatingI));
-    uintPropsInfo.push_back(CUInt32PropInfo("gpuMachinePECount",
+    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePECount),
         &cfg.m_gpuMachinePECountS, &cfg.m_gpuMachinePECountE, &cfg.m_gpuMachinePECountI));
-    uintPropsInfo.push_back(CUInt32PropInfo("gpuMachinePERating",
+    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePERating),
         &cfg.m_gpuMachinePERatingS, &cfg.m_gpuMachinePERatingE, &cfg.m_gpuMachinePERatingI));
 
     // Fill double properties info
     //
     static QVector<CDoublePropInfo> doublePropsInfo;
-    doublePropsInfo.push_back(CDoublePropInfo("resourceBaudRate",
+    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceBaudRate),
         &cfg.m_resourceBaudRateS, &cfg.m_resourceBaudRateE, &cfg.m_resourceBaudRateI));
-    doublePropsInfo.push_back(CDoublePropInfo("resourceCostPerSec",
+    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceCostPerSec),
         &cfg.m_resourceCostPerSecS, &cfg.m_resourceCostPerSecE, &cfg.m_resourceCostPerSecI));
-    doublePropsInfo.push_back(CDoublePropInfo("linkBaudRate",
+    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_linkBaudRate),
         &cfg.m_linkBaudRateS, &cfg.m_linkBaudRateE, &cfg.m_linkBaudRateI));
-    doublePropsInfo.push_back(CDoublePropInfo("loadOperationCost",
+    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_loadOperationCost),
         &cfg.m_loadOperationCostS, &cfg.m_loadOperationCostE, &cfg.m_loadOperationCostI));
-    doublePropsInfo.push_back(CDoublePropInfo("saveOperationCost",
+    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_saveOperationCost),
         &cfg.m_saveOperationCostS, &cfg.m_saveOperationCostE, &cfg.m_saveOperationCostI));
 
     // Read all uint properties

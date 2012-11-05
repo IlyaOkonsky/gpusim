@@ -44,7 +44,7 @@ const QString CMatrixMultiplyExperimentGeneratorSettings::c_saveOperationCostPro
 // Code
 ////////////////////////////////////////////////////////////////////////// 
 
-#pragma region Constructor and equality comparision support
+#pragma region Constructor and comparision support
 CMatrixMultiplyExperimentGeneratorSettings::CMatrixMultiplyExperimentGeneratorSettings()
     :IJavaXMLSerialize(c_className),
     m_cpuMachinePECount(c_defaultCPUMachinePECount), m_cpuMachinePERating(c_defaultCPUMachinePERating),
@@ -70,13 +70,41 @@ bool CMatrixMultiplyExperimentGeneratorSettings::operator==(const CMatrixMultipl
         (m_resourceCostPerSec == other.m_resourceCostPerSec) &&
         (m_linkBaudRate       == other.m_linkBaudRate      ) &&
         (m_loadOperationCost  == other.m_loadOperationCost ) &&
-        (m_saveOperationCost  == other.m_saveOperationCost ) &&
-        (m_gpuMachinePERating == other.m_gpuMachinePERating);
+        (m_saveOperationCost  == other.m_saveOperationCost );
 }
 
 bool CMatrixMultiplyExperimentGeneratorSettings::operator!=(const CMatrixMultiplyExperimentGeneratorSettings& other) const
 {
     return !(*this == other);
+}
+
+bool CMatrixMultiplyExperimentGeneratorSettings::operator<(const CMatrixMultiplyExperimentGeneratorSettings& other) const
+{
+    if (m_cpuMachinePECount != other.m_cpuMachinePECount)
+        return m_cpuMachinePECount < other.m_cpuMachinePECount;
+
+    if (m_cpuMachinePERating != other.m_cpuMachinePERating)
+        return m_cpuMachinePERating < other.m_cpuMachinePERating;
+
+    if (m_gpuMachinePECount != other.m_gpuMachinePECount)
+        return m_gpuMachinePECount < other.m_gpuMachinePECount;
+
+    if (m_gpuMachinePERating != other.m_gpuMachinePERating)
+        return m_gpuMachinePERating < other.m_gpuMachinePERating;
+
+    if (m_resourceBaudRate != other.m_resourceBaudRate)
+        return m_resourceBaudRate < other.m_resourceBaudRate;
+
+    if (m_resourceCostPerSec != other.m_resourceCostPerSec)
+        return m_resourceCostPerSec < other.m_resourceCostPerSec;
+
+    if (m_linkBaudRate != other.m_linkBaudRate)
+        return m_linkBaudRate < other.m_linkBaudRate;
+
+    if (m_loadOperationCost != other.m_loadOperationCost)
+        return m_loadOperationCost < other.m_loadOperationCost;
+
+    return m_saveOperationCost < other.m_saveOperationCost;
 }
 
 #pragma endregion

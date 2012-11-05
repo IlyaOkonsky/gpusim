@@ -28,6 +28,12 @@
     <Filter Include="Model\Originals\Reader">
       <UniqueIdentifier>{9d151ca1-50a8-4711-a78d-a3fac0356e0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\MMEGSettingsGenerator">
+      <UniqueIdentifier>{2915dd70-29db-4ea6-898c-470776d2e6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Config\Helpers">
+      <UniqueIdentifier>{f72f0260-cdc1-46cc-ad40-ef7089177c54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -49,6 +55,15 @@
     <ClCompile Include="Model\Originals\OriginalsReader.cpp">
       <Filter>Model\Originals\Reader</Filter>
     </ClCompile>
+    <ClCompile Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.cpp">
+      <Filter>Model\MMEGSettingsGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Config\MMEGSettingsHelpers.cpp">
+      <Filter>Model\Config\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\Config\VaryHelper.cpp">
+      <Filter>Model\Config\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model\Config\OptimizerConfig.h">
@@ -56,6 +71,15 @@
     </ClInclude>
     <ClInclude Include="Model\Originals\Original.h">
       <Filter>Model\Originals</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.h">
+      <Filter>Model\MMEGSettingsGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Config\MMEGSettingsHelpers.h">
+      <Filter>Model\Config\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\Config\VaryHelper.h">
+      <Filter>Model\Config\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

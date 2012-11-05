@@ -42,6 +42,7 @@ namespace Model
         // #loadOperationCost
         // #saveOperationCost
         // 
+        // If increment value is 0 or negative - corresponding variable shall not be variated.
         //
         static bool readFromFile(const QString &filePath, COptimizerConfig &config);
 

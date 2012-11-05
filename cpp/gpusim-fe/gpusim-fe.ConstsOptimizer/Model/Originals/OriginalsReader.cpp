@@ -1,6 +1,6 @@
 #include "OriginalsReader.h"
 
-#include "../../QLogger/QLog"
+#include "../QLogger/QLog"
 
 #include <QFile>
 #include <QTextStream>

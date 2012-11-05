@@ -1,5 +1,7 @@
 #include "Optimizer.h"
+
 #include "Originals/OriginalsReader.h"
+#include "MMEGConfigGenerator/MMEGSettigsGenerator.h"
 
 #include "../../QLogger/QLog"
 
@@ -45,7 +47,9 @@ void COptimizer::optimize()
         qApp->quit();
         return;
     }
-    
+
+    generateSettingsSet();
+
     qApp->quit();
 }
 
@@ -74,4 +78,11 @@ bool COptimizer::readConfig()
     bool res = COptimizerConfig::readFromFile(m_configFilePath, m_config);
     qLog_DebugMsg() << "..." << res;
     return res;
+}
+
+void COptimizer::generateSettingsSet()
+{
+    qLog_DebugMsg() << "Generating settings set... ";
+    m_settingsSet = CMMEGSettingsGenerator::generate(m_config);
+    qLog_DebugMsg() << "..." << m_settingsSet.size() << " settings generated.";
 }

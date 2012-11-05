@@ -2,6 +2,7 @@
 
 #include "Originals/Original.h"
 #include "Config/OptimizerConfig.h"
+#include "Config/MMEGSettingsHelpers.h"
 
 #include <QObject>
 
@@ -26,6 +27,7 @@ namespace Model
 
         bool readOriginals();
         bool readConfig();
+        void generateSettingsSet();
 
         // Checks result for true, writes it into debug with "..." prefix and quits if check fails.
         void checkResult(bool res);
@@ -37,5 +39,6 @@ namespace Model
 
         COriginalsList m_originals;
         COptimizerConfig m_config;
+        CMMEGSettingsList m_settingsSet;
     };
 }

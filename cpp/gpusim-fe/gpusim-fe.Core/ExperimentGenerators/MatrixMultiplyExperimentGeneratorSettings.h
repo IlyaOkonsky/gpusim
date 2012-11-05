@@ -30,6 +30,8 @@ namespace Core
             bool operator == (const CMatrixMultiplyExperimentGeneratorSettings& other) const;
             bool operator != (const CMatrixMultiplyExperimentGeneratorSettings& other) const;
 
+            bool operator < (const CMatrixMultiplyExperimentGeneratorSettings& other) const;
+
             quint32 getCPUMachinePECount() const;
             void setCPUMachinePECount(quint32 cpuMachineCount);
 
