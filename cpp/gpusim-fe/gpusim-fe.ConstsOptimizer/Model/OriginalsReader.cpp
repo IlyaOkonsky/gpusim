@@ -48,7 +48,6 @@ bool COriginalsReader::readOriginals(const QString &filePath)
     COriginal currentOriginal;
     while(!ts.atEnd())
     {
-        QDoubleVector times;
         quint32 matrixSize;
         
         QString line = ts.readLine();
