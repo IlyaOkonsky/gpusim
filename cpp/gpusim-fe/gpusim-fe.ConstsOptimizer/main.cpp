@@ -36,7 +36,7 @@ int process(int argc, char *argv[])
     if (app.arguments().contains("--trace"))
         QLogger::instance()->setLogLevel(QLogger::LogLevel_Trace);
 
-    Model::COptimizer optimizer("matrmul.txt", "gpusim-fe.ConstsOptimizer.cfg", "bestSettings.xml");
+    Model::COptimizer optimizer(argv[1], argv[2], argv[3]);
     QMetaObject::invokeMethod(&optimizer, "optimize", Qt::QueuedConnection);
     return app.exec();
 }
