@@ -34,7 +34,6 @@
 #
 ###############################################################################
 
-# Ignore Experiments directory
+# Ignore best settings output for project.
 #
-Experiments/
-Experiments-co/
+bestSettings.xml
