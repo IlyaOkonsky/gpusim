@@ -1,8 +1,9 @@
 #include "JavaXMLHelper.h"
 
+#include "../QLogger/QLog"
+
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
 
 using namespace Core::Serialization;
 
@@ -95,8 +96,8 @@ bool CJavaXMLHelper::verifyDocument(const QDomDocument &doc)
 
     if (javaXMLXMLDecoderVersion != c_rootElemVersionPropValue)
     {
-        qWarning() << "[CJavaXMLHelper::verifyDocument]: JavaXMLDecoder version is unexpected. Expected:" <<
-            c_rootElemVersionPropValue << "; Actual:" << javaXMLXMLDecoderVersion;
+        qLog_TraceMsg() << "JavaXMLDecoder version is unexpected. Expected: " <<
+            c_rootElemVersionPropValue << "; Actual: " << javaXMLXMLDecoderVersion;
     }
 
     return (root.attribute(c_rootElemClassPropName, QString()) == c_rootElemClassPropValue);
@@ -196,7 +197,7 @@ bool CJavaXMLHelper::getPropertyElement(const QDomElement &elem, const QString &
         return true;
     }        
 
-    qWarning() << "[CJavaXMLHelper::getPropertyElement]: property element with name" << propName << "not found.";
+    qLog_TraceMsg() << "Property element with name " << propName << " not found.";
     return false;
 }
 
@@ -212,8 +213,7 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
     QDomElement valueElem = propElem.firstChildElement(propType);
     if (valueElem.isNull())
     {
-        qWarning() << "[CJavaXMLHelper::getPropertyValue]: no value with type" << propType <<
-            "for property" << propName << "found";
+        qLog_WarningMsg() << "No value with type " << propType << " for property" << propName << " found";
         return false;
     }
 
@@ -244,8 +244,8 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
         return true;
     }
 
-    qWarning() << "[CJavaXMLHelper::getPropertyValue]: convertion failed (Property:" << propName <<
-        "; Actual value string:" << valueString << "; Target type - qint32).";
+    qLog_WarningMsg() << "Convertion failed (Property: " << propName << "; Actual value string: " <<
+        valueString << "; Target type - qint32).";
     return false;
 }
 
@@ -266,8 +266,8 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
         return true;
     }
 
-    qWarning() << "[CJavaXMLHelper::getPropertyValue]: convertion failed (Property:" << propName <<
-        "; Actual value string:" << valueString << "; Target type - quint32).";
+    qLog_WarningMsg() << "Convertion failed (Property: " << propName << "; Actual value string: " << valueString <<
+        "; Target type - quint32).";
     return false;
 }
 
@@ -288,8 +288,8 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
         return true;
     }
 
-    qWarning() << "[CJavaXMLHelper::getPropertyValue]: convertion failed (Property:" << propName <<
-        "; Actual value string:" << valueString << "; Target type - qint64).";
+    qLog_WarningMsg() << "Convertion failed (Property: " << propName << "; Actual value string: " << valueString <<
+        "; Target type - qint64).";
     return false;
 }
 
@@ -310,8 +310,8 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
         return true;
     }
 
-    qWarning() << "[CJavaXMLHelper::getPropertyValue]: convertion failed (Property:" << propName <<
-        "; Actual value string:" << valueString << "; Target type - quint64).";
+    qLog_WarningMsg() << "Convertion failed (Property: " << propName << "; Actual value string: " << valueString <<
+        "; Target type - quint64).";
     return false;
 }
 
@@ -332,8 +332,8 @@ bool CJavaXMLHelper::getPropertyValue(const QDomElement &elem, const QString &pr
         return true;
     }
 
-    qWarning() << "[CJavaXMLHelper::getPropertyValue]: convertion failed (Property:" << propName <<
-        "; Actual value string:" << valueString << "; Target type - double).";
+    qLog_WarningMsg() << "Convertion failed (Property: " << propName << "; Actual value string: " << valueString <<
+        "; Target type - double).";
     return false;
 }
 #pragma endregion

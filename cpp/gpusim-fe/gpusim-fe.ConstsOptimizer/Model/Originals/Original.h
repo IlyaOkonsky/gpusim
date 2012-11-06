@@ -20,7 +20,6 @@ namespace Model
         bool operator != (const COriginal& other) const;
         bool operator <  (const COriginal& other) const;
 
-
         quint32 getMatrixSize() const;
         void setMatrixSize(quint32 matrixSize);
 

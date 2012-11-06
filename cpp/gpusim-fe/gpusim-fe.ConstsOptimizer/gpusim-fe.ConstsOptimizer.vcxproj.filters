@@ -55,14 +55,14 @@
     <ClCompile Include="Model\Originals\OriginalsReader.cpp">
       <Filter>Model\Originals\Reader</Filter>
     </ClCompile>
-    <ClCompile Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.cpp">
-      <Filter>Model\MMEGSettingsGenerator</Filter>
-    </ClCompile>
     <ClCompile Include="Model\Config\MMEGSettingsHelpers.cpp">
       <Filter>Model\Config\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Model\Config\VaryHelper.cpp">
       <Filter>Model\Config\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.cpp">
+      <Filter>Model\MMEGSettingsGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,14 +72,14 @@
     <ClInclude Include="Model\Originals\Original.h">
       <Filter>Model\Originals</Filter>
     </ClInclude>
-    <ClInclude Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.h">
-      <Filter>Model\MMEGSettingsGenerator</Filter>
-    </ClInclude>
     <ClInclude Include="Model\Config\MMEGSettingsHelpers.h">
       <Filter>Model\Config\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Model\Config\VaryHelper.h">
       <Filter>Model\Config\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.h">
+      <Filter>Model\MMEGSettingsGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

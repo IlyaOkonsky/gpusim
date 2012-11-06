@@ -67,11 +67,14 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Global\Enums">
+      <UniqueIdentifier>{9f05f7bc-ddac-4177-aacd-574e27dc841b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global\MetaTypes">
+      <UniqueIdentifier>{8ef7657f-d4c0-47d3-9f67-532132d77753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MetaTypes.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="Experiment.cpp">
       <Filter>Experiment</Filter>
     </ClCompile>
@@ -132,11 +135,14 @@
     <ClCompile Include="Serialization\JavaXMLHelper.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
+    <ClCompile Include="MetaTypes.cpp">
+      <Filter>Global\MetaTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Enums.cpp">
+      <Filter>Global\Enums</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MetaTypes.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="Core_global.h">
       <Filter>Global</Filter>
     </ClInclude>
@@ -185,8 +191,11 @@
     <ClInclude Include="Serialization\JavaXMLListSerialize.hpp">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="MetaTypes.h">
+      <Filter>Global\MetaTypes</Filter>
+    </ClInclude>
     <ClInclude Include="Enums.h">
-      <Filter>Global</Filter>
+      <Filter>Global\Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

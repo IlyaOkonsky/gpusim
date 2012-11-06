@@ -75,7 +75,8 @@ bool COriginalsReader::readOriginals(const QString &filePath)
             currentOriginal.setSimulationTime(o.getSimulationTime());
     }
     
-    return true;
+    std::sort(m_originals.begin(), m_originals.end());
+    return !m_originals.isEmpty();
 }
 
 bool COriginalsReader::processLine(const QString &line, COriginal &o)

@@ -2,11 +2,13 @@
 
 #include "../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGeneratorSettings.h"
 #include <QVector>
+#include <QQueue>
 
 namespace Model
 {
     using Core::Settings::CMatrixMultiplyExperimentGeneratorSettings;
     typedef QVector<CMatrixMultiplyExperimentGeneratorSettings> CMMEGSettingsList;
+    typedef QQueue<CMatrixMultiplyExperimentGeneratorSettings> CMMEGSettingsQueue;
 
     typedef enum _tagCMMEGSettingsProps
     {

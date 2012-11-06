@@ -88,7 +88,7 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model\Config\MMEGSettingsHelpers.cpp" />
-    <ClCompile Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.cpp" />
+    <ClCompile Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.cpp" />
     <ClCompile Include="Model\Config\VaryHelper.cpp" />
     <ClCompile Include="Model\Optimizer.cpp" />
     <ClCompile Include="Model\Config\OptimizerConfig.cpp" />
@@ -108,7 +108,7 @@
     </CustomBuild>
     <ClInclude Include="Model\Config\MMEGSettingsHelpers.h" />
     <ClInclude Include="Model\Config\OptimizerConfig.h" />
-    <ClInclude Include="Model\MMEGConfigGenerator\MMEGSettigsGenerator.h" />
+    <ClInclude Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.h" />
     <ClInclude Include="Model\Config\VaryHelper.h" />
     <ClInclude Include="Model\Originals\Original.h" />
     <CustomBuild Include="Model\Originals\OriginalsReader.h">

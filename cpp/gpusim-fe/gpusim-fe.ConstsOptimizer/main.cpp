@@ -3,16 +3,18 @@
 #include <QtCore/QCoreApplication>
 
 #include <../QLogger/QLogger>
+#include <iostream>
 
 void installLogger()
 {
     QLogger::instance()->setLogDestination(QLogger::CLogDestination(
         QLogger::LogDest_Default | QLogger::LogDest_File));
-    QLogger::instance()->setLogFormat("[%COL(SEV):5%]:[%COL(TIME):25%]:"
+    QLogger::instance()->setDateTimeFormat("hh:mm:ss.zzz");
+    QLogger::instance()->setLogFormat("[%COL(SEV):5%]:[%COL(TIME):12%]:"
         "[%COL(MOD):20%]:[%COL(FUNC):40%]> %COL(MSG):0%");
 
     QLogger::instance()->setLogFileName("gpusim-fe.ConstsOptimizer.log");
-    QLogger::instance()->setLogLevel(QLogger::LogLevel_Trace);
+    QLogger::instance()->setLogLevel(QLogger::LogLevel_Debug);
     QLogger::instance()->setLogsDir(QDir::current());
     QLogger::instance()->writeStartMessage();
 }
@@ -30,13 +32,26 @@ int process(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     Core::registerMetaTypes();
-    Model::COptimizer optimizer("matrmul.txt", "gpusim-fe.ConstsOptimizer.cfg", QString());
+
+    if (app.arguments().contains("--trace"))
+        QLogger::instance()->setLogLevel(QLogger::LogLevel_Trace);
+
+    Model::COptimizer optimizer("matrmul.txt", "gpusim-fe.ConstsOptimizer.cfg", "bestSettings.xml");
     QMetaObject::invokeMethod(&optimizer, "optimize", Qt::QueuedConnection);
     return app.exec();
 }
 
 int main(int argc, char *argv[])
 {
+    if (argc < 4)
+    {
+        std::cout << "Parameters not set. usage:" << std::endl;
+        std::cout << "gpusim-fe.ConstsOptimizer <originals_file_path> <config_file_path> <best_settings_filePath> " <<
+            "[--trace]" << std::endl;
+        system("pause");
+        return 0;
+    }
+
     installLogger();
     int iRes = process(argc, argv);
     deinstallLogger();

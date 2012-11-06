@@ -24,9 +24,6 @@ private slots:
     void onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core::CExitCode ec);
 
 private:
-    void createExperementer();
-
-private:
     typedef enum _tagCState
     {
         State_Ready,

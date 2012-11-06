@@ -1,6 +1,6 @@
 #include "Simulator.h"
 
-#include <QDebug>
+#include "../QLogger/QLog"
 
 using namespace Core;
 
@@ -48,7 +48,7 @@ void CSimulator::setSimulation(const CSimulation &simulation)
     Q_ASSERT(m_state == State_Ready);
     if (m_state != State_Ready)
     {
-        qWarning() << "[CSimulator::setSimulation] wrong state.";
+        qLog_WarningMsg() << "Wrong state.";
         return;
     }
 
@@ -83,7 +83,7 @@ void CSimulator::execute()
     Q_ASSERT(m_state == State_Ready);
     if (m_state != State_Ready)
     {
-        qWarning() << "[CSimulator::execute]. Wrong state.";
+        qLog_WarningMsg() << "Wrong state.";
         processExecuted(EC_Error);
         return;
     }
@@ -91,7 +91,7 @@ void CSimulator::execute()
     emitProgress(0);
     if (!m_simulation.getConfigRef().saveToFile(m_configFilePath))
     {
-        qWarning() << "[CSimulator::execute]. Failed to save configuration to file.";
+        qLog_WarningMsg() << "Failed to save configuration to file.";
         processExecuted(EC_Error);
         return;
     }
@@ -113,7 +113,7 @@ void CSimulator::cancel()
 {
     if ((m_state == State_Ready) || (m_state == State_Canceling))
     {
-        qWarning() << "[CSimulator::cancel]: Wrong state";
+        qLog_WarningMsg() << "Wrong state.";
         return;
     }
 
@@ -137,7 +137,7 @@ void CSimulator::onJavaProcessError(QProcess::ProcessError error)
     if (m_state == State_Canceling)
         return;
 
-    qWarning() << "[CSimulator::onJavaProcessError]: " << error;
+    qLog_WarningMsg() << "Process error: " << error;
     processExecuted(EC_Error);
 }
 
@@ -165,7 +165,7 @@ void CSimulator::onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 
     if (exitCode)
     {
-        qDebug() << "[CSimulator::onJavaProcessFinished]: Java process exit error code: " << exitCode;
+        qLog_DebugMsg() << "Java process exit error code: " << exitCode;
         processExecuted(EC_Error);
         return;
     }
@@ -173,7 +173,7 @@ void CSimulator::onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     GridSimConfig::CGridSimOutput output;
     if (!output.loadFromFile(m_outputFilePath))
     {
-        qWarning() << "[CSimulator::onJavaProcessFinished]. Failed to load output from file.";
+        qLog_WarningMsg() << "Failed to load output from file.";
         processExecuted(EC_Error);
     }
     m_simulation.setOutput(output);

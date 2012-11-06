@@ -139,7 +139,7 @@ void CMatrixMultiplyExperimentGeneratorSettings::setCPUMachinePERating(quint32 c
 #pragma region GPUMachinePECount property
 quint32 CMatrixMultiplyExperimentGeneratorSettings::getGPUMachinePECount() const
 {
-    return m_cpuMachinePECount;
+    return m_gpuMachinePECount;
 }
 
 void CMatrixMultiplyExperimentGeneratorSettings::setGPUMachinePECount(quint32 gpuMachineCount)
@@ -151,7 +151,7 @@ void CMatrixMultiplyExperimentGeneratorSettings::setGPUMachinePECount(quint32 gp
 #pragma region GPUMachinePERating property
 quint32 CMatrixMultiplyExperimentGeneratorSettings::getGPUMachinePERating() const
 {
-    return m_cpuMachinePERating;
+    return m_gpuMachinePERating;
 }
 
 void CMatrixMultiplyExperimentGeneratorSettings::setGPUMachinePERating(quint32 gpuMachineRating)

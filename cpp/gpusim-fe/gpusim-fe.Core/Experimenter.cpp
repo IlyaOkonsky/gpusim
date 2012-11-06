@@ -1,6 +1,6 @@
 #include "Experimenter.h"
 
-#include <QDebug>
+#include "../QLogger/QLog"
 
 using namespace Core;
 
@@ -33,7 +33,7 @@ void CExperimenter::setExperiment(const CExperiment &experiment)
     Q_ASSERT(m_state == State_Ready);
     if (m_state != State_Ready)
     {
-        qWarning() << "[CExperimenter::setExperiment] wrong state.";
+        qLog_WarningMsg() << "Wrong state.";
         return;
     }
 
@@ -48,7 +48,7 @@ void CExperimenter::setExperiment(const CExperiment &experiment)
     m_simulatorsWorkingDir = QDir(m_workingDir).absoluteFilePath(m_experiment.getDirName());
     if (!QDir().mkpath(m_simulatorsWorkingDir))
     {
-        qWarning() << "[CExperimenter::setExperiment] failed to create simulators working dir";
+        qLog_WarningMsg() << "Failed to create simulators working dir";
         return;
     }
     
@@ -79,7 +79,7 @@ void CExperimenter::execute()
     Q_ASSERT(m_state == State_Ready);
     if (m_state != State_Ready)
     {
-        qWarning() << "[CSimulator::execute]. Wrong state.";
+        qLog_WarningMsg() << "Wrong state.";
         processExecuted(EC_Error);
         return;
     }
@@ -101,7 +101,7 @@ void CExperimenter::cancel()
 {
     if (m_state != State_Executing)
     {
-        qWarning() << "[CExperimenter::cancel]: Wrong state";
+        qLog_WarningMsg() << "Wrong state.";
         return;
     }
 
@@ -164,7 +164,7 @@ void CExperimenter::processCurrentSim()
 
     createSimulator(*m_itCurrentSim);
 
-    qDebug() << "[CExperimenter::processCurrentSim]: Executing simulation " << m_itCurrentSim->getName();
+    qLog_DebugMsg() << "Executing simulation " << m_itCurrentSim->getName();
     m_pSimulator->execute();
 }
 
@@ -193,7 +193,7 @@ void CExperimenter::createSimulator(const CSimulation &sim)
 {
     if (m_pSimulator)
     {
-        qWarning() << "[CExperimenter::createSimulator]: Simulator already created";
+        qLog_WarningMsg() << "Simulator already created";
         return;
     }
 

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Core_global.h"
+
+#include <QString>
+
 namespace Core
 {
     typedef enum _tagCExitCode
@@ -10,4 +14,6 @@ namespace Core
         EC_Canceled
 
     } CExitCode;
+
+    QString GPUSIM_FE_CORE_EXPORT exitCodeToString(CExitCode ec);
 }

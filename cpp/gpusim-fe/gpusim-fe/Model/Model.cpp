@@ -1,8 +1,9 @@
 #include "Model.h"
 #include "../../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
 
+#include "../QLogger/QLog"
+
 #include <QThread>
-#include <QDebug>
 
 using namespace Core;
 
@@ -55,7 +56,7 @@ void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, qui
     Settings::CMatrixMultiplyExperimentGeneratorSettings settings;
     if (!settings.loadFromFile(c_mmegSettingsFilePath))
     {
-        qWarning() << "Failed to load MMEG settings.";
+        qLog_WarningMsg() << "Failed to load MMEG settings.";
         emit experimentProgress(100);
         emit experimentResult(EC_Error);
     }

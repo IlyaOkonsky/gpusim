@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enums.cpp" />
     <ClCompile Include="Experiment.cpp" />
     <ClCompile Include="Experimenter.cpp" />
     <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.cpp" />
