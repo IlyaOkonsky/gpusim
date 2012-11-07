@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Originals/Original.h"
+#include "../../gpusim-fe.Core/Originals/Original.h"
 #include "Config/OptimizerConfig.h"
 #include "Config/MMEGSettingsHelpers.h"
 #include "../../gpusim-fe.Core/Experimenter.h"
@@ -34,11 +34,6 @@ namespace Model
         void processNextSettings();
         void finishOptimization(bool error);
 
-        // Returns difference between originals and experiment result.
-        // In case of error returns -1.0f;
-        // 
-        double calculateDiff(const Core::CExperiment &e);
-
         bool checkDiff(double currentDifference);
         void saveBestSettings();
 
@@ -49,7 +44,7 @@ namespace Model
         QString m_configFilePath;
         QString m_outputFilePath;
 
-        COriginalsList m_originals;
+        Core::COriginalsList m_originals;
         COptimizerConfig m_config;
 
         quint32 m_settingsSetTotalSize;
@@ -65,6 +60,7 @@ namespace Model
         Core::CExperimenter m_experimenter;
 
     private:
+        static const quint32 c_originalsMaxMatrixSize;        
         static const QString c_simulatorJarPath;
         static const QString c_experimentsWorkingDir;
         static const quint32 c_mmegBlockSize;

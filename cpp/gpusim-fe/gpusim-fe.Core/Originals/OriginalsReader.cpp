@@ -6,18 +6,18 @@
 #include <QTextStream>
 #include <QStringList>
 
-using namespace Model;
+using namespace Core;
 
 //////////////////////////////////////////////////////////////////////////
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
+const quint32 COriginalsReader::c_defaulMaxMatrixSize = 0;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const quint32 COriginalsReader::c_maxMatrixSize   = 1024;
 const QChar   COriginalsReader::c_columnSplitter  = QChar(';');
 const quint32 COriginalsReader::c_columnsCount    = 4;
 #pragma endregion
@@ -26,8 +26,9 @@ const quint32 COriginalsReader::c_columnsCount    = 4;
 // Code
 ////////////////////////////////////////////////////////////////////////// 
 
-COriginalsReader::COriginalsReader(COriginalsList &originals)
-    : m_originals(originals)
+COriginalsReader::COriginalsReader(COriginalsList &originals, 
+    quint32 maxMatrixSize /*= c_defaulMaxMatrixSize*/)
+    : m_originals(originals), m_maxMatrixSize(maxMatrixSize)
 {
 
 }
@@ -62,7 +63,7 @@ bool COriginalsReader::readOriginals(const QString &filePath)
             if (currentOriginal.getMatrixSize() != 0)
                 m_originals.push_back(currentOriginal);
 
-            if (currentOriginal.getMatrixSize() >= c_maxMatrixSize)
+            if (m_maxMatrixSize && (currentOriginal.getMatrixSize() >= m_maxMatrixSize))
                 break;
 
             currentOriginal = o;

@@ -108,6 +108,9 @@
     <ClCompile Include="GridSimConfig\GridSimResourceConfig.cpp" />
     <ClCompile Include="IExperimentGenerator.cpp" />
     <ClCompile Include="MetaTypes.cpp" />
+    <ClCompile Include="Originals\OriginalsHelpers.cpp" />
+    <ClCompile Include="Originals\Original.cpp" />
+    <ClCompile Include="Originals\OriginalsReader.cpp" />
     <ClCompile Include="Serialization\IJavaXMLSerialize.cpp" />
     <ClCompile Include="Serialization\JavaXMLHelper.cpp" />
     <ClCompile Include="Simulation.cpp" />
@@ -117,6 +120,9 @@
     <ClInclude Include="Core_global.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Experiment.h" />
+    <ClInclude Include="Originals\OriginalsHelpers.h" />
+    <ClInclude Include="Originals\Original.h" />
+    <ClInclude Include="Originals\OriginalsReader.h" />
     <ClInclude Include="Serialization\IJavaXMLSerialize.h" />
     <ClInclude Include="Serialization\JavaXMLHelper.h" />
     <ClInclude Include="Serialization\JavaXMLListSerialize.hpp" />

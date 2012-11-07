@@ -92,8 +92,6 @@
     <ClCompile Include="Model\Config\VaryHelper.cpp" />
     <ClCompile Include="Model\Optimizer.cpp" />
     <ClCompile Include="Model\Config\OptimizerConfig.cpp" />
-    <ClCompile Include="Model\Originals\Original.cpp" />
-    <ClCompile Include="Model\Originals\OriginalsReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Model\Optimizer.h">
@@ -110,23 +108,6 @@
     <ClInclude Include="Model\Config\OptimizerConfig.h" />
     <ClInclude Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.h" />
     <ClInclude Include="Model\Config\VaryHelper.h" />
-    <ClInclude Include="Model\Originals\Original.h" />
-    <CustomBuild Include="Model\Originals\OriginalsReader.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </Command>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <None Include="gpusim-fe.ConstsOptimizer.cfg" />

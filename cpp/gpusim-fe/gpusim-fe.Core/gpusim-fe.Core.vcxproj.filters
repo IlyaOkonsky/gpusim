@@ -73,6 +73,15 @@
     <Filter Include="Global\MetaTypes">
       <UniqueIdentifier>{8ef7657f-d4c0-47d3-9f67-532132d77753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Originals">
+      <UniqueIdentifier>{3d2a71f7-5c02-4e07-befb-61554b65621c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Originals\Reader">
+      <UniqueIdentifier>{9dcc9bc6-fde9-48da-a1e2-38459adeddd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Originals\Helpers">
+      <UniqueIdentifier>{299cb148-887a-4bd7-8515-1277365bfd21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Experiment.cpp">
@@ -141,6 +150,15 @@
     <ClCompile Include="Enums.cpp">
       <Filter>Global\Enums</Filter>
     </ClCompile>
+    <ClCompile Include="Originals\Original.cpp">
+      <Filter>Originals</Filter>
+    </ClCompile>
+    <ClCompile Include="Originals\OriginalsReader.cpp">
+      <Filter>Originals\Reader</Filter>
+    </ClCompile>
+    <ClCompile Include="Originals\OriginalsHelpers.cpp">
+      <Filter>Originals\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core_global.h">
@@ -196,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="Enums.h">
       <Filter>Global\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Originals\Original.h">
+      <Filter>Originals</Filter>
+    </ClInclude>
+    <ClInclude Include="Originals\OriginalsReader.h">
+      <Filter>Originals\Reader</Filter>
+    </ClInclude>
+    <ClInclude Include="Originals\OriginalsHelpers.h">
+      <Filter>Originals\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

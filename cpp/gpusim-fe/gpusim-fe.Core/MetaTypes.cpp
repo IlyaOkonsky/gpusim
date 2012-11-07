@@ -2,6 +2,7 @@
 
 #include "Experiment.h"
 #include "Enums.h"
+#include "Originals/Original.h"
 
 #include <QProcess>
 
@@ -28,6 +29,10 @@ void Core::registerMetaTypes()
     qRegisterMetaType<CExperiment>("Core::CExperiment");
 
     qRegisterMetaType<CExitCode>("Core::CExitCode");
+
+    qRegisterMetaType<COriginal>("Core::COriginal");
+    qRegisterMetaType<COriginalsList>("Core::COriginalsList");
+
     qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
     qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
 }

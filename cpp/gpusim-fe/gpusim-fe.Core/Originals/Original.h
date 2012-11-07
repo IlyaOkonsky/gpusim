@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../Core_global.h"
+
 #include <QVector>
 #include <QMetaType>
 
-namespace Model
+namespace Core
 {
-    class COriginal
+    class GPUSIM_FE_CORE_EXPORT COriginal
     {
     public:
         static const double  c_minSimulationTime;
@@ -34,5 +36,5 @@ namespace Model
     typedef QVector<COriginal> COriginalsList;
 }
 
-Q_DECLARE_METATYPE(Model::COriginal);
-Q_DECLARE_METATYPE(Model::COriginalsList);
+Q_DECLARE_METATYPE(Core::COriginal);
+Q_DECLARE_METATYPE(Core::COriginalsList);

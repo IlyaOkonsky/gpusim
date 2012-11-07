@@ -1,17 +1,20 @@
 #include "Optimizer.h"
 
-#include "Originals/OriginalsReader.h"
+#include "../../gpusim-fe.Core/Originals/OriginalsReader.h"
+#include "../../gpusim-fe.Core/Originals/OriginalsHelpers.h"
+
 #include "MMEGSettingsGenerator/MMEGSettigsGenerator.h"
 #include "../../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
 
 #include "../../QLogger/QLog"
 
 #include <QCoreApplication>
-#include <QMath.h>
 
 using namespace Model;
 using Core::CMatrixMultiplyExperimentGenerator;
 using Core::CExperiment;
+using Core::COriginal;
+using Core::COriginalsReader;
 
 //////////////////////////////////////////////////////////////////////////
 // Constants
@@ -22,9 +25,10 @@ using Core::CExperiment;
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const QString COptimizer::c_simulatorJarPath      = QString("../Simulator/gpusim-runtime.jar");
-const QString COptimizer::c_experimentsWorkingDir = QString("../Experiments-co");
-const quint32 COptimizer::c_mmegBlockSize         = 16;
+const quint32 COptimizer::c_originalsMaxMatrixSize = 1024;
+const QString COptimizer::c_simulatorJarPath       = QString("../Simulator/gpusim-runtime.jar");
+const QString COptimizer::c_experimentsWorkingDir  = QString("../Experiments-co");
+const quint32 COptimizer::c_mmegBlockSize          = 16;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,7 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
         return;
     }
 
-    double diff = calculateDiff(pExperimenter->getExperimentRef());
+    double diff = Core::calculateDifference(m_originals, pExperimenter->getExperimentRef());
     if (diff == -1.0f)
     {
         qLog_CriticalMsg() << "Failed to calculate difference between originals and simulation.";
@@ -115,7 +119,7 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
 bool COptimizer::readOriginals()
 {
     qLog_DebugMsg() << "Reading originals from " << m_originalsFilePath << " file...";
-    COriginalsReader reader(m_originals);
+    COriginalsReader reader(m_originals, c_originalsMaxMatrixSize);
     bool res = reader.readOriginals(m_originalsFilePath);
     qLog_DebugMsg() << "..." << res;
     return res;
@@ -171,28 +175,6 @@ void COptimizer::finishOptimization(bool error)
     qLog_DebugMsg() << "Best difference value "<< m_bestDifference << " was achived. Best settings values:";
     writeSettingsToLog(m_bestSettings);
     qApp->quit();
-}
-
-double COptimizer::calculateDiff(const Core::CExperiment &e)
-{
-    if (e.getSimulationsRef().size() != m_originals.size())
-    {
-        qLog_CriticalMsg() << "Originals and simulations count in experiment are no equal.";
-        return -1.0f;
-    }
-
-    double diff = 0.0f;
-    auto itOriginals = m_originals.constBegin();
-    auto itOriginalsEnd = m_originals.constEnd();
-    auto itSimulation = e.getSimulationsRef().constBegin();
-    for(; itOriginals != itOriginalsEnd; ++itOriginals, ++itSimulation)
-    {
-        double distance = qAbs(itOriginals->getSimulationTime() -
-            itSimulation->getOutputRef().getTotalSimulationTime());
-        diff += qPow(distance, 2.0f);
-    }
-
-    return diff;
 }
 
 bool COptimizer::checkDiff(double currentDifference)
