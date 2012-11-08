@@ -14,8 +14,8 @@ template <class T>
 struct CPropInfo
 {
     CPropInfo(const QString &name = QString(), T* pStartValue = nullptr, T* pEndValue = nullptr,
-        T* pIncrement = nullptr)
-        : m_name(name), m_pStartValue(pStartValue), m_pEndValue(pEndValue), m_pIncrement(pIncrement)
+        T* pIncrement = nullptr, COptimizerConfig::CIncrementMode *pIM = nullptr)
+        : m_name(name), m_pStartValue(pStartValue), m_pEndValue(pEndValue), m_pIncrement(pIncrement), m_pIM(pIM)
     {
     }
 
@@ -23,6 +23,7 @@ struct CPropInfo
     T* m_pStartValue;
     T* m_pEndValue;
     T* m_pIncrement;
+    COptimizerConfig::CIncrementMode *m_pIM;
 };
 
 typedef CPropInfo<QVariant> CVariantPropInfo;
@@ -65,7 +66,15 @@ static bool parseProperty(QTextStream &in, CVariantPropInfo &info)
 
     line = in.readLine();
     QStringList l = line.split(QChar(' '), QString::SkipEmptyParts);
-    if (l.size() != 3)
+    if (l.size() != 4)
+        return false;
+
+    QString sIncrementMode = l[3].toUpper();
+    if (sIncrementMode == QLatin1String("A"))
+        *info.m_pIM = COptimizerConfig::IM_Additive;
+    else if (sIncrementMode == QLatin1String("M"))
+        *info.m_pIM = COptimizerConfig::IM_Multiplicative;
+    else
         return false;
 
     *info.m_pStartValue = l[0];
@@ -80,7 +89,7 @@ static bool parseProperty(QTextStream &in, CVariantPropInfo &info)
 static bool parseProperty(QTextStream &in, CDoublePropInfo &info)
 {
     QVariant vStartValue, vEndValue, vIncrement;
-    CVariantPropInfo vInfo(info.m_name, &vStartValue, &vEndValue, &vIncrement);
+    CVariantPropInfo vInfo(info.m_name, &vStartValue, &vEndValue, &vIncrement, info.m_pIM);
 
     if (!parseProperty(in, vInfo))
         return false;
@@ -101,7 +110,7 @@ static bool parseProperty(QTextStream &in, CDoublePropInfo &info)
 static bool parseProperty(QTextStream &in, CUInt32PropInfo &info)
 {
     QVariant vStartValue, vEndValue, vIncrement;
-    CVariantPropInfo vInfo(info.m_name, &vStartValue, &vEndValue, &vIncrement);
+    CVariantPropInfo vInfo(info.m_name, &vStartValue, &vEndValue, &vIncrement, info.m_pIM);
 
     if (!parseProperty(in, vInfo))
         return false;
@@ -124,15 +133,15 @@ static bool parseProperty(QTextStream &in, CUInt32PropInfo &info)
 
 COptimizerConfig::COptimizerConfig()
     : m_mode(OM_Sequential),
-    m_cpuMachinePECountS(0), m_cpuMachinePECountE(0), m_cpuMachinePECountI(0),
-    m_cpuMachinePERatingS(0), m_cpuMachinePERatingE(0), m_cpuMachinePERatingI(0),
-    m_gpuMachinePECountS(0), m_gpuMachinePECountE(0), m_gpuMachinePECountI(0),
-    m_gpuMachinePERatingS(0), m_gpuMachinePERatingE(0), m_gpuMachinePERatingI(0),
-    m_resourceBaudRateS(0.0f), m_resourceBaudRateE(0.0f), m_resourceBaudRateI(0.0f),
-    m_resourceCostPerSecS(0.0f), m_resourceCostPerSecE(0.0f), m_resourceCostPerSecI(0.0f),
-    m_linkBaudRateS(0.0f), m_linkBaudRateE(0.0f), m_linkBaudRateI(0.0f),
-    m_loadOperationCostS(0.0f), m_loadOperationCostE(0.0f), m_loadOperationCostI(0.0f),
-    m_saveOperationCostS(0.0f), m_saveOperationCostE(0.0f), m_saveOperationCostI(0.0f)
+    m_cpuMachinePECountS(0), m_cpuMachinePECountE(0), m_cpuMachinePECountI(0), m_cpuMachinePECountM(IM_Additive),
+    m_cpuMachinePERatingS(0), m_cpuMachinePERatingE(0), m_cpuMachinePERatingI(0), m_cpuMachinePERatingM(IM_Additive),
+    m_gpuMachinePECountS(0), m_gpuMachinePECountE(0), m_gpuMachinePECountI(0), m_gpuMachinePECountM(IM_Additive),
+    m_gpuMachinePERatingS(0), m_gpuMachinePERatingE(0), m_gpuMachinePERatingI(0), m_gpuMachinePERatingM(IM_Additive),
+    m_resourceBaudRateS(0.0f), m_resourceBaudRateE(0.0f), m_resourceBaudRateI(0.0f), m_resourceBaudRateM(IM_Additive),
+    m_resourceCostPerSecS(0.0f), m_resourceCostPerSecE(0.0f), m_resourceCostPerSecI(0.0f), m_resourceCostPerSecM(IM_Additive),
+    m_linkBaudRateS(0.0f), m_linkBaudRateE(0.0f), m_linkBaudRateI(0.0f), m_linkBaudRateM(IM_Additive),
+    m_loadOperationCostS(0.0f), m_loadOperationCostE(0.0f), m_loadOperationCostI(0.0f), m_loadOperationCostM(IM_Additive),
+    m_saveOperationCostS(0.0f), m_saveOperationCostE(0.0f), m_saveOperationCostI(0.0f), m_saveOperationCostM(IM_Additive)
 {
 
 }
@@ -156,27 +165,27 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     //
     static QVector<CUInt32PropInfo> uintPropsInfo;
     uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePECount),
-        &cfg.m_cpuMachinePECountS, &cfg.m_cpuMachinePECountE, &cfg.m_cpuMachinePECountI));
+        &cfg.m_cpuMachinePECountS, &cfg.m_cpuMachinePECountE, &cfg.m_cpuMachinePECountI, &cfg.m_cpuMachinePECountM));
     uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePERating),
-        &cfg.m_cpuMachinePERatingS, &cfg.m_cpuMachinePERatingE, &cfg.m_cpuMachinePERatingI));
+        &cfg.m_cpuMachinePERatingS, &cfg.m_cpuMachinePERatingE, &cfg.m_cpuMachinePERatingI, &cfg.m_cpuMachinePERatingM));
     uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePECount),
-        &cfg.m_gpuMachinePECountS, &cfg.m_gpuMachinePECountE, &cfg.m_gpuMachinePECountI));
+        &cfg.m_gpuMachinePECountS, &cfg.m_gpuMachinePECountE, &cfg.m_gpuMachinePECountI, &cfg.m_gpuMachinePECountM));
     uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePERating),
-        &cfg.m_gpuMachinePERatingS, &cfg.m_gpuMachinePERatingE, &cfg.m_gpuMachinePERatingI));
+        &cfg.m_gpuMachinePERatingS, &cfg.m_gpuMachinePERatingE, &cfg.m_gpuMachinePERatingI, &cfg.m_gpuMachinePERatingM));
 
     // Fill double properties info
     //
     static QVector<CDoublePropInfo> doublePropsInfo;
     doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceBaudRate),
-        &cfg.m_resourceBaudRateS, &cfg.m_resourceBaudRateE, &cfg.m_resourceBaudRateI));
+        &cfg.m_resourceBaudRateS, &cfg.m_resourceBaudRateE, &cfg.m_resourceBaudRateI, &cfg.m_resourceBaudRateM));
     doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceCostPerSec),
-        &cfg.m_resourceCostPerSecS, &cfg.m_resourceCostPerSecE, &cfg.m_resourceCostPerSecI));
+        &cfg.m_resourceCostPerSecS, &cfg.m_resourceCostPerSecE, &cfg.m_resourceCostPerSecI, &cfg.m_resourceCostPerSecM));
     doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_linkBaudRate),
-        &cfg.m_linkBaudRateS, &cfg.m_linkBaudRateE, &cfg.m_linkBaudRateI));
+        &cfg.m_linkBaudRateS, &cfg.m_linkBaudRateE, &cfg.m_linkBaudRateI, &cfg.m_linkBaudRateM));
     doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_loadOperationCost),
-        &cfg.m_loadOperationCostS, &cfg.m_loadOperationCostE, &cfg.m_loadOperationCostI));
+        &cfg.m_loadOperationCostS, &cfg.m_loadOperationCostE, &cfg.m_loadOperationCostI, &cfg.m_loadOperationCostM));
     doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_saveOperationCost),
-        &cfg.m_saveOperationCostS, &cfg.m_saveOperationCostE, &cfg.m_saveOperationCostI));
+        &cfg.m_saveOperationCostS, &cfg.m_saveOperationCostE, &cfg.m_saveOperationCostI, &cfg.m_saveOperationCostM));
 
     // Read all uint properties
     //
