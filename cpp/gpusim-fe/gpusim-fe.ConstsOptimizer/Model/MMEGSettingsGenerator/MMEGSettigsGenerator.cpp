@@ -12,7 +12,7 @@ CMMEGSettingsList CMMEGSettingsGenerator::generate(const COptimizerConfig&cfg)
 {
     CMMEGSettingsList l;
     CMatrixMultiplyExperimentGeneratorSettings initial = createInitialSettings(cfg);
-    if (cfg.m_mode == COptimizerConfig::OM_Sequential)
+    if (cfg.m_om == COptimizerConfig::OM_Sequential)
         l = genSequentual(cfg, initial);
     else
         l = genRecursive(cfg, initial);

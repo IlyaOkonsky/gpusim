@@ -2,6 +2,7 @@
 
 #include "../../../gpusim-fe.Core/Experiment.h"
 #include "../../../gpusim-fe.Core/Enums.h"
+#include "../../../gpusim-fe.Core/Originals/Original.h"
 
 #include <QDialog>
 #include "ui_Mainwindow.h"
@@ -24,7 +25,15 @@ signals:
 private slots:
     void executeClick();
     void cancelClick();
+    void useOriginalsChanged(bool val);
+    void chooseOriginalsFileClick();
+    bool loadOriginals();
+
+private:
+    void fillUIFromOriginals();
+    void clearOriginals();
 
 private:
     Ui::CMainWindow ui;
+    Core::COriginalsList m_originals;
 };

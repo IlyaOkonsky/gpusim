@@ -5,19 +5,19 @@
    <int>8</int>
   </void>
   <void property="cpuMachineRating">
-   <int>100</int>
+   <int>815</int>
   </void>
   <void property="gpuMachineCount">
-   <int>8</int>
+   <int>70</int>
   </void>
   <void property="gpuMachineRating">
-   <int>100</int>
+   <int>20</int>
   </void>
   <void property="resourceArch">
-   <string>Matrix Multiply Experiment Arch</string>
+   <string>gpusim-fe.Consts Optimizer Arch</string>
   </void>
   <void property="resourceOS">
-   <string>Matrix Multiply Experiment OS</string>
+   <string>gpusim-fe.Consts Optimizer OS</string>
   </void>
   <void property="resourceBaudRate">
    <double>10000000000</double>
@@ -29,10 +29,10 @@
    <double>10000000000</double>
   </void>
   <void property="loadOperationCost">
-   <double>10</double>
+   <double>1.482e-05</double>
   </void>
   <void property="saveOperationCost">
-   <double>100</double>
+   <double>1.482e-05</double>
   </void>
  </object>
 </java>

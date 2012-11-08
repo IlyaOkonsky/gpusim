@@ -1,8 +1,9 @@
 #include "../gpusim-fe.Core/MetaTypes.h"
 #include "Model/Optimizer.h"
-#include <QtCore/QCoreApplication>
 
-#include <../QLogger/QLogger>
+#include "../QLogger/QLogger.h"
+
+#include <QtCore/QCoreApplication>
 #include <iostream>
 
 void installLogger()
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
     if (argc < 4)
     {
         std::cout << "Parameters not set. usage:" << std::endl;
-        std::cout << "gpusim-fe.ConstsOptimizer <originals_file_path> <config_file_path> <best_settings_filePath> " <<
+        std::cout << "gpusim-fe.ConstsOptimizer <config_file_path> <originals_file_path> <best_settings_filePath> " <<
             "[--trace]" << std::endl;
         system("pause");
         return 0;

@@ -25,7 +25,6 @@ using Core::COriginalsReader;
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const quint32 COptimizer::c_originalsMaxMatrixSize = 1024;
 const QString COptimizer::c_simulatorJarPath       = QString("../Simulator/gpusim-runtime.jar");
 const QString COptimizer::c_experimentsWorkingDir  = QString("../Experiments-co");
 const quint32 COptimizer::c_mmegBlockSize          = 16;
@@ -35,10 +34,10 @@ const quint32 COptimizer::c_mmegBlockSize          = 16;
 // Code
 ////////////////////////////////////////////////////////////////////////// 
 
-COptimizer::COptimizer(const QString &originalsFilePath, const QString &configFilePath, const QString &outputFilePath,
+COptimizer::COptimizer(const QString &configFilePath, const QString &originalsFilePath, const QString &outputFilePath,
     QObject *pParent /*= nullptr*/)
-    :QObject(pParent), m_originalsFilePath(originalsFilePath), m_configFilePath(configFilePath),
-    m_outputFilePath(outputFilePath), m_settingsSetTotalSize(0), m_bestDifference(0.0f),
+    :QObject(pParent), m_configFilePath(configFilePath), m_originalsFilePath(originalsFilePath),
+    m_outputFilePath(outputFilePath), m_settingsSetTotalSize(0), m_bestDifference(0.0f), m_bestAverangeError(0.0f),
     m_experimenter(c_simulatorJarPath, c_experimentsWorkingDir, CExperiment(), this)
 {
     connect(&m_experimenter,
@@ -54,6 +53,13 @@ COptimizer::COptimizer(const QString &originalsFilePath, const QString &configFi
 
 void COptimizer::optimize()
 {
+    if (!readConfig())
+    {
+        qLog_CriticalMsg() << "Failed to read config.";
+        finishOptimization(true);
+        return;
+    }
+
     if (!readOriginals())
     {
         qLog_CriticalMsg() << "Failed to read originals.";
@@ -65,13 +71,6 @@ void COptimizer::optimize()
     m_mmegMaxMatrixSize = m_originals.back().getMatrixSize();
     m_mmegMatrixSizeIncrement = (m_originals.back().getMatrixSize() - m_originals.front().getMatrixSize()) /
         (m_originals.size() - 1);
-
-    if (!readConfig())
-    {
-        qLog_CriticalMsg() << "Failed to read config.";
-        finishOptimization(true);
-        return;
-    }
 
     generateSettingsSet();
     qLog_DebugMsg() << "Starting experiments execution...";
@@ -100,7 +99,9 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
         return;
     }
 
-    double diff = Core::calculateDifference(m_originals, pExperimenter->getExperimentRef());
+    double averangeError = 0.0f;
+    double diff = Core::calculateDifference(m_originals, pExperimenter->getExperimentRef(),
+        &averangeError);
     if (diff == -1.0f)
     {
         qLog_CriticalMsg() << "Failed to calculate difference between originals and simulation.";
@@ -108,7 +109,7 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
         return;
     }
 
-    if (checkDiff(diff))
+    if (checkDiff(diff, averangeError))
         saveBestSettings();
 
     processNextSettings();
@@ -119,7 +120,8 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
 bool COptimizer::readOriginals()
 {
     qLog_DebugMsg() << "Reading originals from " << m_originalsFilePath << " file...";
-    COriginalsReader reader(m_originals, c_originalsMaxMatrixSize);
+    COriginalsReader reader(m_originals, m_config.m_originalsMinMatrixSize, m_config.m_originalsMaxMatrixSize,
+        m_config.m_originalsMinSizeIncrement);
     bool res = reader.readOriginals(m_originalsFilePath);
     qLog_DebugMsg() << "..." << res;
     return res;
@@ -172,21 +174,32 @@ void COptimizer::finishOptimization(bool error)
     }
 
     qLog_DebugMsg() << "Optimization finihed with success.";
-    qLog_DebugMsg() << "Best difference value "<< m_bestDifference << " was achived. Best settings values:";
+    qLog_DebugMsg() << "Best difference value " << m_bestDifference << " with avernage error " << m_bestAverangeError <<
+        "% was achived. Best settings values:";
     writeSettingsToLog(m_bestSettings);
     qApp->quit();
 }
 
-bool COptimizer::checkDiff(double currentDifference)
+bool COptimizer::checkDiff(double currentDifference, double currentAverangeError)
 {
-    qLog_DebugMsg() << "Difference value: " << currentDifference;
-    if ((m_bestDifference != 0.0f) && (currentDifference >= m_bestDifference))
+    qLog_DebugMsg() << "Difference value: " << currentDifference << "; Averange error: " << currentAverangeError << "%.";
+    
+    double currentCompareValue = (m_config.m_cm == COptimizerConfig::CM_AbsoluteDifference)
+        ? currentDifference
+        : currentAverangeError;
+    double currentBestValue = (m_config.m_cm == COptimizerConfig::CM_AbsoluteDifference)
+        ? m_bestDifference
+        : m_bestAverangeError;
+
+    if ((currentBestValue != 0.0f) && (currentCompareValue >= currentBestValue))
         return false;
 
     m_bestDifference = currentDifference;
+    m_bestAverangeError = currentAverangeError;
     m_bestSettings = m_currentSettings;
 
-    qLog_DebugMsg() << "New best difference value " << m_bestDifference << " found.";
+    qLog_DebugMsg() << "New best difference value " << m_bestDifference << " with averange error " <<
+        m_bestAverangeError << "% found.";
     writeSettingsToLog(m_bestSettings);
 
     return true;

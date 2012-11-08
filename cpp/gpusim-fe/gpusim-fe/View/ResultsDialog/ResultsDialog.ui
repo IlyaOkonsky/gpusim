@@ -7,15 +7,24 @@
     <x>0</x>
     <y>0</y>
     <width>628</width>
-    <height>345</height>
+    <height>503</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>CResultsDialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,0">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="margin">
+    <number>5</number>
+   </property>
    <item>
     <widget class="QwtPlot" name="plot"/>
+   </item>
+   <item>
+    <widget class="QwtPlot" name="plotRelativeError"/>
    </item>
    <item>
     <widget class="QFrame" name="frmTools">
@@ -32,49 +41,53 @@
       <enum>QFrame::Plain</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QGroupBox" name="gbStats">
         <property name="title">
          <string>Statistics</string>
         </property>
-        <layout class="QFormLayout" name="formLayout">
+        <layout class="QFormLayout" name="formLayout_2">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
+         <property name="horizontalSpacing">
+          <number>5</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>5</number>
+         </property>
+         <property name="margin">
+          <number>5</number>
+         </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="lbMinExecTimeDesc">
+          <widget class="QLabel" name="lbAbsoluteDifferenceDesc">
            <property name="text">
-            <string>Min exec time:</string>
+            <string>Summary absolute differece:</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="lbMinExecTime">
+          <widget class="QLabel" name="lbAbsoluteDifference">
            <property name="text">
             <string>No info</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="lbMaxExecTimeDesc">
+          <widget class="QLabel" name="lbAverangeRelativeErrorDesc">
            <property name="text">
-            <string>Max exec time:</string>
+            <string>Averange relative error:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="lbMaxExecTime">
-           <property name="text">
-            <string>No info</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="lbAverangeExecTimeDesc">
-           <property name="text">
-            <string>Averange exec time:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="lbAverangeExecTime">
+          <widget class="QLabel" name="lbAverangeRelativeError">
            <property name="text">
             <string>No info</string>
            </property>

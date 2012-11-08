@@ -37,24 +37,39 @@ static bool parseHeader(QTextStream &in)
     return (in.readLine() == QString("#gpusim-fe.ConstOptimizer.Config"));
 }
 
-static bool parseMode(QTextStream &in, COptimizerConfig::COptimizationMode &mode)
+static bool parseOriginalsMatrixSizes(QTextStream &in, quint32 &originalsMinMatrixSize,
+    quint32 &originalsMaxMatrixSize, quint32 &originalsMinSizeIncrement)
 {
     QString line = in.readLine();
+    QStringList l = line.split(QChar(' '), QString::SkipEmptyParts);
+    if (l.size() != 3)
+        return false;
+
+    bool okMinSize, okMaxSize, okMinIncrement;
+    originalsMinMatrixSize    = l[0].toUInt(&okMinSize);
+    originalsMaxMatrixSize    = l[1].toUInt(&okMaxSize);
+    originalsMinSizeIncrement = l[2].toUInt(&okMinIncrement);
+    return okMinSize && okMaxSize && okMinIncrement;
+}
+
+static bool parseModes(QTextStream &in, COptimizerConfig::COptimizationMode &om,
+    COptimizerConfig::CCompareMode &cm)
+{
+    QString line = in.readLine().toUpper();
     bool nextLineIsEmpty = (in.readLine().isEmpty());
 
     if (!nextLineIsEmpty)
         return false;
 
-    if (line == "R")
-    {
-        mode = COptimizerConfig::OM_Recursive;
-        return true;
-    }
-
-    if (line != "S")
+    QStringList l = line.split(QChar(' '), QString::SkipEmptyParts);
+    if (l.size() != 2)
         return false;
-        
-    mode = COptimizerConfig::OM_Sequential;
+
+    if ((l[0] != "R") && (l[0] != "S") && (l[0] != "A") && (l[0] != "R"))
+        return false;
+
+    om = (l[0] == "R")? COptimizerConfig::OM_Recursive : COptimizerConfig::OM_Sequential;
+    cm = (l[1] == "A")? COptimizerConfig::CM_AbsoluteDifference: COptimizerConfig::CM_RelativeError;
     return true;
 }
 
@@ -132,7 +147,8 @@ static bool parseProperty(QTextStream &in, CUInt32PropInfo &info)
 //////////////////////////////////////////////////////////////////////////
 
 COptimizerConfig::COptimizerConfig()
-    : m_mode(OM_Sequential),
+    : m_om(OM_Sequential), m_cm(CM_AbsoluteDifference),
+    m_originalsMinMatrixSize(0), m_originalsMaxMatrixSize(0), m_originalsMinSizeIncrement(0),
     m_cpuMachinePECountS(0), m_cpuMachinePECountE(0), m_cpuMachinePECountI(0), m_cpuMachinePECountM(IM_Additive),
     m_cpuMachinePERatingS(0), m_cpuMachinePERatingE(0), m_cpuMachinePERatingI(0), m_cpuMachinePERatingM(IM_Additive),
     m_gpuMachinePECountS(0), m_gpuMachinePECountE(0), m_gpuMachinePECountI(0), m_gpuMachinePECountM(IM_Additive),
@@ -158,7 +174,13 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     if (!parseHeader(in))
         return false;
 
-    if (!parseMode(in, cfg.m_mode))
+    if (!parseOriginalsMatrixSizes(in, cfg.m_originalsMinMatrixSize, cfg.m_originalsMaxMatrixSize,
+        cfg.m_originalsMinSizeIncrement))
+    {
+        return false;
+    }
+
+    if (!parseModes(in, cfg.m_om, cfg.m_cm))
         return false;
 
     // Fill uint properties info

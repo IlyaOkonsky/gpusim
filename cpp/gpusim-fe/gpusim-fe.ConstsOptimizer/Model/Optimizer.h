@@ -14,7 +14,7 @@ namespace Model
         Q_OBJECT;
 
     public:
-        COptimizer(const QString &originalsFilePath, const QString &configFilePath,
+        COptimizer(const QString &configFilePath, const QString &originalsFilePath, 
             const QString &outputFilePath, QObject *pParent = nullptr);
 
     public slots:
@@ -34,14 +34,14 @@ namespace Model
         void processNextSettings();
         void finishOptimization(bool error);
 
-        bool checkDiff(double currentDifference);
+        bool checkDiff(double currentDifference, double currentAverangeError);
         void saveBestSettings();
 
         static void writeSettingsToLog(const CMatrixMultiplyExperimentGeneratorSettings &s);
 
     private:
-        QString m_originalsFilePath;
         QString m_configFilePath;
+        QString m_originalsFilePath;
         QString m_outputFilePath;
 
         Core::COriginalsList m_originals;
@@ -53,6 +53,7 @@ namespace Model
         CMatrixMultiplyExperimentGeneratorSettings m_currentSettings;
         CMatrixMultiplyExperimentGeneratorSettings m_bestSettings;
         double m_bestDifference;
+        double m_bestAverangeError;
 
         quint32 m_mmegMinMatrixSize;
         quint32 m_mmegMaxMatrixSize;
@@ -60,7 +61,6 @@ namespace Model
         Core::CExperimenter m_experimenter;
 
     private:
-        static const quint32 c_originalsMaxMatrixSize;        
         static const QString c_simulatorJarPath;
         static const QString c_experimentsWorkingDir;
         static const quint32 c_mmegBlockSize;

@@ -30,7 +30,6 @@ CMatrixMultiplyExperimentGenerator::CMatrixMultiplyExperimentGenerator(
     Q_ASSERT(m_maxMatrixSize <= 5000);
     Q_ASSERT(m_minMatrixSize <= m_maxMatrixSize);
     Q_ASSERT(m_matrixSizeIncrement > 0);
-    Q_ASSERT(m_blockSize >= m_minMatrixSize);
     Q_ASSERT(m_blockSize <= m_maxMatrixSize);
 }
 #pragma endregion

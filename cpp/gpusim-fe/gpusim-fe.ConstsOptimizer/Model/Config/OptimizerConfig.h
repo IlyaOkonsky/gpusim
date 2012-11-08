@@ -21,6 +21,12 @@ namespace Model
             OM_Sequential
         } COptimizationMode;
 
+        typedef enum _tagCCompareMode
+        {
+            CM_AbsoluteDifference,
+            CM_RelativeError
+        } CCompareMode;
+
         typedef enum _tagCIncrementMode
         {
             IM_Additive,
@@ -31,7 +37,10 @@ namespace Model
 
         // File format is next:
         // <Header>
-        // <Mode (recursive or not)>
+        // <Originals parameters: in one line min matrix size, max matrix size and min distance between sizes
+        // (increment. Splitter is space)>
+        // <Mode (R - recursive or S - sequential) and Compare mode (A - absolute distance or R - relative error)>
+        // <Line break - \r\n>
         // <Properties>
         // For each property there must be 3 lines:
         // First for property name;
@@ -54,7 +63,12 @@ namespace Model
         //
         static bool readFromFile(const QString &filePath, COptimizerConfig &config);
 
-        COptimizationMode m_mode;
+        COptimizationMode m_om;
+        CCompareMode m_cm;
+
+        quint32        m_originalsMinMatrixSize;
+        quint32        m_originalsMaxMatrixSize;
+        quint32        m_originalsMinSizeIncrement;
 
         quint32        m_cpuMachinePECountS;
         quint32        m_cpuMachinePECountE;

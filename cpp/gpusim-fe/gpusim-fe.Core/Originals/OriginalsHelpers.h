@@ -9,5 +9,5 @@ namespace Core
     // In case of error returns -1.0f;
     // 
     double GPUSIM_FE_CORE_EXPORT calculateDifference(const COriginalsList &originals,
-        const Core::CExperiment &experiment);
+        const Core::CExperiment &experiment, double *pAverangeError = nullptr);
 }

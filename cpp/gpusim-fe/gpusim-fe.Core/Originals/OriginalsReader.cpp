@@ -12,7 +12,9 @@ using namespace Core;
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
-const quint32 COriginalsReader::c_defaulMaxMatrixSize = 0;
+const quint32 COriginalsReader::c_defaultMinMatrixSize     = 0;
+const quint32 COriginalsReader::c_defaultMaxMatrixSize     = 0;
+const quint32 COriginalsReader::c_defaultminMatrixDistance = 0;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -26,9 +28,12 @@ const quint32 COriginalsReader::c_columnsCount    = 4;
 // Code
 ////////////////////////////////////////////////////////////////////////// 
 
-COriginalsReader::COriginalsReader(COriginalsList &originals, 
-    quint32 maxMatrixSize /*= c_defaulMaxMatrixSize*/)
-    : m_originals(originals), m_maxMatrixSize(maxMatrixSize)
+COriginalsReader::COriginalsReader(COriginalsList &originals,
+    quint32 minMatrixSize /*= c_defaulMinMatrixSize*/,
+    quint32 maxMatrixSize /*= c_defaulMaxMatrixSize*/,
+    quint32 minMatrixDistance /*= c_defaultminMatrixDistance*/)
+    : m_originals(originals), m_minMatrixSize(minMatrixSize), m_maxMatrixSize(maxMatrixSize),
+    m_minMatrixDistance(minMatrixDistance)
 {
 
 }
@@ -60,10 +65,17 @@ bool COriginalsReader::readOriginals(const QString &filePath)
         //
         if (currentOriginal.getMatrixSize() != o.getMatrixSize())
         {
-            if (currentOriginal.getMatrixSize() != 0)
-                m_originals.push_back(currentOriginal);
+            quint32 currentMatrixSize = currentOriginal.getMatrixSize();
+            quint32 lastMatrixSize = m_originals.isEmpty() ? 0 : m_originals.back().getMatrixSize();
+            quint32 currentDistance = currentMatrixSize - lastMatrixSize;
 
-            if (m_maxMatrixSize && (currentOriginal.getMatrixSize() >= m_maxMatrixSize))
+            if ((currentMatrixSize != 0) && (currentMatrixSize >= m_minMatrixSize))
+            {
+                if ((!lastMatrixSize) || (currentDistance >= m_minMatrixDistance))
+                    m_originals.push_back(currentOriginal);
+            }
+
+            if (m_maxMatrixSize && (currentMatrixSize >= m_maxMatrixSize))
                 break;
 
             currentOriginal = o;
@@ -91,7 +103,7 @@ bool COriginalsReader::processLine(const QString &line, COriginal &o)
     QStringList l = line.split(c_columnSplitter , QString::SkipEmptyParts);
     if (l.size() != c_columnsCount)
     {
-        qLog_WarningMsg() << c_columnsCount << " divided by " << c_columnSplitter << "Expectec";
+        qLog_WarningMsg() << c_columnsCount << " columns divided by " << c_columnSplitter << " expected";
         return false;
     }
 
