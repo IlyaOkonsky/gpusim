@@ -87,8 +87,8 @@ CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &n
     // Machines list (2 machines: one for CPU and one for GPU)
     //
     CGridSimMachinesConfig machines;
-    machines.append(CGridSimMachineConfig(0, m_settings.getCPUMachinePECount(), m_settings.getCPUMachinePERating()));
-    machines.append(CGridSimMachineConfig(1, m_settings.getGPUMachinePECount(), m_settings.getGPUMachinePERating()));
+    machines.append(CGridSimMachineConfig(0, m_settings.getGPUMachinePECount(), m_settings.getGPUMachinePERating()));
+    machines.append(CGridSimMachineConfig(1, m_settings.getCPUMachinePECount(), m_settings.getCPUMachinePERating()));
 
     //
     // Resources list with only one resource
