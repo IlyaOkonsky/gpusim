@@ -11,11 +11,13 @@ using namespace Core::Serialization;
 const double  CGridSimGridletConfig::c_minLength     = 0.0f;
 const quint64 CGridSimGridletConfig::c_minInputSize  = 1;
 const quint64 CGridSimGridletConfig::c_minOutputSize = 1;
+const quint64 CGridSimGridletConfig::c_minCount      = 1;
 
 const quint32 CGridSimGridletConfig::c_defaultID         = 0;
 const double  CGridSimGridletConfig::c_defaultLength     = c_minLength;
 const quint64 CGridSimGridletConfig::c_defaultInputSize  = c_minInputSize;
 const quint64 CGridSimGridletConfig::c_defaultOutputSize = c_minOutputSize;
+const quint64 CGridSimGridletConfig::c_defaultCount      = c_minCount;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -26,6 +28,7 @@ const QString CGridSimGridletConfig::c_idPropName         = QString("ID");
 const QString CGridSimGridletConfig::c_lengthPropName     = QString("length");
 const QString CGridSimGridletConfig::c_inputSizePropName  = QString("inputSize");
 const QString CGridSimGridletConfig::c_outputSizePropName = QString("outputSize");
+const QString CGridSimGridletConfig::c_countPropName      = QString("count");
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -34,14 +37,16 @@ const QString CGridSimGridletConfig::c_outputSizePropName = QString("outputSize"
 
 #pragma region Constructor and equality comparision support
 CGridSimGridletConfig::CGridSimGridletConfig(quint32 id /*= c_defaultID*/, double length /*= c_defaultLength*/,
-    quint64 inputSize /*= c_defaultInputSize*/, quint64 outputSize /*= c_defaultOutputSize*/)
+    quint64 inputSize /*= c_defaultInputSize*/, quint64 outputSize /*= c_defaultOutputSize*/,
+    quint64 count /*= c_defaultCount*/)
     : IJavaXMLSerialize(c_className), m_id(c_defaultID), m_length(c_defaultLength), m_inputSize(c_defaultInputSize),
-    m_outputSize(c_defaultOutputSize)
+    m_outputSize(c_defaultOutputSize), m_count(c_defaultCount)
 {
     setID(id);
     setLength(length);
     setInputSize(inputSize);
     setOutputSize(outputSize);
+    setCount(count);
 }
 
 bool CGridSimGridletConfig::operator==(const CGridSimGridletConfig& other) const
@@ -50,7 +55,8 @@ bool CGridSimGridletConfig::operator==(const CGridSimGridletConfig& other) const
         (m_id         == other.m_id        ) &&
         (m_length     == other.m_length    ) &&
         (m_inputSize  == other.m_inputSize ) &&
-        (m_outputSize == other.m_outputSize);
+        (m_outputSize == other.m_outputSize) &&
+        (m_count      == other.m_count     );
 }
 
 bool CGridSimGridletConfig::operator!=(const CGridSimGridletConfig& other) const
@@ -124,6 +130,23 @@ void CGridSimGridletConfig::setOutputSize(quint64 outputSize)
     m_outputSize = outputSize;
 }
 #pragma endregion
+
+
+#pragma region OutputSize property
+quint64 CGridSimGridletConfig::getCount() const
+{
+    return m_count;
+}
+
+void CGridSimGridletConfig::setCount(quint64 count)
+{
+    if (m_count == count)
+        return;
+
+    Q_ASSERT(count >= c_minCount);
+    m_count = count;
+}
+#pragma endregion
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,7 +154,11 @@ void CGridSimGridletConfig::setOutputSize(quint64 outputSize)
 #pragma region Serialization support
 bool CGridSimGridletConfig::isValid() const
 {
-    return (m_length >= c_minLength) && (m_inputSize >= c_minInputSize) && (m_outputSize >= c_minOutputSize);
+    return
+        (m_length     >= c_minLength    ) &&
+        (m_inputSize  >= c_minInputSize ) &&
+        (m_outputSize >= c_minOutputSize) &&
+        (m_count      >= c_minCount     );
 }
 
 void CGridSimGridletConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) const
@@ -140,6 +167,7 @@ void CGridSimGridletConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &el
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_lengthPropName,     getLength()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_inputSizePropName,  getInputSize()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_outputSizePropName, getOutputSize()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_countPropName,      getCount()));
 }
 
 void CGridSimGridletConfig::loadDataFromXMLNode(const QDomElement &elem)
@@ -148,16 +176,19 @@ void CGridSimGridletConfig::loadDataFromXMLNode(const QDomElement &elem)
     double length;
     quint64 inputSize;
     quint64 outputSize;
+    quint64 count;
 
     CJavaXMLHelper::getPropertyValue(elem, c_idPropName,         id,         c_defaultID);
     CJavaXMLHelper::getPropertyValue(elem, c_lengthPropName,     length,     c_defaultLength);
     CJavaXMLHelper::getPropertyValue(elem, c_inputSizePropName,  inputSize,  c_defaultInputSize);
     CJavaXMLHelper::getPropertyValue(elem, c_outputSizePropName, outputSize, c_defaultOutputSize);
+    CJavaXMLHelper::getPropertyValue(elem, c_countPropName,      count,      c_defaultCount);
 
     setID(id);
     setLength(length);
     setInputSize(inputSize);
     setOutputSize(outputSize);
+    setCount(count);
 }
 
 IJavaXMLSerializePtr CGridSimGridletConfig::create() const

@@ -72,7 +72,8 @@ public class GpuSimUser extends GridSim {
             super.gridletSubmit(gridlet, resourceID);
         }
         for (int i = 0; i < count; ++i){
-            GridSimRunTime.getInstance().getOutput().addGridlet(super.gridletReceive());
+            super.gridletReceive();
+            // GridSimRunTime.getInstance().getOutput().addGridlet(super.gridletReceive());
         }
         super.shutdownGridStatisticsEntity();
         super.shutdownUserEntity();

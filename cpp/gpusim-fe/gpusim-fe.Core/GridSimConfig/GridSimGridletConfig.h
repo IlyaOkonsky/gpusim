@@ -15,15 +15,18 @@ namespace Core
             static const double  c_minLength;
             static const quint64 c_minInputSize;
             static const quint64 c_minOutputSize;
+            static const quint64 c_minCount;
 
             static const quint32 c_defaultID;
             static const double  c_defaultLength;
             static const quint64 c_defaultInputSize;
             static const quint64 c_defaultOutputSize;
+            static const quint64 c_defaultCount;
 
         public:
             CGridSimGridletConfig(quint32 id = c_defaultID, double length = c_defaultLength,
-                quint64 inputSize = c_defaultInputSize, quint64 outputSize = c_defaultOutputSize);
+                quint64 inputSize = c_defaultInputSize, quint64 outputSize = c_defaultOutputSize,
+                quint64 count = c_defaultCount);
 
             bool operator == (const CGridSimGridletConfig& other) const;
             bool operator != (const CGridSimGridletConfig& other) const;
@@ -39,6 +42,9 @@ namespace Core
 
             quint64 getOutputSize() const;
             void setOutputSize(quint64 outputSize);
+
+            quint64 getCount() const;
+            void setCount(quint64 count);
 
             virtual bool isValid() const;
 
@@ -59,6 +65,7 @@ namespace Core
             double m_length;
             quint64 m_inputSize;
             quint64 m_outputSize;
+            quint64 m_count;
 
         private:
             static const QString c_className;
@@ -66,6 +73,7 @@ namespace Core
             static const QString c_lengthPropName;
             static const QString c_inputSizePropName;
             static const QString c_outputSizePropName;
+            static const QString c_countPropName;
         };
 
         typedef QVector<CGridSimGridletConfig> CGridSimGridletsConfig;

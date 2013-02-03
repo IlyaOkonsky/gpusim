@@ -215,7 +215,10 @@ public class GridSimRunTime {
 
         _gridlets = new GridletList();
         for (GridSimGridletConfig gc : _config.getGridlets()) {
-            _gridlets.add(new Gridlet(gc.getID(), gc.getLength(), gc.getInputSize(), gc.getOutputSize()));
+            for (long i = 0; i < gc.getCount(); ++i) {
+                int id = (int)(gc.getID() + i);
+                _gridlets.add(new Gridlet(id, gc.getLength(), gc.getInputSize(), gc.getOutputSize()));
+            }
         }
         
         printRuntimeMessage("Gridlets created");

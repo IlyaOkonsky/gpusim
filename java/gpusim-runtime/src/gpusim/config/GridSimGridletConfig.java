@@ -8,6 +8,7 @@ public class GridSimGridletConfig implements Serializable {
     private double _length;
     private long _inputSize;
     private long _outputSize;
+    private long _count;
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Constructors">
@@ -16,6 +17,7 @@ public class GridSimGridletConfig implements Serializable {
         _length = 1;
         _inputSize = 1;
         _outputSize = 1;
+        _count = 1;
     }
     //</editor-fold>
     
@@ -75,5 +77,19 @@ public class GridSimGridletConfig implements Serializable {
         _outputSize = outputSize;
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Count property">
+    public long getCount() {
+        return _count;
+    }
+    
+    public void setCount(long count) {
+        if (count < 1) {
+            throw new AssertionError(count >= 1);
+        }
+        
+        _count = count;
+    }
+    //</editor-fold>    
     //</editor-fold>
 }

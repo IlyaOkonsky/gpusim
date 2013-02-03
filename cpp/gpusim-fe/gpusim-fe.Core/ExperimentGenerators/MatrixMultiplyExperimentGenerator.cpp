@@ -112,9 +112,7 @@ CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &n
         gridletsCount = 1;
         blockSize = matrixSize;
     }
-
-    for (quint32 i = 0; i < gridletsCount; ++i)
-        gridltes.append(createGridlet(i, matrixSize, blockSize));
+    gridltes.append(createGridlet(0, matrixSize, blockSize, gridletsCount));
 
     // And finally config
     //
@@ -122,7 +120,7 @@ CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &n
 }
 
 CGridSimGridletConfig CMatrixMultiplyExperimentGenerator::createGridlet(quint32 id, quint64 matrixSize,
-    quint64 blockSize)
+    quint64 blockSize, quint64 count /*= 1*/)
 {
     // NOTE: Formulas:
     //   length = block_size * matrix_size^2 * save + 2 * matrix_size^3 * load;
@@ -137,6 +135,6 @@ CGridSimGridletConfig CMatrixMultiplyExperimentGenerator::createGridlet(quint32 
     quint64 inputSize = 3 * blockSize;
     quint64 outputSize = blockSize;
 
-    return CGridSimGridletConfig(id, length, inputSize, outputSize);
+    return CGridSimGridletConfig(id, length, inputSize, outputSize, count);
 }
 #pragma endregion

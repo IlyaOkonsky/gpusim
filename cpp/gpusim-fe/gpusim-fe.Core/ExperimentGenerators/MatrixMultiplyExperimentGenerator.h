@@ -20,7 +20,8 @@ namespace Core
 
         CSimulation createSim(quint32 simNumber, quint64 matrixSize, quint64 blockSize);
         GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 matrixSize, quint64 blockSize);
-        GridSimConfig::CGridSimGridletConfig createGridlet(quint32 id, quint64 matrixSize, quint64 blockSize);
+        GridSimConfig::CGridSimGridletConfig createGridlet(quint32 id, quint64 matrixSize, quint64 blockSize,
+            quint64 count = 1);
 
     private:
         Settings::CMatrixMultiplyExperimentGeneratorSettings m_settings;
