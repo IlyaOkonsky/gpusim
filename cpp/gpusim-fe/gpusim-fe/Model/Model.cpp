@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "../../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
+#include "../../gpusim-fe.Core/ExperimentGenerators/NBodyExperimentGenerator.h"
 
 #include "../QLogger/QLog"
 
@@ -53,7 +54,18 @@ void CModel::close()
 void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement,
     quint64 blockSize)
 {
-    Settings::CMatrixMultiplyExperimentGeneratorSettings settings;
+//     Settings::CMatrixMultiplyExperimentGeneratorSettings settings;
+//     if (!settings.loadFromFile(c_mmegSettingsFilePath))
+//     {
+//         qLog_WarningMsg() << "Failed to load MMEG settings.";
+//         emit experimentProgress(100);
+//         emit experimentResult(EC_Error);
+//     }
+// 
+//     CMatrixMultiplyExperimentGenerator gen(settings, minMatrixSize, maxMatrixSize, matrixSizeIncrement, blockSize);
+//     m_experimenter.execute(gen.generate());
+
+    Settings::CNBodyExperimentGeneratorSettings settings;
     if (!settings.loadFromFile(c_mmegSettingsFilePath))
     {
         qLog_WarningMsg() << "Failed to load MMEG settings.";
@@ -61,8 +73,9 @@ void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, qui
         emit experimentResult(EC_Error);
     }
 
-    CMatrixMultiplyExperimentGenerator gen(settings, minMatrixSize, maxMatrixSize, matrixSizeIncrement, blockSize);
+    CNBodyExperimentGenerator gen(settings, 65536, 65536, 0, 512, 512, 0);
     m_experimenter.execute(gen.generate());
+
 }
 
 void CModel::cancelExperiment()

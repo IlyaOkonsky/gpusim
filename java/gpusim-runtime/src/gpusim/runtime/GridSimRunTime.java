@@ -160,7 +160,7 @@ public class GridSimRunTime {
         Calendar calendar = Calendar.getInstance();
         
         // Mean trace GridSim events/activities
-        boolean trace_flag = true;
+        boolean trace_flag = false;
 
         // List of files or processing names to be excluded from any statistical measures
         //

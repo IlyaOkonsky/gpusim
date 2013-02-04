@@ -82,6 +82,12 @@
     <Filter Include="Originals\Helpers">
       <UniqueIdentifier>{299cb148-887a-4bd7-8515-1277365bfd21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExperimentGenerators\NBody">
+      <UniqueIdentifier>{14e947bd-a75b-4f94-88d1-9eb38eaf90c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExperimentGenerators\NBody\Settings">
+      <UniqueIdentifier>{8718065a-0563-4dc8-88cd-72a3f4b6beb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Experiment.cpp">
@@ -159,6 +165,12 @@
     <ClCompile Include="Originals\OriginalsHelpers.cpp">
       <Filter>Originals\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="ExperimentGenerators\NBodyExperimentGenerator.cpp">
+      <Filter>ExperimentGenerators\NBody</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.cpp">
+      <Filter>ExperimentGenerators\NBody\Settings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core_global.h">
@@ -223,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="Originals\OriginalsHelpers.h">
       <Filter>Originals\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentGenerators\NBodyExperimentGenerator.h">
+      <Filter>ExperimentGenerators\NBody</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.h">
+      <Filter>ExperimentGenerators\NBody\Settings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

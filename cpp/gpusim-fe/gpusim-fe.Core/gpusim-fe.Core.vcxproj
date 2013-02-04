@@ -87,6 +87,8 @@
     <ClCompile Include="Experimenter.cpp" />
     <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.cpp" />
     <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.cpp" />
+    <ClCompile Include="ExperimentGenerators\NBodyExperimentGenerator.cpp" />
+    <ClCompile Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.cpp" />
     <ClCompile Include="ExperimentGenerators\TestExperimentGenerator.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_Experimenter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -120,6 +122,8 @@
     <ClInclude Include="Core_global.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Experiment.h" />
+    <ClInclude Include="ExperimentGenerators\NBodyExperimentGenerator.h" />
+    <ClInclude Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.h" />
     <ClInclude Include="Originals\OriginalsHelpers.h" />
     <ClInclude Include="Originals\Original.h" />
     <ClInclude Include="Originals\OriginalsReader.h" />

@@ -135,8 +135,7 @@ void CGridSimOutput::setGridlets(const CGridSimGridletsOutput &gridlets)
 #pragma region Serialization support
 bool CGridSimOutput::isValid() const
 {
-    return (m_version >= c_minVersion) && (m_totalSimulationTime >= c_minTotalSimulationTime) &&
-        (!(m_name.isEmpty() || m_gridlets.isEmpty()));
+    return (m_version >= c_minVersion) && (m_totalSimulationTime >= c_minTotalSimulationTime) && (!m_name.isEmpty());
 }
 
 void CGridSimOutput::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) const
