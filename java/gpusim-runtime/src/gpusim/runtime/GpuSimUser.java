@@ -10,16 +10,13 @@ public class GpuSimUser extends GridSim {
 
     private int _gpuSimUserID;
     private LinkedList<Integer> _resourcesIDs;
-    private GridletList _gridlets;
+    private GridletsContainer _gridlets;
 
-    public GpuSimUser(double linkBaudRate, GridletList gridlets) throws Exception {
+    public GpuSimUser(double linkBaudRate, GridletsContainer gridlets) throws Exception {
         super(GPUSIM_USER_NAME, linkBaudRate);
         
         _gpuSimUserID = GridSim.getEntityId(GPUSIM_USER_NAME);
         _gridlets = gridlets;
-        for(Gridlet gridlet: _gridlets) {
-            gridlet.setUserID(_gpuSimUserID);
-        }
     }
 
     public int getGpuSimUserID() {
@@ -64,21 +61,58 @@ public class GpuSimUser extends GridSim {
     @Override
     public void body() {
         loadResourcesIDs();
-        int count = _gridlets.size();
-        int resourceID = _resourcesIDs.get(0);
-        for (int i = 0; i < count; ++i)
+
+        while (true)
         {
-            Gridlet gridlet = (Gridlet)_gridlets.get(i);
-            super.gridletSubmit(gridlet, resourceID);
+            printRuntimeMessage("Submitting next gridlets chunk...");
+            int submittedCount = submitGridletsChunk();
+            printRuntimeMessage(String.format("...%1$d gridlets submitted",
+                    submittedCount));
+
+            if (submittedCount == 0)
+                break;
+
+            printRuntimeMessage(String.format("Receiving %1$d gridlets...",
+                    submittedCount));
+            for (int i = 0; i < submittedCount; ++i){
+                super.gridletReceive();
+
+                // NOTE: Here we can write statistics for received gridlet
+            }
+            printRuntimeMessage("Received...");
         }
-        for (int i = 0; i < count; ++i){
-            super.gridletReceive();
-            // GridSimRunTime.getInstance().getOutput().addGridlet(super.gridletReceive());
-        }
+
         super.shutdownGridStatisticsEntity();
         super.shutdownUserEntity();
         super.terminateIOEntities();
 
         GridSimRunTime.getInstance().getOutput().setTotalSimulationTime(GridSim.clock());
+    }
+
+    // Returns count of submitted gridlets. Zero count means no gridlets were
+    // submitted.
+    //
+    private int submitGridletsChunk()
+    {
+        int submittedCount = 0;
+
+        try {
+            for (Integer resourceID: _resourcesIDs) {
+                int freePECount = super.getNumFreePE(resourceID);
+                for (int i = 0; i < freePECount; ++i) {
+                    Gridlet g = _gridlets.getNextGridlet(_gpuSimUserID);
+                    super.gridletSubmit(g, resourceID);
+                    ++submittedCount;
+                }
+            }
+        } catch (NoMoreGridletsException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return submittedCount;
+    }
+
+    private static void printRuntimeMessage(String message) {
+        System.out.println("[GpuSimUser] " + message);
     }
 }

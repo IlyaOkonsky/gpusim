@@ -3,8 +3,6 @@ package gpusim.runtime;
 import gpusim.config.*;
 import gridsim.GridResource;
 import gridsim.GridSim;
-import gridsim.Gridlet;
-import gridsim.GridletList;
 import gridsim.Machine;
 import gridsim.MachineList;
 import gridsim.ResourceCalendar;
@@ -37,7 +35,7 @@ public class GridSimRunTime {
     private GridSimConfig _config;
     private GridSimOutput _output;
     
-    private GridletList _gridlets;
+    private GridletsContainer _gridletsContainer;
     private GpuSimUser _gpuSimUser;
 
     //<editor-fold defaultstate="collapsed" desc="Singletone">
@@ -59,7 +57,11 @@ public class GridSimRunTime {
     public GridSimOutput getOutput() {
         return _output;
     }
-    
+
+    public GridletsContainer getGridletsContainer() {
+        return _gridletsContainer;
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Configuration loading and output saving">
     public void loadConfig(String filePath) throws FileNotFoundException, IncopatibleVersionException {
         printRuntimeMessage("Loading configuration from file: " + filePath);
@@ -123,15 +125,14 @@ public class GridSimRunTime {
         // Gridlets list
         //
         LinkedList<GridSimGridletConfig> gridlets = new LinkedList<GridSimGridletConfig>();
-        for (int i = 0; i < 10; ++i){
-            GridSimGridletConfig gridlet = new GridSimGridletConfig();
-            gridlet.setID(i);
-            gridlet.setLength(100.0f);
-            gridlet.setInputSize(50);
-            gridlet.setOutputSize(30);
-            
-            gridlets.add(gridlet);
-        }
+
+        GridSimGridletConfig gridlet = new GridSimGridletConfig();
+        gridlet.setID(0);
+        gridlet.setLength(100.0f);
+        gridlet.setInputSize(50);
+        gridlet.setOutputSize(30);
+        gridlet.setCount(10);
+
         
         // Total configuration
         //
@@ -210,24 +211,20 @@ public class GridSimRunTime {
         printRuntimeMessage("Resouces created");
     }
 
-    public void createGridlets() {
-        printRuntimeMessage("Creating gridlets");
+    public void createGridletsContainer()
+    {
+        printRuntimeMessage("Creating Gridlets Container");
 
-        _gridlets = new GridletList();
-        for (GridSimGridletConfig gc : _config.getGridlets()) {
-            for (long i = 0; i < gc.getCount(); ++i) {
-                int id = (int)(gc.getID() + i);
-                _gridlets.add(new Gridlet(id, gc.getLength(), gc.getInputSize(), gc.getOutputSize()));
-            }
-        }
-        
-        printRuntimeMessage("Gridlets created");
+        _gridletsContainer = new GridletsContainer(_config.getGridlets());
+
+        printRuntimeMessage("Gridlets Container created");
     }
-    
+
     public void createUser() throws Exception {
         printRuntimeMessage("Creating user");
 
-        _gpuSimUser = new GpuSimUser(_config.getLinkBaudRate(), _gridlets);
+        _gpuSimUser = new GpuSimUser(_config.getLinkBaudRate(),
+                _gridletsContainer);
 
         printRuntimeMessage("User created");
     }

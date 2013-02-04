@@ -35,7 +35,7 @@ public class EntryPoint {
             runtime.loadConfig(_configFilePath);
             runtime.initGridSim();
             runtime.createResources();
-            runtime.createGridlets();
+            runtime.createGridletsContainer();
             runtime.createUser();
             GridSim.startGridSimulation();
             runtime.saveOutput(_outputFilePath);
