@@ -4,6 +4,8 @@ import gpusim.config.IncopatibleVersionException;
 import gridsim.GridSim;
 import java.io.FileNotFoundException;
 
+// JVM parameters -Xms1024m -Xmx1024m -Xss20m
+
 public class EntryPoint {
     private static String _configFilePath;
     private static String _outputFilePath;
