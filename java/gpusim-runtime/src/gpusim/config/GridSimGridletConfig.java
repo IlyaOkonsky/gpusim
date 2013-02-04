@@ -90,6 +90,6 @@ public class GridSimGridletConfig implements Serializable {
         
         _count = count;
     }
-    //</editor-fold>    
+    //</editor-fold>
     //</editor-fold>
 }

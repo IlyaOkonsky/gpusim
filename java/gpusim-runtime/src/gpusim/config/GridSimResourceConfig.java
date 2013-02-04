@@ -13,6 +13,7 @@ public class GridSimResourceConfig implements Serializable {
     private int _allocPolicy;
     private double _baudRate;
     private LinkedList<GridSimMachineConfig> _machines;
+    private long _count;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructors">
@@ -25,6 +26,7 @@ public class GridSimResourceConfig implements Serializable {
         _allocPolicy = 0;
         _baudRate = 1.0f;
         _machines = new LinkedList<GridSimMachineConfig>();
+        _count = 1;
     }
     //</editor-fold>
 
@@ -141,6 +143,20 @@ public class GridSimResourceConfig implements Serializable {
         }
         
         _machines = machines;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Count property">
+    public long getCount() {
+        return _count;
+    }
+
+    public void setCount(long count) {
+        if (count < 1) {
+            throw new AssertionError(count >= 1);
+        }
+
+        _count = count;
     }
     //</editor-fold>
     //</editor-fold>

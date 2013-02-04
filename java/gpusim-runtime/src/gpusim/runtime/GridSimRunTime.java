@@ -196,15 +196,17 @@ public class GridSimRunTime {
                     RESOURCES_OFFPEAK_LOAD, RESOURCES_HOLIDAY_LOAD, RESOURCES_CALENDAR_WEEKENDS,
                     RESOURCES_CALENDAR_HOLIDAYS, RESOURCES_CALENDAR_SEED);
 
-            GridResource resource;
-            try {
-                printRuntimeMessage("Creating resource " + resConfig.getName());
-                resource = new GridResource(resConfig.getName(), resConfig.getBaudRate(), rc, calendar);
-            }
-            catch (Exception e) {
-                String desc = "Failed to create resource " + resConfig.getName() + ": " + e.getMessage();
-                printRuntimeMessage(desc);
-                throw new GridSimRunTimeException(desc);
+            for (long i = 0; i < resConfig.getCount(); ++i) {
+                GridResource resource;
+                try {
+                    printRuntimeMessage("Creating resource " + resConfig.getName());
+                    resource = new GridResource(resConfig.getName(), resConfig.getBaudRate(), rc, calendar);
+                }
+                catch (Exception e) {
+                    String desc = "Failed to create resource " + resConfig.getName() + ": " + e.getMessage();
+                    printRuntimeMessage(desc);
+                    throw new GridSimRunTimeException(desc);
+                }
             }
         }
         
