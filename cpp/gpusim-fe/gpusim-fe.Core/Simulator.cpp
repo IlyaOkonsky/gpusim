@@ -17,7 +17,8 @@ const QString CSimulator::c_configFileNameFormat = QString("Simulation_%1.config
 const QString CSimulator::c_outputFileNameFormat = QString("Simulation_%1.output.xml");
 
 //java -jar "<jar-file-path>" "<config-file-path>" "<output-file-path>"
-const QString CSimulator::c_javaProcessExecFormat = QString("java -Xms1024m -Xmx1024m -jar \"%1\" \"%2\" \"%3\"");
+//const QString CSimulator::c_javaProcessExecFormat = QString("java -Xms1024m -Xmx1024m -jar \"%1\" \"%2\" \"%3\"");
+const QString CSimulator::c_javaProcessExecFormat = QString("java -Xss128k -jar \"%1\" \"%2\" \"%3\"");
 
 #pragma endregion
 
@@ -75,6 +76,16 @@ void CSimulator::setSimulation(const CSimulation &simulation)
     connect(m_pJavaProcess,
         SIGNAL(finished(int, QProcess::ExitStatus)),
         SLOT(onJavaProcessFinished(int, QProcess::ExitStatus)),
+        Qt::QueuedConnection);
+
+    connect(m_pJavaProcess,
+        SIGNAL(readyReadStandardOutput()),
+        SLOT(onJavaProcessReadyReadStdOut()),
+        Qt::QueuedConnection);
+
+    connect(m_pJavaProcess,
+        SIGNAL(readyReadStandardError()),
+        SLOT(onJavaProcessReadyReadStdErr()),
         Qt::QueuedConnection);
 }
 
@@ -181,6 +192,16 @@ void CSimulator::onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitSt
     processExecuted(EC_Ok);
 }
 
+void CSimulator::onJavaProcessReadyReadStdOut()
+{
+    qLog_DebugMsg() << m_pJavaProcess->readAllStandardOutput();
+}
+
+void CSimulator::onJavaProcessReadyReadStdErr()
+{
+    qLog_WarningMsg() << m_pJavaProcess->readAllStandardError();
+}
+
 //////////////////////////////////////////////////////////////////////////
 #pragma region Tools
 QString CSimulator::buildFullSimualtionFilePath(const QString &workingDir, const QString &fileNameFormat,
@@ -214,3 +235,5 @@ void CSimulator::processCancel()
     m_pJavaProcess->kill();
 }
 #pragma endregion
+
+

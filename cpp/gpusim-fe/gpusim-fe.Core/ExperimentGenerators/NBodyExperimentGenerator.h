@@ -16,8 +16,10 @@ namespace Core
 
     private:
         CSimulation createSim(quint32 simNumber, quint64 n, quint64 threadsPerBlock);
-        GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 n, quint64 threadsPerBlock);
-        GridSimConfig::CGridSimGridletConfig createGridlet(quint64 n);
+        GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 n, quint64 threadsPerBlock,
+            quint64 blocksCount);
+        GridSimConfig::CGridSimResourcesConfig createResources(quint64 threadsPerBlock, quint64 blocksCount);
+        GridSimConfig::CGridSimGridletConfig createGridlet(quint64 n, quint64 blocksCount);
 
     private:
         Settings::CNBodyExperimentGeneratorSettings m_settings;

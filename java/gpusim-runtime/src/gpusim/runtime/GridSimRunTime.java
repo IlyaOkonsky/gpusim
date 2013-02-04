@@ -198,12 +198,15 @@ public class GridSimRunTime {
 
             for (long i = 0; i < resConfig.getCount(); ++i) {
                 GridResource resource;
+                //String resName = resConfig.getName();
+                String resName = String.format("Resource_%1$d", i);
+
                 try {
-                    printRuntimeMessage("Creating resource " + resConfig.getName());
-                    resource = new GridResource(resConfig.getName(), resConfig.getBaudRate(), rc, calendar);
+                    printRuntimeMessage("Creating resource " + resName);
+                    resource = new GridResource(resName, resConfig.getBaudRate(), rc, calendar);
                 }
                 catch (Exception e) {
-                    String desc = "Failed to create resource " + resConfig.getName() + ": " + e.getMessage();
+                    String desc = "Failed to create resource " + resName + ": " + e.getMessage();
                     printRuntimeMessage(desc);
                     throw new GridSimRunTimeException(desc);
                 }

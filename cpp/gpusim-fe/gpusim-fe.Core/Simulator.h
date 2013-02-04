@@ -36,6 +36,8 @@ namespace Core
         void onJavaProcessError(QProcess::ProcessError error);
         void onJavaProcessStarted();
         void onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+        void onJavaProcessReadyReadStdOut();
+        void onJavaProcessReadyReadStdErr();
 
     private:
         static QString buildFullSimualtionFilePath(const QString &workingDir, const QString &fileNameFormat,

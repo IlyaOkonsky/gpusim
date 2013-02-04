@@ -15,6 +15,7 @@ namespace Core
             static const quint32 c_minAllocPolicy;
             static const quint32 c_maxAllocPolicy;
             static const double  c_minBaudRate;
+            static const quint64 c_minCount;
 
             static const QString c_defaultName;
             static const QString c_defaultArch;
@@ -23,6 +24,7 @@ namespace Core
             static const double  c_defaultTimeZone;
             static const quint32 c_defaultAllocPolicy;
             static const double  c_defaultBaudRate;
+            static const quint64 c_defaultCount;
 
         public:
             CGridSimResourceConfig(
@@ -33,13 +35,16 @@ namespace Core
                 double timeZone     = c_defaultTimeZone,
                 qint32 allocPolicy  = c_defaultAllocPolicy,
                 double baudRate     = c_defaultBaudRate,
-                const CGridSimMachinesConfig &machines = CGridSimMachinesConfig());
+                const CGridSimMachinesConfig &machines = CGridSimMachinesConfig(),
+                quint64 count       = c_defaultCount);
 
             bool operator == (const CGridSimResourceConfig& other) const;
             bool operator != (const CGridSimResourceConfig& other) const;
 
             QString getName() const;
             void setName(const QString &name);
+
+            static QString buildName(quint32 resourceID);
 
             QString getArch() const;
             void setArch(const QString &arch);
@@ -62,6 +67,9 @@ namespace Core
             CGridSimMachinesConfig getMachines() const;
             const CGridSimMachinesConfig &getMachinesRef() const;
             void setMachines(const CGridSimMachinesConfig &machines);
+
+            quint64 getCount() const;
+            void setCount(quint64 count);
 
             virtual bool isValid() const;
 
@@ -89,8 +97,10 @@ namespace Core
             qint32 m_allocPolicy;
             double m_baudRate;
             CGridSimMachinesConfig m_machines;
+            quint64 m_count;
 
         private:
+            static const QString c_nameFormat;            
             static const QString c_nameRegExp;
 
             static const QString c_className;
@@ -102,6 +112,7 @@ namespace Core
             static const QString c_allocPolicyPropName;
             static const QString c_baudRatePropName;
             static const QString c_machinesPropName;
+            static const QString c_countPropName;
         };
 
         typedef QVector<CGridSimResourceConfig> CGridSimResourcesConfig;

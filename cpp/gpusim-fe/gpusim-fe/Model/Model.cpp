@@ -73,7 +73,7 @@ void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, qui
         emit experimentResult(EC_Error);
     }
 
-    CNBodyExperimentGenerator gen(settings, 65536, 65536, 0, 512, 512, 0);
+    CNBodyExperimentGenerator gen(settings, 1048576, 1048576, 0, 32, 1024, 2);
     m_experimenter.execute(gen.generate());
 
 }

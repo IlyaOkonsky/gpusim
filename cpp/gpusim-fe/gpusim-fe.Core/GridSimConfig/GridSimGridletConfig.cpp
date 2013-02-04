@@ -131,8 +131,7 @@ void CGridSimGridletConfig::setOutputSize(quint64 outputSize)
 }
 #pragma endregion
 
-
-#pragma region OutputSize property
+#pragma region Count property
 quint64 CGridSimGridletConfig::getCount() const
 {
     return m_count;

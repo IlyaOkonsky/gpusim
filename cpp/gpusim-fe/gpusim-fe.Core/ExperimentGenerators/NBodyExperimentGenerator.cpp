@@ -69,13 +69,13 @@ CExperiment CNBodyExperimentGenerator::generate()
 
             if (!m_threadsPerBlockIncrement)
                 break;
-            currentThreadsPerBlock += m_threadsPerBlockIncrement;
+            currentThreadsPerBlock *= m_threadsPerBlockIncrement;
 
         } while (currentThreadsPerBlock <= m_maxThreadsPerBlock);
 
         if (!m_nIncrement)
             break;
-        currentN += m_nIncrement;
+        currentN *= m_nIncrement;
 
     } while (currentN <= m_maxN);
 
@@ -92,44 +92,53 @@ CSimulation CNBodyExperimentGenerator::createSim(quint32 simNumber, quint64 n, q
     QString simName = c_simNameFormat.arg(QString::number(simNumber), QString::number(n),
         QString::number(threadsPerBlock));
     QString configName = simName + c_configPostfix;
-    return CSimulation(simNumber, simName, createConfig(configName, n, threadsPerBlock));
+    quint64 blocksCount = qMin(n / threadsPerBlock, quint64(32768));
+    return CSimulation(simNumber, simName, createConfig(configName, n, threadsPerBlock, blocksCount));
 }
 
-CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint64 n, quint64 threadsPerBlock)
+CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint64 n, quint64 threadsPerBlock,
+    quint64 blocksCount)
 {
-    // Machines list (Machines count = N / threadsPerBlock; PECount = threadsPerBlock;)
-    //
-    CGridSimMachinesConfig machines;
-
-    quint32 machinesCount = n / threadsPerBlock;
-    for (quint32 i = 0; i < machinesCount; ++i)
-        machines.append(CGridSimMachineConfig(i, threadsPerBlock, 1000));
-
-    //
-    // Resources list with only one resource
-    //
-    CGridSimResourceConfig resource;
-    resource.setArch(m_settings.getResourceArch());
-    resource.setOS(m_settings.getResourceOS());
-    resource.setBaudRate(m_settings.getResourceBaudRate());
-    resource.setCostPerSec(m_settings.getResourceCostPerSec());
-    resource.setAllocPolicy(1);
-    resource.setMachines(machines);
-
-    CGridSimResourcesConfig resources;
-    resources.append(resource);
+    auto resources = createResources(threadsPerBlock, blocksCount);
 
     // Gridlets list
     //
     CGridSimGridletsConfig gridltes;
-    gridltes.append(createGridlet(n));
+    gridltes.append(createGridlet(n, blocksCount));
 
     // And finally config
     //
     return CGridSimConfig(name, m_settings.getLinkBaudRate(), resources, gridltes);
 }
 
-CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n)
+CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threadsPerBlock, quint64 blocksCount)
+{
+    // Machines list (Only one machines with PECount = threadsPerBlock;)
+    //
+    CGridSimMachinesConfig machines;
+    for (int i = 0; i < 32; ++i)
+        machines.append(CGridSimMachineConfig(i, threadsPerBlock, 10000));
+
+    //
+    // Resources list with n / threadsPerBlock (max 1024 ) resources
+    //
+    CGridSimResourcesConfig resources;
+    CGridSimResourceConfig resource;
+    //resource.setName(CGridSimResourceConfig::buildName(i));
+    resource.setArch(m_settings.getResourceArch());
+    resource.setOS(m_settings.getResourceOS());
+    resource.setBaudRate(m_settings.getResourceBaudRate());
+    resource.setCostPerSec(m_settings.getResourceCostPerSec());
+    resource.setAllocPolicy(0);
+    resource.setMachines(machines);
+    resource.setCount(blocksCount / 32);
+    resources.append(resource);
+
+    return resources;
+}
+
+
+CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n, quint64 blocksCount)
 {
     // NOTE: Formulas:
     //   length = length_const;
@@ -137,11 +146,13 @@ CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n)
     //   out_size = out_size_const;
     //   count = n^2;
 
-    double length = 5;
+    quint64 modifiedN = n / blocksCount;
+    double length = (n * n) / blocksCount;
     quint64 inputSize = 20;
-    quint64 outputSize = 12;
-    quint64 modifiedN = n / 200;
-    quint64 count = modifiedN * modifiedN;
+    quint64 outputSize = 15;
+    //quint64 modifiedN = n;
+    //quint64 count = modifiedN * modifiedN;
+    quint64 count = blocksCount;
 
     return CGridSimGridletConfig(0, length, inputSize, outputSize, count);
 }
