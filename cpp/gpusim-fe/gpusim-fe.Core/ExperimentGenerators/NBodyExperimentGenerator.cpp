@@ -1,5 +1,6 @@
 #include "NBodyExperimentGenerator.h"
 
+#include <qmath.h>
 using namespace Core;
 using namespace Core::GridSimConfig;
 
@@ -59,9 +60,9 @@ CExperiment CNBodyExperimentGenerator::generate()
     quint32 simNumber = 0;
     
     quint64 currentN = m_minN;
-    quint64 currentThreadsPerBlock = m_minThreadsPerBlock;
     do
     {
+        quint64 currentThreadsPerBlock = m_minThreadsPerBlock;
         do 
         {
             sims.append(createSim(simNumber, currentN, currentThreadsPerBlock));
@@ -93,31 +94,29 @@ CSimulation CNBodyExperimentGenerator::createSim(quint32 simNumber, quint64 n, q
         QString::number(threadsPerBlock));
     QString configName = simName + c_configPostfix;
     quint64 blocksCount = qMin(n / threadsPerBlock, quint64(32768));
-    return CSimulation(simNumber, simName, createConfig(configName, n, threadsPerBlock, blocksCount));
+    return CSimulation(simNumber, simName, createConfig(configName, n, threadsPerBlock));
 }
 
-CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint64 n, quint64 threadsPerBlock,
-    quint64 blocksCount)
+CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint64 n, quint64 threadsPerBlock)
 {
-    auto resources = createResources(threadsPerBlock, blocksCount);
+    auto resources = createResources(threadsPerBlock);
 
     // Gridlets list
     //
     CGridSimGridletsConfig gridltes;
-    gridltes.append(createGridlet(n, blocksCount));
+    gridltes.append(createGridlet(n, threadsPerBlock));
 
     // And finally config
     //
     return CGridSimConfig(name, m_settings.getLinkBaudRate(), resources, gridltes);
 }
 
-CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threadsPerBlock, quint64 blocksCount)
+CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threadsPerBlock)
 {
     // Machines list (Only one machines with PECount = threadsPerBlock;)
     //
     CGridSimMachinesConfig machines;
-    for (int i = 0; i < 32; ++i)
-        machines.append(CGridSimMachineConfig(i, threadsPerBlock, 10000));
+    machines.append(CGridSimMachineConfig(0, 1, 1000));
 
     //
     // Resources list with n / threadsPerBlock (max 1024 ) resources
@@ -131,14 +130,14 @@ CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threa
     resource.setCostPerSec(m_settings.getResourceCostPerSec());
     resource.setAllocPolicy(0);
     resource.setMachines(machines);
-    resource.setCount(blocksCount / 32);
+    resource.setCount(threadsPerBlock);
     resources.append(resource);
 
     return resources;
 }
 
 
-CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n, quint64 blocksCount)
+CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n, quint64 threadsPerBlock)
 {
     // NOTE: Formulas:
     //   length = length_const;
@@ -146,13 +145,32 @@ CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n, quint6
     //   out_size = out_size_const;
     //   count = n^2;
 
-    quint64 modifiedN = n / blocksCount;
-    double length = (n * n) / blocksCount;
-    quint64 inputSize = 20;
-    quint64 outputSize = 15;
+//    quint64 modifiedN = n / blocksCount;
+    
+    double r = double(threadsPerBlock) * log(double(n));
+    if (n >= 512 * 1024)
+        r *= threadsPerBlock;
+
+    double r2 = n / threadsPerBlock;
+    if (threadsPerBlock >= 256)
+        r2 = 0;
+//quint64 r = threadsPerBlock * n * log(n); 
+    
+    double l = (n * n) / (threadsPerBlock * threadsPerBlock);
+    double length = l + r - r2;
+
+//     if (threadsPerBlock <= 32)
+//     {
+//         length = n * n / qPow(2, threadsPerBlock );
+//     }
+
+    // !!! double length = log(double(n * n)) / log(double(threadsPerBlock * threadsPerBlock)) + qRound64(r);
+    quint64 inputSize = 1;
+    quint64 outputSize = 1;
     //quint64 modifiedN = n;
     //quint64 count = modifiedN * modifiedN;
-    quint64 count = blocksCount;
+    quint64 count = threadsPerBlock;
+
 
     return CGridSimGridletConfig(0, length, inputSize, outputSize, count);
 }

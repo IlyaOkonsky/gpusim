@@ -18,7 +18,7 @@ const QString CSimulator::c_outputFileNameFormat = QString("Simulation_%1.output
 
 //java -jar "<jar-file-path>" "<config-file-path>" "<output-file-path>"
 //const QString CSimulator::c_javaProcessExecFormat = QString("java -Xms1024m -Xmx1024m -jar \"%1\" \"%2\" \"%3\"");
-const QString CSimulator::c_javaProcessExecFormat = QString("java -Xss128k -jar \"%1\" \"%2\" \"%3\"");
+const QString CSimulator::c_javaProcessExecFormat = QString("java -Xss64k -jar \"%1\" \"%2\" \"%3\"");
 
 #pragma endregion
 
