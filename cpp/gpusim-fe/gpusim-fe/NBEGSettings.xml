@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_34" class="java.beans.XMLDecoder">
+ <object class="gpusim-fe.NBEG-settings">
+  <void property="gpuCoreRating">
+   <int>1000</int>
+  </void>
+  <void property="resourceArch">
+   <string>N-Body Experiment Arch</string>
+  </void>
+  <void property="resourceOS">
+   <string>N-Body Experiment OS</string>
+  </void>
+  <void property="resourceBaudRate">
+   <double>10000000000</double>
+  </void>
+  <void property="resourceCostPerSec">
+   <double>1</double>
+  </void>
+  <void property="linkBaudRate">
+   <double>10000000000</double>
+  </void>
+  <void property="limitationsDivider">
+   <double>128</double>
+  </void>
+  <void property="smallTPBPenaltyWeight">
+   <double>1</double>
+  </void>
+  <void property="largeTPBPenaltyWeight">
+   <double>0.05</double>
+  </void>
+  <void property="multiplicativeLengthScaleFactor">
+   <double>0.055</double>
+  </void>
+  <void property="additiveLengthScale">
+   <double>0</double>
+  </void>
+ </object>
+</java>

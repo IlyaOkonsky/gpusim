@@ -1,5 +1,5 @@
 #include "OptimizerConfig.h"
-#include "MMEGSettingsHelpers.h"
+#include "NBEGSettingsHelpers.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -37,19 +37,19 @@ static bool parseHeader(QTextStream &in)
     return (in.readLine() == QString("#gpusim-fe.ConstOptimizer.Config"));
 }
 
-static bool parseOriginalsMatrixSizes(QTextStream &in, quint32 &originalsMinMatrixSize,
-    quint32 &originalsMaxMatrixSize, quint32 &originalsMinSizeIncrement)
+static bool parseOriginalsParameters(QTextStream &in, quint32 &originalsMinN,
+    quint32 &originalsMaxN, quint32 &originalsThreadsPerBlock)
 {
     QString line = in.readLine();
     QStringList l = line.split(QChar(' '), QString::SkipEmptyParts);
     if (l.size() != 3)
         return false;
 
-    bool okMinSize, okMaxSize, okMinIncrement;
-    originalsMinMatrixSize    = l[0].toUInt(&okMinSize);
-    originalsMaxMatrixSize    = l[1].toUInt(&okMaxSize);
-    originalsMinSizeIncrement = l[2].toUInt(&okMinIncrement);
-    return okMinSize && okMaxSize && okMinIncrement;
+    bool okMinN, okMaxN, okTPB;
+    originalsMinN            = l[0].toUInt(&okMinN);
+    originalsMaxN            = l[1].toUInt(&okMaxN);
+    originalsThreadsPerBlock = l[2].toUInt(&okTPB);
+    return okMinN && okMaxN && okTPB;
 }
 
 static bool parseModes(QTextStream &in, COptimizerConfig::COptimizationMode &om,
@@ -148,16 +148,16 @@ static bool parseProperty(QTextStream &in, CUInt32PropInfo &info)
 
 COptimizerConfig::COptimizerConfig()
     : m_om(OM_Sequential), m_cm(CM_AbsoluteDifference),
-    m_originalsMinMatrixSize(0), m_originalsMaxMatrixSize(0), m_originalsMinSizeIncrement(0),
-    m_cpuMachinePECountS(0), m_cpuMachinePECountE(0), m_cpuMachinePECountI(0), m_cpuMachinePECountM(IM_Additive),
-    m_cpuMachinePERatingS(0), m_cpuMachinePERatingE(0), m_cpuMachinePERatingI(0), m_cpuMachinePERatingM(IM_Additive),
-    m_gpuMachinePECountS(0), m_gpuMachinePECountE(0), m_gpuMachinePECountI(0), m_gpuMachinePECountM(IM_Additive),
-    m_gpuMachinePERatingS(0), m_gpuMachinePERatingE(0), m_gpuMachinePERatingI(0), m_gpuMachinePERatingM(IM_Additive),
+    m_originalsMinN(0), m_originalsMaxN(0), m_originalsThreadsPerBlock(0),
+    m_gpuCoreRatingS(0), m_gpuCoreRatingE(0), m_gpuCoreRatingI(0), m_gpuCoreRatingM(IM_Additive),
     m_resourceBaudRateS(0.0f), m_resourceBaudRateE(0.0f), m_resourceBaudRateI(0.0f), m_resourceBaudRateM(IM_Additive),
     m_resourceCostPerSecS(0.0f), m_resourceCostPerSecE(0.0f), m_resourceCostPerSecI(0.0f), m_resourceCostPerSecM(IM_Additive),
     m_linkBaudRateS(0.0f), m_linkBaudRateE(0.0f), m_linkBaudRateI(0.0f), m_linkBaudRateM(IM_Additive),
-    m_loadOperationCostS(0.0f), m_loadOperationCostE(0.0f), m_loadOperationCostI(0.0f), m_loadOperationCostM(IM_Additive),
-    m_saveOperationCostS(0.0f), m_saveOperationCostE(0.0f), m_saveOperationCostI(0.0f), m_saveOperationCostM(IM_Additive)
+    m_limitationsDividerS(0.0f), m_limitationsDividerE(0.0f), m_limitationsDividerI(0.0f), m_limitationsDividerM(IM_Additive),
+    m_smallTPBPenaltyWeightS(0.0f), m_smallTPBPenaltyWeightE(0.0f), m_smallTPBPenaltyWeightI(0.0f), m_smallTPBPenaltyWeightM(IM_Additive),
+    m_largeTPBPenaltyWeightS(0.0f), m_largeTPBPenaltyWeightE(0.0f), m_largeTPBPenaltyWeightI(0.0f), m_largeTPBPenaltyWeightM(IM_Additive),
+    m_multiplicativeLengthScaleFactorS(0.0f), m_multiplicativeLengthScaleFactorE(0.0f), m_multiplicativeLengthScaleFactorI(0.0f), m_multiplicativeLengthScaleFactorM(IM_Additive),
+    m_additiveLengthScaleFactorS(0.0f), m_additiveLengthScaleFactorE(0.0f), m_additiveLengthScaleFactorI(0.0f), m_additiveLengthScaleFactorM(IM_Additive)
 {
 
 }
@@ -174,11 +174,8 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     if (!parseHeader(in))
         return false;
 
-    if (!parseOriginalsMatrixSizes(in, cfg.m_originalsMinMatrixSize, cfg.m_originalsMaxMatrixSize,
-        cfg.m_originalsMinSizeIncrement))
-    {
+    if (!parseOriginalsParameters(in, cfg.m_originalsMinN, cfg.m_originalsMaxN, cfg.m_originalsThreadsPerBlock))
         return false;
-    }
 
     if (!parseModes(in, cfg.m_om, cfg.m_cm))
         return false;
@@ -186,28 +183,29 @@ bool COptimizerConfig::readFromFile(const QString &filePath, COptimizerConfig &c
     // Fill uint properties info
     //
     static QVector<CUInt32PropInfo> uintPropsInfo;
-    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePECount),
-        &cfg.m_cpuMachinePECountS, &cfg.m_cpuMachinePECountE, &cfg.m_cpuMachinePECountI, &cfg.m_cpuMachinePECountM));
-    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_cpuMachinePERating),
-        &cfg.m_cpuMachinePERatingS, &cfg.m_cpuMachinePERatingE, &cfg.m_cpuMachinePERatingI, &cfg.m_cpuMachinePERatingM));
-    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePECount),
-        &cfg.m_gpuMachinePECountS, &cfg.m_gpuMachinePECountE, &cfg.m_gpuMachinePECountI, &cfg.m_gpuMachinePECountM));
-    uintPropsInfo.push_back(CUInt32PropInfo(getMMEGSPropName(MMEGSProp_gpuMachinePERating),
-        &cfg.m_gpuMachinePERatingS, &cfg.m_gpuMachinePERatingE, &cfg.m_gpuMachinePERatingI, &cfg.m_gpuMachinePERatingM));
+    uintPropsInfo.push_back(CUInt32PropInfo(getNBEGSPropName(NBEGSProp_gpuCoreRating),
+        &cfg.m_gpuCoreRatingS, &cfg.m_gpuCoreRatingE, &cfg.m_gpuCoreRatingI, &cfg.m_gpuCoreRatingM));
 
     // Fill double properties info
     //
     static QVector<CDoublePropInfo> doublePropsInfo;
-    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceBaudRate),
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_resourceBaudRate),
         &cfg.m_resourceBaudRateS, &cfg.m_resourceBaudRateE, &cfg.m_resourceBaudRateI, &cfg.m_resourceBaudRateM));
-    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_resourceCostPerSec),
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_resourceCostPerSec),
         &cfg.m_resourceCostPerSecS, &cfg.m_resourceCostPerSecE, &cfg.m_resourceCostPerSecI, &cfg.m_resourceCostPerSecM));
-    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_linkBaudRate),
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_linkBaudRate),
         &cfg.m_linkBaudRateS, &cfg.m_linkBaudRateE, &cfg.m_linkBaudRateI, &cfg.m_linkBaudRateM));
-    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_loadOperationCost),
-        &cfg.m_loadOperationCostS, &cfg.m_loadOperationCostE, &cfg.m_loadOperationCostI, &cfg.m_loadOperationCostM));
-    doublePropsInfo.push_back(CDoublePropInfo(getMMEGSPropName(MMEGSProp_saveOperationCost),
-        &cfg.m_saveOperationCostS, &cfg.m_saveOperationCostE, &cfg.m_saveOperationCostI, &cfg.m_saveOperationCostM));
+
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_limitationsDivider),
+        &cfg.m_limitationsDividerS, &cfg.m_limitationsDividerE, &cfg.m_limitationsDividerI, &cfg.m_limitationsDividerM));
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_smallTPBPenaltyWeight),
+        &cfg.m_smallTPBPenaltyWeightS, &cfg.m_smallTPBPenaltyWeightE, &cfg.m_smallTPBPenaltyWeightI, &cfg.m_smallTPBPenaltyWeightM));
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_largeTPBPenaltyWeight),
+        &cfg.m_largeTPBPenaltyWeightS, &cfg.m_largeTPBPenaltyWeightE, &cfg.m_largeTPBPenaltyWeightI, &cfg.m_largeTPBPenaltyWeightM));
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_multiplicativeLengthScaleFactor),
+        &cfg.m_multiplicativeLengthScaleFactorS, &cfg.m_multiplicativeLengthScaleFactorE, &cfg.m_multiplicativeLengthScaleFactorI, &cfg.m_multiplicativeLengthScaleFactorM));
+    doublePropsInfo.push_back(CDoublePropInfo(getNBEGSPropName(NBEGSProp_additiveLengthScaleFactor),
+        &cfg.m_additiveLengthScaleFactorS, &cfg.m_additiveLengthScaleFactorE, &cfg.m_additiveLengthScaleFactorI, &cfg.m_additiveLengthScaleFactorM));
 
     // Read all uint properties
     //

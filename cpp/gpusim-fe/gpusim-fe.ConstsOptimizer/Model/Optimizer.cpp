@@ -3,15 +3,15 @@
 #include "../../gpusim-fe.Core/Originals/OriginalsReader.h"
 #include "../../gpusim-fe.Core/Originals/OriginalsHelpers.h"
 
-#include "MMEGSettingsGenerator/MMEGSettigsGenerator.h"
-#include "../../gpusim-fe.Core/ExperimentGenerators/MatrixMultiplyExperimentGenerator.h"
+#include "NBEGSettingsGenerator/NBEGSettigsGenerator.h"
+#include "../../gpusim-fe.Core/ExperimentGenerators/NBodyExperimentGenerator.h"
 
 #include "../../QLogger/QLog"
 
 #include <QCoreApplication>
 
 using namespace Model;
-using Core::CMatrixMultiplyExperimentGenerator;
+using Core::CNBodyExperimentGenerator;
 using Core::CExperiment;
 using Core::COriginal;
 using Core::COriginalsReader;
@@ -27,7 +27,6 @@ using Core::COriginalsReader;
 #pragma region Private constants
 const QString COptimizer::c_simulatorJarPath       = QString("../Simulator/gpusim-runtime.jar");
 const QString COptimizer::c_experimentsWorkingDir  = QString("../Experiments-co");
-const quint32 COptimizer::c_mmegBlockSize          = 16;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,11 +65,6 @@ void COptimizer::optimize()
         finishOptimization(true);
         return;
     }
-
-    m_mmegMinMatrixSize = m_originals.front().getMatrixSize();
-    m_mmegMaxMatrixSize = m_originals.back().getMatrixSize();
-    m_mmegMatrixSizeIncrement = (m_originals.back().getMatrixSize() - m_originals.front().getMatrixSize()) /
-        (m_originals.size() - 1);
 
     generateSettingsSet();
     qLog_DebugMsg() << "Starting experiments execution...";
@@ -120,8 +114,8 @@ void COptimizer::onExperimeterExecuted(Core::CExperimenter *pExperimenter, Core:
 bool COptimizer::readOriginals()
 {
     qLog_DebugMsg() << "Reading originals from " << m_originalsFilePath << " file...";
-    COriginalsReader reader(m_originals, m_config.m_originalsMinMatrixSize, m_config.m_originalsMaxMatrixSize,
-        m_config.m_originalsMinSizeIncrement);
+    COriginalsReader reader(m_originals, m_config.m_originalsMinN, m_config.m_originalsMaxN,
+        m_config.m_originalsThreadsPerBlock);
     bool res = reader.readOriginals(m_originalsFilePath);
     qLog_DebugMsg() << "..." << res;
     return res;
@@ -139,7 +133,7 @@ void COptimizer::generateSettingsSet()
 {
     qLog_DebugMsg() << "Generating settings set... ";
 
-    CMMEGSettingsList settingsSet = CMMEGSettingsGenerator::generate(m_config);
+    CNBEGSettingsList settingsSet = CNBEGSettingsGenerator::generate(m_config);
     m_settingsSetTotalSize = settingsSet.size();
     std::copy(settingsSet.constBegin(), settingsSet.constEnd(), std::back_inserter(m_settingsSet));
     
@@ -159,9 +153,10 @@ void COptimizer::processNextSettings()
     qLog_DebugMsg() << "Executing experiment #" << m_settingsSetTotalSize - m_settingsSet.size() << 
         " of " << m_settingsSetTotalSize << "...";
 
-    CMatrixMultiplyExperimentGenerator gen(m_currentSettings, m_mmegMinMatrixSize, m_mmegMaxMatrixSize,
-        m_mmegMatrixSizeIncrement, c_mmegBlockSize);
-    m_experimenter.execute(gen.generate());
+    writeSettingsToLog(m_currentSettings);
+
+    CNBodyExperimentGenerator gen(m_currentSettings, 1024, 1024, 0, 1024, 1024, 0);
+    m_experimenter.execute(gen.generateFromOriginals(m_originals, false));
 }
 
 void COptimizer::finishOptimization(bool error)
@@ -217,16 +212,16 @@ void COptimizer::saveBestSettings()
 
 //////////////////////////////////////////////////////////////////////////
 
-void COptimizer::writeSettingsToLog(const CMatrixMultiplyExperimentGeneratorSettings &s)
+void COptimizer::writeSettingsToLog(const CNBodyExperimentGeneratorSettings &s)
 {
-    qLog_DebugMsg() << "MMEGSettings values: ";
-    qLog_DebugMsg() << "..cpuMachinePECount:  " << s.getCPUMachinePECount();
-    qLog_DebugMsg() << "..cpuMachinePERating: " << s.getCPUMachinePERating();
-    qLog_DebugMsg() << "..gpuMachinePECount:  " << s.getGPUMachinePECount();
-    qLog_DebugMsg() << "..gpuMachinePERating: " << s.getGPUMachinePERating();
-    qLog_DebugMsg() << "..resourceBaudRate:   " << s.getResourceBaudRate();
-    qLog_DebugMsg() << "..resourceCostPerSec: " << s.getResourceCostPerSec();
-    qLog_DebugMsg() << "..linkBaudRate:       " << s.getLinkBaudRate();
-    qLog_DebugMsg() << "..loadOperationCost:  " << s.getLoadOperationCost();
-    qLog_DebugMsg() << "..saveOperationCost:  " << s.getSaveOperationCost();
+    qLog_DebugMsg() << "NBEGSettings values: ";
+    qLog_DebugMsg() << "..gpuCoreRating:                   " << s.getGPUCoreRating();
+    qLog_DebugMsg() << "..resourceBaudRate:                " << s.getResourceBaudRate();
+    qLog_DebugMsg() << "..resourceCostPerSec:              " << s.getResourceCostPerSec();
+    qLog_DebugMsg() << "..linkBaudRate:                    " << s.getLinkBaudRate();
+    qLog_DebugMsg() << "..limitationsDivider:              " << s.getLimitationsDivider();
+    qLog_DebugMsg() << "..smallTPBPenaltyWeight:           " << s.getSmallTPBPenaltyWeight();
+    qLog_DebugMsg() << "..largeTPBPenaltyWeight:           " << s.getLargeTPBPenaltyWeight();
+    qLog_DebugMsg() << "..multiplicativeLengthScaleFactor: " << s.getMultiplicativeLengthScaleFactor();
+    qLog_DebugMsg() << "..additiveLengthScaleFactor:       " << s.getAdditiveLengthScaleFactor();
 }

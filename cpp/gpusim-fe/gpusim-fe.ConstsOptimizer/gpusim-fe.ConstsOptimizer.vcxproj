@@ -87,8 +87,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model\Config\MMEGSettingsHelpers.cpp" />
-    <ClCompile Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.cpp" />
+    <ClCompile Include="Model\Config\NBEGSettingsHelpers.cpp" />
+    <ClCompile Include="Model\NBEGSettingsGenerator\NBEGSettigsGenerator.cpp" />
     <ClCompile Include="Model\Config\VaryHelper.cpp" />
     <ClCompile Include="Model\Optimizer.cpp" />
     <ClCompile Include="Model\Config\OptimizerConfig.cpp" />
@@ -104,9 +104,9 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQLOG_MODULE_NAME=\"gpusim-fe.Optimizer\" -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_XML_LIB  "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtXml"</Command>
     </CustomBuild>
-    <ClInclude Include="Model\Config\MMEGSettingsHelpers.h" />
+    <ClInclude Include="Model\Config\NBEGSettingsHelpers.h" />
     <ClInclude Include="Model\Config\OptimizerConfig.h" />
-    <ClInclude Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.h" />
+    <ClInclude Include="Model\NBEGSettingsGenerator\NBEGSettigsGenerator.h" />
     <ClInclude Include="Model\Config\VaryHelper.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "OptimizerConfig.h"
 #include <QString>
 #include <QTextStream>
 
@@ -37,8 +36,7 @@ namespace Model
 
         // File format is next:
         // <Header>
-        // <Originals parameters: in one line min matrix size, max matrix size and min distance between sizes
-        // (increment. Splitter is space)>
+        // <Originals parameters: in one line min N, max N and threadPerBlock value increment. Splitter is space)>
         // <Mode (R - recursive or S - sequential) and Compare mode (A - absolute distance or R - relative error)>
         // <Line break - \r\n>
         // <Properties>
@@ -49,15 +47,15 @@ namespace Model
         // Third line must be empty (\r\n)
         // 
         // Properties names
-        // #cpuMachinePECount
-        // #cpuMachinePERating
-        // #gpuMachinePECount
-        // #gpuMachinePERating
+        // #gpuCoreRating
         // #resourceBaudRate
         // #resourceCostPerSec
         // #linkBaudRate
-        // #loadOperationCost
-        // #saveOperationCost
+        // #limitationsDivider
+        // #smallTPBPenaltyWeight
+        // #largeTPBPenaltyWeight
+        // #multiplicativeLengthScaleFactor
+        // #additiveLengthScaleFactor
         // 
         // If increment value is 0 or negative - corresponding variable shall not be variated.
         //
@@ -66,29 +64,14 @@ namespace Model
         COptimizationMode m_om;
         CCompareMode m_cm;
 
-        quint32        m_originalsMinMatrixSize;
-        quint32        m_originalsMaxMatrixSize;
-        quint32        m_originalsMinSizeIncrement;
+        quint32        m_originalsMinN;
+        quint32        m_originalsMaxN;
+        quint32        m_originalsThreadsPerBlock;
 
-        quint32        m_cpuMachinePECountS;
-        quint32        m_cpuMachinePECountE;
-        quint32        m_cpuMachinePECountI;
-        CIncrementMode m_cpuMachinePECountM;
-
-        quint32        m_cpuMachinePERatingS;
-        quint32        m_cpuMachinePERatingE;
-        quint32        m_cpuMachinePERatingI;
-        CIncrementMode m_cpuMachinePERatingM;
-
-        quint32        m_gpuMachinePECountS;
-        quint32        m_gpuMachinePECountE;
-        quint32        m_gpuMachinePECountI;
-        CIncrementMode m_gpuMachinePECountM;
-
-        quint32        m_gpuMachinePERatingS;
-        quint32        m_gpuMachinePERatingE;
-        quint32        m_gpuMachinePERatingI;
-        CIncrementMode m_gpuMachinePERatingM;
+        quint32        m_gpuCoreRatingS;
+        quint32        m_gpuCoreRatingE;
+        quint32        m_gpuCoreRatingI;
+        CIncrementMode m_gpuCoreRatingM;
 
         double         m_resourceBaudRateS;
         double         m_resourceBaudRateE;
@@ -99,21 +82,36 @@ namespace Model
         double         m_resourceCostPerSecE;
         double         m_resourceCostPerSecI;
         CIncrementMode m_resourceCostPerSecM;
-        
+
         double         m_linkBaudRateS;
         double         m_linkBaudRateE;
         double         m_linkBaudRateI;
         CIncrementMode m_linkBaudRateM;
 
-        double         m_loadOperationCostS;
-        double         m_loadOperationCostE;
-        double         m_loadOperationCostI;
-        CIncrementMode m_loadOperationCostM;
+        double         m_limitationsDividerS;
+        double         m_limitationsDividerE;
+        double         m_limitationsDividerI;
+        CIncrementMode m_limitationsDividerM;
+
+        double         m_smallTPBPenaltyWeightS;
+        double         m_smallTPBPenaltyWeightE;
+        double         m_smallTPBPenaltyWeightI;
+        CIncrementMode m_smallTPBPenaltyWeightM;
+
+        double         m_largeTPBPenaltyWeightS;
+        double         m_largeTPBPenaltyWeightE;
+        double         m_largeTPBPenaltyWeightI;
+        CIncrementMode m_largeTPBPenaltyWeightM;
+
+        double         m_multiplicativeLengthScaleFactorS;
+        double         m_multiplicativeLengthScaleFactorE;
+        double         m_multiplicativeLengthScaleFactorI;
+        CIncrementMode m_multiplicativeLengthScaleFactorM;
         
-        double         m_saveOperationCostS;
-        double         m_saveOperationCostE;
-        double         m_saveOperationCostI;
-        CIncrementMode m_saveOperationCostM;
+        double         m_additiveLengthScaleFactorS;
+        double         m_additiveLengthScaleFactorE;
+        double         m_additiveLengthScaleFactorI;
+        CIncrementMode m_additiveLengthScaleFactorM;
 
     private:
 

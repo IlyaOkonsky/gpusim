@@ -14,16 +14,18 @@
 #pragma comment(lib, "qwt.lib")
 #endif // _DEBUG
 
-CResultsDialog::CResultsDialog(const Core::CExperiment &exp, const Core::COriginalsList &originals,
+CResultsDialog::CResultsDialog(const Core::CExperiment &exp, const Core::COriginalsList &originals, CXAsisMode mode,
     QWidget *pParent /*= nullptr*/)
     : QDialog(pParent)
 {
     ui.setupUi(this);
-    configUI(exp, originals.size() == exp.getSimulationsRef().size());
+    bool withOriginals = (exp.getSimulationsRef().size() == originals.size());
 
-    QwtPlotCurve *pExperimentCurve = buildExperimentCurve(exp, originals);
-    QwtPlotCurve *pOriginalsCurve = buildOriginalsCurve(exp, originals);
-    QwtPlotCurve *pRelErrorCurve = buildRelativeErrorCurve(exp, originals);
+    configUI(exp, mode, withOriginals);
+
+    QwtPlotCurve *pExperimentCurve = buildExperimentCurve(exp, mode);
+    QwtPlotCurve *pOriginalsCurve = buildOriginalsCurve(exp, originals, mode);
+    QwtPlotCurve *pRelErrorCurve = buildRelativeErrorCurve(exp, originals, mode);
 
     pExperimentCurve->attach(ui.plot);
     if (pOriginalsCurve)
@@ -35,24 +37,26 @@ CResultsDialog::CResultsDialog(const Core::CExperiment &exp, const Core::COrigin
     ui.plot->replot();
     ui.plotRelativeError->replot();
 
-    updateStatistics(exp, originals);
+    updateStatistics(exp, originals, mode, withOriginals);
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CResultsDialog::configUI(const Core::CExperiment &exp, bool originalsPresent)
+void CResultsDialog::configUI(const Core::CExperiment &exp, CXAsisMode mode, bool withOriginals)
 {
     ui.plot->canvas()->setCursor(Qt::ArrowCursor);
     ui.plotRelativeError->canvas()->setCursor(Qt::ArrowCursor);
 
-    QString matrixSizeAxisTitle = tr("Matrix size");
-    QString plotXAsisTitle = originalsPresent? matrixSizeAxisTitle : tr("Simulation number");
+    QString plotXAsisTitle = (mode == XAM_ThreadsPerBlock)? tr("Threads per block") : tr("N");
+
     ui.plot->setAxisTitle(QwtPlot::xBottom, plotXAsisTitle);
     ui.plot->setAxisTitle(QwtPlot::yLeft, tr("Simulation time (ms)"));
-    ui.plotRelativeError->setAxisTitle(QwtPlot::xBottom, matrixSizeAxisTitle);
+
+    ui.plotRelativeError->setAxisTitle(QwtPlot::xBottom, plotXAsisTitle);
     ui.plotRelativeError->setAxisTitle(QwtPlot::yLeft, tr("Relative error (%)"));
 
     QwtLegend *pLegend = new QwtLegend();
+//    pLegend->set
     ui.plot->insertLegend(pLegend, QwtPlot::BottomLegend);
 
     QwtLegend *pLegendRError = new QwtLegend();
@@ -66,39 +70,39 @@ void CResultsDialog::configUI(const Core::CExperiment &exp, bool originalsPresen
     pGridRError->setPen(QPen(Qt::lightGray));
     pGridRError->attach(ui.plotRelativeError);
 
-    ui.plotRelativeError->setVisible(originalsPresent);
-    ui.gbStats->setVisible(originalsPresent);
+    ui.plotRelativeError->setVisible(withOriginals);
+    ui.lbAbsoluteDifference->setVisible(withOriginals);
+    ui.lbAbsoluteDifferenceDesc->setVisible(withOriginals);
+    ui.lbAverangeRelativeError->setVisible(withOriginals);
+    ui.lbAverangeRelativeErrorDesc->setVisible(withOriginals);
 
     connect(this, SIGNAL(rejected()), SLOT(deleteLater()));
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-QwtPlotCurve * CResultsDialog::buildExperimentCurve(const Core::CExperiment &exp,
-    const Core::COriginalsList &originals)
+QwtPlotCurve * CResultsDialog::buildExperimentCurve(const Core::CExperiment &exp, CXAsisMode mode)
 {
     size_t simsCount = exp.getSimulationsRef().size();
-    bool withOriginals = (simsCount == originals.size());
-    
+
     CPointsList samples;
     for (int i = 0; i < simsCount; ++i)
     {
-        double simTime = exp.getSimulationsRef()[i].getOutput().getTotalSimulationTime();
-        quint32 simNumber = exp.getSimulationsRef()[i].getNumber();
-        QString simName = exp.getSimulationsRef()[i].getName();
+        double  simTime       = exp.getSimulationsRef()[i].getOutput().getTotalSimulationTime();
+        double  simXAsisValue = exp.getSimulationsRef()[i].getXAsisValue();
 
-        double xValue = withOriginals? originals[i].getMatrixSize() : simNumber;
-        samples.push_back(QPointF(xValue, simTime));
+        samples.push_back(QPointF(simXAsisValue, simTime));
     }
 
     QwtPlotCurve *pCurve = new QwtPlotCurve(tr("Simulation results"));
-    pCurve->setPen(QPen(Qt::blue, 2.0f));
+    //pCurve->setPen(QPen(Qt::blue, 2.0f));
+    pCurve->setPen(QPen(Qt::black, 2.0f, Qt::SolidLine));
     pCurve->setSamples(samples);
     return pCurve;
 }
 
 QwtPlotCurve * CResultsDialog::buildOriginalsCurve(const Core::CExperiment &exp,
-    const Core::COriginalsList &originals)
+    const Core::COriginalsList &originals, CXAsisMode mode)
 {
     size_t simsCount = exp.getSimulationsRef().size();
     if (simsCount != originals.size())
@@ -106,16 +110,24 @@ QwtPlotCurve * CResultsDialog::buildOriginalsCurve(const Core::CExperiment &exp,
 
     CPointsList samples;
     for (int i = 0; i < simsCount; ++i)
-        samples.push_back(QPointF(originals[i].getMatrixSize(), originals[i].getSimulationTime()));
+    {
+        double  time = originals[i].getSimulationTime();
+        quint32 N    = originals[i].getN();
+        double  tpb  = originals[i].getThreadsPerBlock();
+
+        double xValue = (mode == XAM_N) ? N : tpb;
+        samples.push_back(QPointF(xValue, time));
+    }
 
     QwtPlotCurve *pCurve = new QwtPlotCurve(tr("Originals results"));
-    pCurve->setPen(QPen(Qt::red, 2.0f));
+    //pCurve->setPen(QPen(Qt::red, 2.0f));
+    pCurve->setPen(QPen(Qt::black, 2.0f, Qt::DashLine));
     pCurve->setSamples(samples);
     return pCurve;
 }
 
 QwtPlotCurve * CResultsDialog::buildRelativeErrorCurve(const Core::CExperiment &exp,
-    const Core::COriginalsList &originals)
+    const Core::COriginalsList &originals, CXAsisMode mode)
 {
     //
     // TODO: refactor this code (this is somelike copy-paste from the Core module)
@@ -129,22 +141,75 @@ QwtPlotCurve * CResultsDialog::buildRelativeErrorCurve(const Core::CExperiment &
     for (int i = 0; i < simsCount; ++i)
     {
         double originalTime = originals[i].getSimulationTime();
-        double simTime = exp.getSimulationsRef()[i].getOutputRef().getTotalSimulationTime();
-        double distance = qAbs(originalTime - simTime);
-        double e = (distance *100) / originalTime;
-        
-        samples.push_back(QPointF(originals[i].getMatrixSize(), e));
+        double simTime      = exp.getSimulationsRef()[i].getOutputRef().getTotalSimulationTime();
+        double distance     = qAbs(originalTime - simTime);
+        double e            = (distance *100) / originalTime;
+        quint32 N           = originals[i].getN();
+        double  tpb         = originals[i].getThreadsPerBlock();
+
+        double xValue = (mode == XAM_N) ? N : tpb;
+
+        samples.push_back(QPointF(xValue, e));
     }
 
     QwtPlotCurve *pCurve = new QwtPlotCurve(tr("Relative error"));
-    pCurve->setPen(QPen(Qt::blue, 2.0f));
+    //pCurve->setPen(QPen(Qt::blue, 2.0f));
+    pCurve->setPen(QPen(Qt::black, 2.0f, Qt::SolidLine));
     pCurve->setSamples(samples);
     return pCurve;
 }
 
 
-void CResultsDialog::updateStatistics(const Core::CExperiment &exp, const Core::COriginalsList &originals)
+void CResultsDialog::updateStatistics(const Core::CExperiment &exp, const Core::COriginalsList &originals,
+    CXAsisMode mode, bool withOriginals)
 {
+    QString additionalInfo;
+    if (mode == XAM_ThreadsPerBlock)
+    {
+        double minOrigTime = 0.0f;
+        quint32 minOrigTPB = 0;
+
+        if (withOriginals)
+        {
+            for (auto I = originals.constBegin(), E = originals.constEnd(); I != E; ++I)
+            {
+                double simTime = I->getSimulationTime();
+                if ((minOrigTime == 0.0f) || (simTime < minOrigTime))
+                {
+                    minOrigTime = simTime;
+                    minOrigTPB = I->getThreadsPerBlock();
+                }
+            }
+
+            additionalInfo += QString("Minimal originals time (%1) is with Threads Per Block equal to %2.").arg(
+                QString::number(minOrigTime), QString::number(minOrigTPB));
+        }
+
+
+        double minSimTime = 0.0f;
+        double minTPB = 0.0f;
+        for (auto I = exp.getSimulationsRef().constBegin(), E = exp.getSimulationsRef().constEnd(); I != E; ++I)
+        {
+            double simTime = I->getOutputRef().getTotalSimulationTime();
+            if ((minSimTime == 0.0f) || (simTime < minSimTime))
+            {
+                minSimTime = simTime;
+                minTPB = I->getXAsisValue();
+            }
+
+        }
+
+        if (minOrigTPB)
+        {
+            minTPB = minOrigTPB;
+            additionalInfo += QChar(' ');
+        }
+
+        additionalInfo += QString("Minimal simulation time (%1) is with Threads Per Block equal to %2.").arg(
+            QString::number(minSimTime), QString::number(minTPB));
+    }
+
+    ui.lbAdditionalInfo->setText(additionalInfo);
     //
     // TODO: refactor this code (this is somelike copy-paste from the Core module)
     //    

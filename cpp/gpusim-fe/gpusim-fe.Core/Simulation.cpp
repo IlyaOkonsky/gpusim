@@ -6,8 +6,9 @@ using namespace Core;
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
-const quint32 CSimulation::c_defaultNumber = 1;
-const QString CSimulation::c_defaultName   = QString("Unnamed Simulation");
+const quint32 CSimulation::c_defaultNumber     = 1;
+const QString CSimulation::c_defaultName       = QString("Unnamed Simulation");
+const double  CSimulation::c_defaultXAsisValue = 1.0f;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -21,21 +22,24 @@ const QString CSimulation::c_defaultName   = QString("Unnamed Simulation");
 
 #pragma region Constructor and comparision support
 CSimulation::CSimulation(quint32 number /*= c_defaultNumber*/, const QString &name /*= c_defaultName*/,
+    double xAsisValue /*= c_defaultXAsisValue*/,
     const GridSimConfig::CGridSimConfig &config /*= GridSimConfig::CGridSimConfig()*/)
-    : m_number(c_defaultNumber), m_name(c_defaultName)
+    : m_number(c_defaultNumber), m_name(c_defaultName), m_xAsisValue(c_defaultXAsisValue)
 {
     setNumber(number);
     setName(name);
+    setXAsisValue(xAsisValue);
     setConfig(config);
 }
 
 bool CSimulation::operator==(const CSimulation& other) const
 {
     return
-        (m_number == other.m_number) &&
-        (m_name   == other.m_name  ) &&
-        (m_config == other.m_config) &&
-        (m_output == other.m_output);
+        (m_number     == other.m_number    ) &&
+        (m_name       == other.m_name      ) &&
+        (m_xAsisValue == other.m_xAsisValue) &&
+        (m_config     == other.m_config    ) &&
+        (m_output     == other.m_output    );
 }
 
 bool CSimulation::operator!=(const CSimulation& other) const
@@ -45,7 +49,7 @@ bool CSimulation::operator!=(const CSimulation& other) const
 
 bool CSimulation::operator<(const CSimulation& right) const
 {
-    return (m_number < right.m_number);
+    return (m_xAsisValue != right.m_xAsisValue) ? (m_xAsisValue < right.m_xAsisValue) : (m_number < right.m_number);
 }
 #pragma endregion
 
@@ -82,6 +86,21 @@ void CSimulation::setName(const QString &name)
 }
 #pragma endregion
 
+#pragma region XAsisValue property
+double CSimulation::getXAsisValue() const
+{
+    return m_xAsisValue;
+}
+
+void CSimulation::setXAsisValue(double xAsisValue)
+{
+    if (m_xAsisValue == xAsisValue)
+        return;
+
+    m_xAsisValue = xAsisValue;
+}
+
+#pragma endregion
 #pragma region Config property
 GridSimConfig::CGridSimConfig CSimulation::getConfig() const
 {

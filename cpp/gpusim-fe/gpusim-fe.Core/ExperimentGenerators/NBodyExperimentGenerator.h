@@ -9,27 +9,28 @@ namespace Core
     {
     public:
         CNBodyExperimentGenerator(const Settings::CNBodyExperimentGeneratorSettings &settings,
-            quint64 minN, quint64 maxN, quint64 nIncrement,
-            quint64 minThreadsPerBlock, quint64 maxThreadsPerBlock, quint64 threadsPerBlockIncrement);
+            quint32 minN, quint32 maxN, quint32 nIncrement,
+            quint32 minThreadsPerBlock, quint32 maxThreadsPerBlock, quint32 threadsPerBlockIncrement);
 
         virtual CExperiment generate();
+        CExperiment generateFromOriginals(const COriginalsList& originals, bool nIsAsisValue);
 
     private:
-        CSimulation createSim(quint32 simNumber, quint64 n, quint64 threadsPerBlock);
-        GridSimConfig::CGridSimConfig createConfig(const QString &name, quint64 n, quint64 threadsPerBlock);
-        GridSimConfig::CGridSimResourcesConfig createResources(quint64 threadsPerBlock);
-        GridSimConfig::CGridSimGridletConfig createGridlet(quint64 n, quint64 threadsPerBlock);
+        CSimulation createSim(quint32 simNumber, quint32 n, quint32 threadsPerBlock, double xAsisValue);
+        GridSimConfig::CGridSimConfig createConfig(const QString &name, quint32 n, quint32 threadsPerBlock);
+        GridSimConfig::CGridSimResourcesConfig createResources(quint32 threadsPerBlock);
+        GridSimConfig::CGridSimGridletConfig createGridlet(quint32 n, quint32 threadsPerBlock);
 
     private:
         Settings::CNBodyExperimentGeneratorSettings m_settings;
 
-        quint64 m_minN;
-        quint64 m_maxN;
-        quint64 m_nIncrement;
+        quint32 m_minN;
+        quint32 m_maxN;
+        quint32 m_nIncrement;
 
-        quint64 m_minThreadsPerBlock;
-        quint64 m_maxThreadsPerBlock;
-        quint64 m_threadsPerBlockIncrement;
+        quint32 m_minThreadsPerBlock;
+        quint32 m_maxThreadsPerBlock;
+        quint32 m_threadsPerBlockIncrement;
 
     private:
         static const QString c_genName;

@@ -10,10 +10,7 @@ namespace Core
             public Core::Serialization::IJavaXMLSerialize
         {
         public:
-            static const quint32 c_defaultCPUMachinePECount;
-            static const quint32 c_defaultCPUMachinePERating;
-            static const quint32 c_defaultGPUMachinePECount;
-            static const quint32 c_defaultGPUMachinePERating;
+            static const quint32 c_defaultGPUCoreRating;
 
             static const QString c_defaultResourceArch;
             static const QString c_defaultResourceOS;
@@ -21,8 +18,11 @@ namespace Core
             static const double  c_defaultResourceCostPerSec;
             static const double  c_defaultLinkBaudRate;
 
-            static const double  c_defaultLoadOperationCost;
-            static const double  c_defaultSaveOperationCost;
+            static const double  c_defaultLimitationsDivider;
+            static const double  c_defaultSmallTPBPenaltyWeight;
+            static const double  c_defaultLargeTPBPenaltyWeight;
+            static const double  c_defaultMultiplicativeLengthScaleFactor;
+            static const double  c_defaultAdditiveLengthScaleFactor;
 
         public:
             CNBodyExperimentGeneratorSettings();
@@ -32,17 +32,8 @@ namespace Core
 
             bool operator < (const CNBodyExperimentGeneratorSettings& other) const;
 
-            quint32 getCPUMachinePECount() const;
-            void setCPUMachinePECount(quint32 cpuMachineCount);
-
-            quint32 getCPUMachinePERating() const;
-            void setCPUMachinePERating(quint32 cpuMachineRating);
-
-            quint32 getGPUMachinePECount() const;
-            void setGPUMachinePECount(quint32 gpuMachineCount);
-
-            quint32 getGPUMachinePERating() const;
-            void setGPUMachinePERating(quint32 gpuMachineRating);
+            quint32 getGPUCoreRating() const;
+            void setGPUCoreRating(quint32 gpuCoreRating);
 
             QString getResourceArch() const;
             void setResourceArch(const QString &resourceArch);
@@ -59,11 +50,23 @@ namespace Core
             double getLinkBaudRate() const;
             void setLinkBaudRate(double linkBaudRate);
 
-            double getLoadOperationCost() const;
-            void setLoadOperationCost(double loadOperationCost);
 
-            double getSaveOperationCost() const;
-            void setSaveOperationCost(double saveOperationCost);
+
+            double getLimitationsDivider() const;
+            void setLimitationsDivider(double limitationsDivider);
+
+            double getSmallTPBPenaltyWeight() const;
+            void setSmallTPBPenaltyWeight(double smallTPBPenaltyWeight);
+
+            double getLargeTPBPenaltyWeight() const;
+            void setLargeTPBPenaltyWeight(double largeTPBPenaltyWeight);
+
+            double getMultiplicativeLengthScaleFactor() const;
+            void setMultiplicativeLengthScaleFactor(double multiplicativeLengthScaleFactor);
+
+            double getAdditiveLengthScaleFactor() const;
+            void setAdditiveLengthScaleFactor(double additiveLengthScaleFactor);
+
 
             bool saveToXMLFile(const QString &filePath) const;
             bool loadFromXMLFile(const QString &filePath);
@@ -83,10 +86,7 @@ namespace Core
             virtual void copy(const Serialization::IJavaXMLSerializePtr &from);
 
         private:
-            quint32 m_cpuMachinePECount;
-            quint32 m_cpuMachinePERating;
-            quint32 m_gpuMachinePECount;
-            quint32 m_gpuMachinePERating;
+            quint32 m_gpuCoreRating;
 
             QString m_resourceArch;
             QString m_resourceOS;
@@ -94,22 +94,25 @@ namespace Core
             double m_resourceCostPerSec;
             double m_linkBaudRate;
 
-            double m_loadOperationCost;
-            double m_saveOperationCost;
+            double m_limitationsDivider;
+            double m_smallTPBPenaltyWeight;
+            double m_largeTPBPenaltyWeight;
+            double m_multiplicativeLengthScaleFactor;
+            double m_additiveLengthScaleFactor;
 
         private:
             static const QString c_className;
-            static const QString c_cpuMachinePECountPropName;
-            static const QString c_cpuMachinePERatingPropName;
-            static const QString c_gpuMachinePECountPropName;
-            static const QString c_gpuMachinePERatingPropName;
+            static const QString c_gpuCoreRatingPropName;
             static const QString c_resourceArchPropName;
             static const QString c_resourceOSPropName;
             static const QString c_resourceBaudRatePropName;
             static const QString c_resourceCostPerSecPropName;
             static const QString c_linkBaudRatePropName;
-            static const QString c_loadOperationCostPropName;
-            static const QString c_saveOperationCostPropName;
+            static const QString c_limitationsDividerPropName;
+            static const QString c_smallTPBPenaltyWeightPropName;
+            static const QString c_largeTPBPenaltyWeightPropName;
+            static const QString c_multiplicativeLengthScaleFactorPropName;
+            static const QString c_additiveLengthScaleFactorPropName;
         };
     }
 }

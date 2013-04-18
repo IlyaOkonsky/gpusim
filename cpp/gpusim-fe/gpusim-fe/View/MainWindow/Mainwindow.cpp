@@ -46,7 +46,9 @@ void CMainWindow::onExperimentResult(Core::CExitCode ec, const Core::CExperiment
     if (ec != Core::EC_Ok)
         return;
 
-    CResultsDialog *dlg = new CResultsDialog(exp, m_originals, this);
+    CResultsDialog::CXAsisMode mode = (ui.sbMinN->value() != ui.sbMaxN->value())
+        ? CResultsDialog::XAM_N : CResultsDialog::XAM_ThreadsPerBlock;
+    CResultsDialog *dlg = new CResultsDialog(exp, m_originals, mode, this);
     dlg->show();
 }
 
@@ -54,8 +56,15 @@ void CMainWindow::onExperimentResult(Core::CExitCode ec, const Core::CExperiment
 
 void CMainWindow::executeClick()
 {
-    emit performExperiment(ui.sbMinMatrixSize->value(), ui.sbMaxMatrixSize->value(), ui.sbMatrixSizeIncrement->value(),
-        ui.sbBlockSize->value());
+    if ((ui.sbMinN->value() != ui.sbMaxN->value()) && (ui.sbMinThreadsPerBlock->value() != ui.sbMaxThreadsPerBlock->value()))
+    {
+        QMessageBox::critical(this, "Wrong parameters!",
+            "Only one parameter (N or threads per block can be changed, not both).");
+        return;
+    }
+    
+    emit performExperiment(ui.sbMinN->value(), ui.sbMaxN->value(), ui.sbMinThreadsPerBlock->value(),
+        ui.sbMaxThreadsPerBlock->value());
 
     ui.gbParameters->setEnabled(false);
     ui.btnExecExperiment->setEnabled(false);
@@ -83,8 +92,10 @@ bool CMainWindow::loadOriginals()
 {
     clearOriginals();
 
-    Core::COriginalsReader reader(m_originals, ui.sbMinMatrixSize->value(),
-        ui.sbMaxMatrixSize->value(), ui.sbMatrixSizeIncrement->value());
+    quint32 minN = ui.sbMinN->value();
+    quint32 maxN = ui.sbMaxN->value();
+    quint32 threadsPerBlock = (minN != maxN)? ui.sbMinThreadsPerBlock->value() : 0;
+    Core::COriginalsReader reader(m_originals, minN, maxN, threadsPerBlock);
     if (!reader.readOriginals(ui.leOriginalsFilePath->text()))
     {
         QMessageBox::critical(this, "Failed to load originals.", "Failed to load originals from specified file, "
@@ -99,15 +110,14 @@ bool CMainWindow::loadOriginals()
 
 void CMainWindow::fillUIFromOriginals()
 {
-    quint32 minMatrixSize = m_originals.front().getMatrixSize();
-    quint32 maxMatrixSize = m_originals.back().getMatrixSize();
-    quint32 matrixSizeIncrement = (m_originals.back().getMatrixSize() - m_originals.front().getMatrixSize()) /
-        (m_originals.size() - 1);
+    quint32 minN = m_originals.front().getN();
+    quint32 maxN = m_originals.back().getN();
 
-    ui.sbBlockSize->setValue(16);
-    ui.sbMinMatrixSize->setValue(minMatrixSize);
-    ui.sbMaxMatrixSize->setValue(maxMatrixSize);
-    ui.sbMatrixSizeIncrement->setValue(matrixSizeIncrement);
+    ui.sbMinN->setValue(m_originals.front().getN());
+    ui.sbMaxN->setValue(m_originals.back().getN());
+
+    ui.sbMinThreadsPerBlock->setValue(m_originals.front().getThreadsPerBlock());
+    ui.sbMaxThreadsPerBlock->setValue(m_originals.back().getThreadsPerBlock());
 }
 
 void CMainWindow::useOriginalsChanged(bool val)
@@ -116,6 +126,9 @@ void CMainWindow::useOriginalsChanged(bool val)
     ui.leOriginalsFilePath->setVisible(val);
     ui.btnChooseOriginalsFile->setVisible(val);
     ui.btnLoadOriginals->setVisible(val);
+
+    ui.sbMinThreadsPerBlock->setEnabled(!val);
+    ui.sbMaxThreadsPerBlock->setEnabled(!val);
 
     if (!val)
         clearOriginals();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>343</height>
+    <width>429</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,87 +31,96 @@
      <property name="title">
       <string>Experiment parameters</string>
      </property>
-     <layout class="QFormLayout" name="formLayout">
+     <layout class="QFormLayout" name="formLayout_3">
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="lbBlockSize">
+       <widget class="QLabel" name="lbMinN">
         <property name="text">
-         <string>Block size</string>
+         <string>Min N</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="sbBlockSize">
+       <widget class="QSpinBox" name="sbMinN">
         <property name="minimum">
-         <number>1</number>
+         <number>1024</number>
         </property>
         <property name="maximum">
          <number>999999999</number>
         </property>
         <property name="singleStep">
-         <number>1000</number>
+         <number>1024</number>
         </property>
         <property name="value">
-         <number>16</number>
+         <number>1024</number>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="lbMinMatrixSize">
+       <widget class="QLabel" name="lbMaxN">
         <property name="text">
-         <string>Min matrix size:</string>
+         <string>Max N</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="sbMinMatrixSize">
+       <widget class="QSpinBox" name="sbMaxN">
         <property name="minimum">
-         <number>16</number>
+         <number>1024</number>
         </property>
         <property name="maximum">
          <number>999999999</number>
+        </property>
+        <property name="singleStep">
+         <number>1024</number>
+        </property>
+        <property name="value">
+         <number>1048576</number>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="lbMaxMatrixSize">
+       <widget class="QLabel" name="lbMinThreadsPerBlock">
         <property name="text">
-         <string>Max matrix size:</string>
+         <string>Min threads per block</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QSpinBox" name="sbMaxMatrixSize">
-        <property name="minimum">
-         <number>2</number>
-        </property>
-        <property name="maximum">
-         <number>999999999</number>
-        </property>
-        <property name="value">
-         <number>4096</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lbMatrixSizeIncrement">
-        <property name="text">
-         <string>Matrix size increment:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="sbMatrixSizeIncrement">
+       <widget class="QSpinBox" name="sbMinThreadsPerBlock">
         <property name="minimum">
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>999999999</number>
+         <number>1024</number>
         </property>
         <property name="value">
-         <number>16</number>
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lbMaxThreadsPerBlock">
+        <property name="text">
+         <string>Max threads per block</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="sbMaxThreadsPerBlock">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1024</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>1024</number>
         </property>
        </widget>
       </item>
@@ -130,7 +139,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -140,7 +149,7 @@
          <item>
           <widget class="QLineEdit" name="leOriginalsFilePath">
            <property name="text">
-            <string>matrmul.txt</string>
+            <string>elapsedTime.m</string>
            </property>
           </widget>
          </item>
@@ -275,14 +284,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>sbBlockSize</tabstop>
-  <tabstop>sbMinMatrixSize</tabstop>
-  <tabstop>sbMaxMatrixSize</tabstop>
-  <tabstop>sbMatrixSizeIncrement</tabstop>
-  <tabstop>cbUseOriginals</tabstop>
-  <tabstop>leOriginalsFilePath</tabstop>
-  <tabstop>btnChooseOriginalsFile</tabstop>
-  <tabstop>btnLoadOriginals</tabstop>
   <tabstop>btnExecExperiment</tabstop>
   <tabstop>btnCancelExperiment</tabstop>
  </tabstops>
@@ -327,12 +328,12 @@
    <slot>chooseOriginalsFileClick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>271</x>
-     <y>168</y>
+     <x>325</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
-     <x>306</x>
-     <y>263</y>
+     <x>214</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
@@ -343,12 +344,12 @@
    <slot>loadOriginals()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>326</x>
-     <y>170</y>
+     <x>373</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
-     <x>331</x>
-     <y>290</y>
+     <x>214</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
@@ -359,12 +360,12 @@
    <slot>useOriginalsChanged(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>146</y>
+     <x>270</x>
+     <y>332</y>
     </hint>
     <hint type="destinationlabel">
-     <x>173</x>
-     <y>277</y>
+     <x>214</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>

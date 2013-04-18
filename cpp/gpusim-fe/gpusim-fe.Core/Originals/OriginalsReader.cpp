@@ -12,31 +12,29 @@ using namespace Core;
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
-const quint32 COriginalsReader::c_defaultMinMatrixSize     = 0;
-const quint32 COriginalsReader::c_defaultMaxMatrixSize     = 0;
-const quint32 COriginalsReader::c_defaultminMatrixDistance = 0;
+const quint32 COriginalsReader::c_defaultMinN            = 0;
+const quint32 COriginalsReader::c_defaultMaxN            = 0;
+const quint32 COriginalsReader::c_defaultThreadsPerBlock = 0;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const QChar   COriginalsReader::c_columnSplitter  = QChar(';');
-const quint32 COriginalsReader::c_columnsCount    = 4;
+const QString COriginalsReader::c_columnSplitter = QString("; ");
+const quint32 COriginalsReader::c_columnsCount   = 3;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 // Code
 ////////////////////////////////////////////////////////////////////////// 
 
-COriginalsReader::COriginalsReader(COriginalsList &originals,
-    quint32 minMatrixSize /*= c_defaulMinMatrixSize*/,
-    quint32 maxMatrixSize /*= c_defaulMaxMatrixSize*/,
-    quint32 minMatrixDistance /*= c_defaultminMatrixDistance*/)
-    : m_originals(originals), m_minMatrixSize(minMatrixSize), m_maxMatrixSize(maxMatrixSize),
-    m_minMatrixDistance(minMatrixDistance)
+Core::COriginalsReader::COriginalsReader(COriginalsList &originals, quint32 minN /*= c_defaultMinN*/,
+    quint32 maxN /*= c_defaultMaxN*/, quint32 threadsPerBlock /*= c_defaultThreadsPerBlock*/)
+    : m_originals(originals), m_minN(minN), m_maxN(maxN), m_threadsPerBlock(threadsPerBlock)
 {
 
 }
+
 
 bool COriginalsReader::readOriginals(const QString &filePath)
 {
@@ -61,31 +59,16 @@ bool COriginalsReader::readOriginals(const QString &filePath)
         if (!processLine(line, o))
             return false;
 
-        // 2.1) Check for new matrix size
-        //
-        if (currentOriginal.getMatrixSize() != o.getMatrixSize())
-        {
-            quint32 currentMatrixSize = currentOriginal.getMatrixSize();
-            quint32 lastMatrixSize = m_originals.isEmpty() ? 0 : m_originals.back().getMatrixSize();
-            quint32 currentDistance = currentMatrixSize - lastMatrixSize;
-
-            if ((currentMatrixSize != 0) && (currentMatrixSize >= m_minMatrixSize))
-            {
-                if ((!lastMatrixSize) || (currentDistance >= m_minMatrixDistance))
-                    m_originals.push_back(currentOriginal);
-            }
-
-            if (m_maxMatrixSize && (currentMatrixSize >= m_maxMatrixSize))
-                break;
-
-            currentOriginal = o;
+        if (o.getN() < m_minN)
             continue;
-        }
-        
-        // 2.2) Check for min of simulation time
-        //
-        if (currentOriginal.getSimulationTime() > o.getSimulationTime())
-            currentOriginal.setSimulationTime(o.getSimulationTime());
+
+        if (m_maxN && (o.getN() > m_maxN))
+            continue;
+
+        if (m_threadsPerBlock && (o.getThreadsPerBlock() != m_threadsPerBlock))
+            continue;
+
+        m_originals.push_back(o);
     }
     
     std::sort(m_originals.begin(), m_originals.end());
@@ -107,7 +90,8 @@ bool COriginalsReader::processLine(const QString &line, COriginal &o)
         return false;
     }
 
-    o.setMatrixSize(l[0].toUInt());
-    o.setSimulationTime(l[3].toDouble());
+    o.setN(l[0].toUInt());
+    o.setThreadsPerBlock(l[1].toUInt());
+    o.setSimulationTime(l[2].toDouble() * 1000.0f);
     return true;
 }

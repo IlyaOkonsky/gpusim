@@ -21,8 +21,8 @@ const QString CNBodyExperimentGenerator::c_configPostfix     = QString(".config"
 
 #pragma region Constructor
 CNBodyExperimentGenerator::CNBodyExperimentGenerator(const Settings::CNBodyExperimentGeneratorSettings &settings,
-    quint64 minN, quint64 maxN, quint64 nIncrement, quint64 minThreadsPerBlock, quint64 maxThreadsPerBlock,
-    quint64 threadsPerBlockIncrement)
+    quint32 minN, quint32 maxN, quint32 nIncrement, quint32 minThreadsPerBlock, quint32 maxThreadsPerBlock,
+    quint32 threadsPerBlockIncrement)
     : IExperimentGenerator(c_genName), m_settings(settings), m_minN(minN), m_maxN(maxN), m_nIncrement(nIncrement),
     m_minThreadsPerBlock(minThreadsPerBlock), m_maxThreadsPerBlock(maxThreadsPerBlock),
     m_threadsPerBlockIncrement(threadsPerBlockIncrement)
@@ -36,6 +36,14 @@ CNBodyExperimentGenerator::CNBodyExperimentGenerator(const Settings::CNBodyExper
     Q_ASSERT(m_minThreadsPerBlock <= m_maxThreadsPerBlock);
 
     Q_ASSERT((m_threadsPerBlockIncrement % 2) == 0);
+
+    Q_ASSERT(!((minN != maxN) && (minThreadsPerBlock != maxThreadsPerBlock)));
+
+    if (m_minN == m_maxN)
+        m_nIncrement = 0;
+
+    if (m_minThreadsPerBlock == m_maxThreadsPerBlock)
+        m_threadsPerBlockIncrement = 0;
 }
 
 #pragma endregion
@@ -65,7 +73,8 @@ CExperiment CNBodyExperimentGenerator::generate()
         quint64 currentThreadsPerBlock = m_minThreadsPerBlock;
         do 
         {
-            sims.append(createSim(simNumber, currentN, currentThreadsPerBlock));
+            double xAsisValue = m_nIncrement ? currentN : currentThreadsPerBlock;
+            sims.append(createSim(simNumber, currentN, currentThreadsPerBlock, xAsisValue));
             ++simNumber;
 
             if (!m_threadsPerBlockIncrement)
@@ -83,21 +92,45 @@ CExperiment CNBodyExperimentGenerator::generate()
     // Create and return experiment
     return CExperiment(expDirName, expName, sims);
 }
+
+CExperiment CNBodyExperimentGenerator::generateFromOriginals(const COriginalsList& originals, bool nIsAsisValue)
+{
+    QString expDirName = c_expDirNameFormat.arg(QString::number(0), QString::number(0),
+        QString::number(0), QString::number(0), QString::number(0),
+        QString::number(0));
+    QString expName = c_expNameFormat.arg(QString::number(0), QString::number(0),
+        QString::number(0), QString::number(0), QString::number(0),
+        QString::number(0));
+
+    // Generate simulations
+    //
+    CSimulationsList sims;
+    quint32 simNumber = 0;
+    for (auto I = originals.constBegin(), E = originals.constEnd(); I != E; ++I, ++simNumber)
+    {
+        double xAsisValue = nIsAsisValue? I->getN() : I->getThreadsPerBlock();
+        sims.push_back(createSim(simNumber, I->getN(), I->getThreadsPerBlock(), xAsisValue));
+    }
+
+    // Create and return experiment
+    return CExperiment(expDirName, expName, sims);
+}
+
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Tools
-CSimulation CNBodyExperimentGenerator::createSim(quint32 simNumber, quint64 n, quint64 threadsPerBlock)
+CSimulation CNBodyExperimentGenerator::createSim(quint32 simNumber, quint32 n, quint32 threadsPerBlock,
+    double xAsisValue)
 {
     QString simName = c_simNameFormat.arg(QString::number(simNumber), QString::number(n),
         QString::number(threadsPerBlock));
     QString configName = simName + c_configPostfix;
-    quint64 blocksCount = qMin(n / threadsPerBlock, quint64(32768));
-    return CSimulation(simNumber, simName, createConfig(configName, n, threadsPerBlock));
+    return CSimulation(simNumber, simName, xAsisValue, createConfig(configName, n, threadsPerBlock));
 }
 
-CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint64 n, quint64 threadsPerBlock)
+CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quint32 n, quint32 threadsPerBlock)
 {
     auto resources = createResources(threadsPerBlock);
 
@@ -111,19 +144,18 @@ CGridSimConfig CNBodyExperimentGenerator::createConfig(const QString &name, quin
     return CGridSimConfig(name, m_settings.getLinkBaudRate(), resources, gridltes);
 }
 
-CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threadsPerBlock)
+CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint32 threadsPerBlock)
 {
-    // Machines list (Only one machines with PECount = threadsPerBlock;)
+    // Machines list: only one machine with only one PE
     //
     CGridSimMachinesConfig machines;
-    machines.append(CGridSimMachineConfig(0, 1, 1000));
+    machines.append(CGridSimMachineConfig(0, 1, m_settings.getGPUCoreRating()));
 
     //
-    // Resources list with n / threadsPerBlock (max 1024 ) resources
+    // Resources list: N (up 1024) resources
     //
     CGridSimResourcesConfig resources;
     CGridSimResourceConfig resource;
-    //resource.setName(CGridSimResourceConfig::buildName(i));
     resource.setArch(m_settings.getResourceArch());
     resource.setOS(m_settings.getResourceOS());
     resource.setBaudRate(m_settings.getResourceBaudRate());
@@ -136,41 +168,39 @@ CGridSimResourcesConfig CNBodyExperimentGenerator::createResources(quint64 threa
     return resources;
 }
 
+double log2(double x)
+{
+    return log(x) / log(2.0f);
+}
 
-CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint64 n, quint64 threadsPerBlock)
+CGridSimGridletConfig CNBodyExperimentGenerator::createGridlet(quint32 n, quint32 threadsPerBlock)
 {
     // NOTE: Formulas:
-    //   length = length_const;
-    //   in_size = in_size_const;
-    //   out_size = out_size_const;
-    //   count = n^2;
+    //   Limitations divider constant is used for decreasing gridlets count via balancing with each gridlet's work
+    //   length.
+    //   
+    //   small_thread_per_blocks_panalty = (n * log2(n)^2 * log2(threadsPerBlock) / threadsPerBlock) * small_tpb_penalty_weight;
+    //   large_thread_per_blocks_penalty = threadsPerBlock * n * thread_per_block_penalty_weigth;
+    //   length = n * (limitations_divider + large_thread_per_blocks_penalty) * multiplicative_length_scale_factor +
+    //       + additive_length_scale_factor;
+    //   in_size = 1;
+    //   out_size = 1;
+    //   count = n / limitations_divider;
 
-//    quint64 modifiedN = n / blocksCount;
+    double limitationsDivider              = m_settings.getLimitationsDivider();
+    double smallTPBPenaltyWeight           = m_settings.getSmallTPBPenaltyWeight();
+    double largeTPBPenaltyWeight           = m_settings.getLargeTPBPenaltyWeight();
+    double multiplicativeLengthScaleFactor = m_settings.getMultiplicativeLengthScaleFactor();
+    double additiveLengthScaleFactor       = m_settings.getAdditiveLengthScaleFactor();
     
-    double r = double(threadsPerBlock) * log(double(n));
-    if (n >= 512 * 1024)
-        r *= threadsPerBlock;
+    double smallTPBPenalty = (smallTPBPenaltyWeight * n * log2(n) * log2(n) * log2(threadsPerBlock)) / (threadsPerBlock);
+    double largeTPBPenalty = threadsPerBlock * n * largeTPBPenaltyWeight;
 
-    double r2 = n / threadsPerBlock;
-    if (threadsPerBlock >= 256)
-        r2 = 0;
-//quint64 r = threadsPerBlock * n * log(n); 
-    
-    double l = (n * n) / (threadsPerBlock * threadsPerBlock);
-    double length = l + r - r2;
-
-//     if (threadsPerBlock <= 32)
-//     {
-//         length = n * n / qPow(2, threadsPerBlock );
-//     }
-
-    // !!! double length = log(double(n * n)) / log(double(threadsPerBlock * threadsPerBlock)) + qRound64(r);
+    double length = (n * limitationsDivider + smallTPBPenalty + largeTPBPenalty) * multiplicativeLengthScaleFactor +
+        additiveLengthScaleFactor;
+    double count = n / limitationsDivider;
     quint64 inputSize = 1;
     quint64 outputSize = 1;
-    //quint64 modifiedN = n;
-    //quint64 count = modifiedN * modifiedN;
-    quint64 count = threadsPerBlock;
-
 
     return CGridSimGridletConfig(0, length, inputSize, outputSize, count);
 }

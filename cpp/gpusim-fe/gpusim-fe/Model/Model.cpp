@@ -13,7 +13,7 @@ using namespace Core;
 ////////////////////////////////////////////////////////////////////////// 
 
 #pragma region Private constants
-const QString CModel::c_mmegSettingsFilePath      = QString("MMEGSettings.xml");
+const QString CModel::c_genSettingsFilePath       = QString("NBEGSettings.xml");
 const QString CModel::c_simulatorJarPath          = QString("../Simulator/gpusim-runtime.jar");
 const QString CModel::c_experimentsWorkingDir     = QString("../Experiments");
 
@@ -51,38 +51,25 @@ void CModel::close()
     thread()->quit();
 }
 
-void CModel::performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement,
-    quint64 blockSize)
+void CModel::performExperiment(quint32 minN, quint32 maxN, quint32 minThreadsPerBlock, quint32 maxThreadsPerBlock)
 {
-//     Settings::CMatrixMultiplyExperimentGeneratorSettings settings;
-//     if (!settings.loadFromFile(c_mmegSettingsFilePath))
-//     {
-//         qLog_WarningMsg() << "Failed to load MMEG settings.";
-//         emit experimentProgress(100);
-//         emit experimentResult(EC_Error);
-//     }
-// 
-//     CMatrixMultiplyExperimentGenerator gen(settings, minMatrixSize, maxMatrixSize, matrixSizeIncrement, blockSize);
-//     m_experimenter.execute(gen.generate());
-
-    Settings::CNBodyExperimentGeneratorSettings settings;
-    if (!settings.loadFromFile(c_mmegSettingsFilePath))
+    if ((minN != maxN) && (minThreadsPerBlock != maxThreadsPerBlock))
     {
-        qLog_WarningMsg() << "Failed to load MMEG settings.";
+        qLog_WarningMsg() << "Only one parameter (N or threads per block can be changed, not both).";
         emit experimentProgress(100);
         emit experimentResult(EC_Error);
     }
 
-    //CNBodyExperimentGenerator gen(settings, 1024, 1048576, 1024, 64, 1024, 2);
-    CNBodyExperimentGenerator gen(settings, 1048576, 1048576, 0, 32, 1024, 2);
-    //CNBodyExperimentGenerator gen(settings, 1024, 1024, 0, 1, 1024, 2);
-    
-    
-    //CNBodyExperimentGenerator gen(settings, 1024, 1048576, 2, 512, 512, 0);
+    Settings::CNBodyExperimentGeneratorSettings settings;
+    if (!settings.loadFromFile(c_genSettingsFilePath))
+    {
+        qLog_WarningMsg() << "Failed to load NBEG settings.";
+        emit experimentProgress(100);
+        emit experimentResult(EC_Error);
+    }
 
-    //CNBodyExperimentGenerator gen(settings, 32768, 32768, 0, 1, 1024, 2);
+    CNBodyExperimentGenerator gen(settings, minN, maxN, 2, minThreadsPerBlock, maxThreadsPerBlock, 2);
     m_experimenter.execute(gen.generate());
-
 }
 
 void CModel::cancelExperiment()

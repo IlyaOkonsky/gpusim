@@ -65,9 +65,9 @@ int process(int argc, char *argv[])
         Qt::QueuedConnection);
 
     QObject::connect(&mainWindow,
-        SIGNAL(performExperiment(quint64, quint64, quint64, quint64)),
+        SIGNAL(performExperiment(quint32, quint32, quint32, quint32)),
         modelThread.getModel().data(),
-        SLOT(performExperiment(quint64, quint64, quint64, quint64)),
+        SLOT(performExperiment(quint32, quint32, quint32, quint32)),
         Qt::QueuedConnection);
     QObject::connect(&mainWindow,
         SIGNAL(cancelExperiment()),

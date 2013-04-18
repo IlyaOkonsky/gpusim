@@ -10,9 +10,11 @@ namespace Core
     public:
         static const quint32 c_defaultNumber;
         static const QString c_defaultName;
+        static const double  c_defaultXAsisValue;
 
     public:
         CSimulation(quint32 number = c_defaultNumber, const QString &name = c_defaultName,
+            double xAsisValue = c_defaultXAsisValue,
             const GridSimConfig::CGridSimConfig &config = GridSimConfig::CGridSimConfig());
 
         bool operator == (const CSimulation& other) const;
@@ -21,12 +23,14 @@ namespace Core
         // Compares by Number property value (returns m_number < right.m_number)
         bool operator <  (const CSimulation& right) const;
 
-
         quint32 getNumber() const;
         void setNumber(quint32 number);
 
         QString getName() const;
         void setName(const QString &name);
+
+        double getXAsisValue() const;
+        void setXAsisValue(double xAsisValue);
 
         GridSimConfig::CGridSimConfig getConfig() const;
         const GridSimConfig::CGridSimConfig &getConfigRef() const;
@@ -39,6 +43,7 @@ namespace Core
     private:
         quint32 m_number;
         QString m_name;
+        double m_xAsisValue;
         GridSimConfig::CGridSimConfig m_config;
         GridSimConfig::CGridSimOutput m_output;
     };

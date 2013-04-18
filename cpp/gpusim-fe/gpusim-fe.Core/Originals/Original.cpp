@@ -6,9 +6,10 @@ using namespace Core;
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
-const double  COriginal::c_minSimulationTime     = 0.0f;
-const quint32 COriginal::c_defaultMatrixSize     = 0;
-const double  COriginal::c_defaultSimulationTime = c_minSimulationTime;
+const double  COriginal::c_minSimulationTime      = 0.0f;
+const quint32 COriginal::c_defaultN               = 0;
+const quint32 COriginal::c_defaultThreadsPerBlock = 0;
+const double  COriginal::c_defaultSimulationTime  = c_minSimulationTime;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -21,17 +22,21 @@ const double  COriginal::c_defaultSimulationTime = c_minSimulationTime;
 ////////////////////////////////////////////////////////////////////////// 
 
 #pragma region Constructor and Comparision support
-COriginal::COriginal(quint32 matrixSize /*= c_defaultMatrixSize*/,
-    double simulationTime /*= c_defaultSimulationTimef*/)
-    : m_matrixSize(c_defaultMatrixSize), m_simulationTime(c_defaultSimulationTime)
+COriginal::COriginal(quint32 n /*= c_defaultN*/, quint32 threadsPerBlock /*= c_defaultThreadsPerBlock*/,
+    double simulationTime /*= c_defaultSimulationTime*/)
+    : m_n(c_defaultN), m_threadsPerBlock(c_defaultThreadsPerBlock), m_simulationTime(c_defaultSimulationTime)
 {
-    setMatrixSize(matrixSize);
+    setN(n);
+    setThreadsPerBlock(threadsPerBlock);
     setSimulationTime(simulationTime);
 }
 
 bool COriginal::operator==(const COriginal& other) const
 {
-    return (m_matrixSize == other.m_matrixSize) && (m_simulationTime == other.m_simulationTime);
+    return
+        (m_n               == other.m_n              ) &&
+        (m_threadsPerBlock == other.m_threadsPerBlock) &&
+        (m_simulationTime  == other.m_simulationTime );
 }
 
 bool COriginal::operator!=(const COriginal& other) const
@@ -41,23 +46,38 @@ bool COriginal::operator!=(const COriginal& other) const
 
 bool COriginal::operator<(const COriginal& other) const
 {
-    return (m_matrixSize < other.m_matrixSize);
+    return (m_n != other.m_n)? (m_n < other.m_n) : (m_threadsPerBlock < other.m_threadsPerBlock);
 }
 #pragma endregion
 
 #pragma region Properties
-#pragma region MatrixSize property
-quint32 COriginal::getMatrixSize() const
+#pragma region N property
+quint32 COriginal::getN() const
 {
-    return m_matrixSize;
+    return m_n;
 }
 
-void COriginal::setMatrixSize(quint32 matrixSize)
+void COriginal::setN(quint32 n)
 {
-    if (m_matrixSize == matrixSize)
+    if (m_n == n)
         return;
 
-    m_matrixSize = matrixSize;
+    m_n = n;
+}
+#pragma endregion
+
+#pragma region ThreadsPerBlock property
+quint32 COriginal::getThreadsPerBlock() const
+{
+    return m_threadsPerBlock;
+}
+
+void COriginal::setThreadsPerBlock(quint32 threadsPerBlock)
+{
+    if (m_threadsPerBlock == threadsPerBlock)
+        return;
+
+    m_threadsPerBlock = threadsPerBlock;
 }
 #pragma endregion
 

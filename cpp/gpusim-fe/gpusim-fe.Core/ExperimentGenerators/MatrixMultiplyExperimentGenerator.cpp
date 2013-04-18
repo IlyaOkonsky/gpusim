@@ -78,7 +78,7 @@ CSimulation CMatrixMultiplyExperimentGenerator::createSim(quint32 simNumber, qui
 {
     QString simName = c_simNameFormat.arg(QString::number(simNumber), QString::number(matrixSize));
     QString configName = simName + c_configPostfix;
-    return CSimulation(simNumber, simName, createConfig(configName, matrixSize, blockSize));
+    return CSimulation(simNumber, simName, matrixSize, createConfig(configName, matrixSize, blockSize));
 }
 
 CGridSimConfig CMatrixMultiplyExperimentGenerator::createConfig(const QString &name, quint64 matrixSize,

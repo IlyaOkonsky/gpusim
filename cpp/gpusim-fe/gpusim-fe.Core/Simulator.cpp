@@ -194,7 +194,7 @@ void CSimulator::onJavaProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 
 void CSimulator::onJavaProcessReadyReadStdOut()
 {
-    qLog_DebugMsg() << m_pJavaProcess->readAllStandardOutput();
+    qLog_TraceMsg() << m_pJavaProcess->readAllStandardOutput();
 }
 
 void CSimulator::onJavaProcessReadyReadStdErr()

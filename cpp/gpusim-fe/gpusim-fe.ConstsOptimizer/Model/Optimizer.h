@@ -2,7 +2,7 @@
 
 #include "../../gpusim-fe.Core/Originals/Original.h"
 #include "Config/OptimizerConfig.h"
-#include "Config/MMEGSettingsHelpers.h"
+#include "Config/NBEGSettingsHelpers.h"
 #include "../../gpusim-fe.Core/Experimenter.h"
 
 #include <QObject>
@@ -37,7 +37,7 @@ namespace Model
         bool checkDiff(double currentDifference, double currentAverangeError);
         void saveBestSettings();
 
-        static void writeSettingsToLog(const CMatrixMultiplyExperimentGeneratorSettings &s);
+        static void writeSettingsToLog(const CNBodyExperimentGeneratorSettings &s);
 
     private:
         QString m_configFilePath;
@@ -48,21 +48,17 @@ namespace Model
         COptimizerConfig m_config;
 
         quint32 m_settingsSetTotalSize;
-        CMMEGSettingsQueue m_settingsSet;
+        CNBEGSettingsQueue m_settingsSet;
 
-        CMatrixMultiplyExperimentGeneratorSettings m_currentSettings;
-        CMatrixMultiplyExperimentGeneratorSettings m_bestSettings;
+        CNBodyExperimentGeneratorSettings m_currentSettings;
+        CNBodyExperimentGeneratorSettings m_bestSettings;
         double m_bestDifference;
         double m_bestAverangeError;
 
-        quint32 m_mmegMinMatrixSize;
-        quint32 m_mmegMaxMatrixSize;
-        quint32 m_mmegMatrixSizeIncrement;
         Core::CExperimenter m_experimenter;
 
     private:
         static const QString c_simulatorJarPath;
         static const QString c_experimentsWorkingDir;
-        static const quint32 c_mmegBlockSize;
     };
 }

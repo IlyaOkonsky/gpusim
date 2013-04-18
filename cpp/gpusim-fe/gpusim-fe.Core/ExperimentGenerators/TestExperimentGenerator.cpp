@@ -27,7 +27,7 @@ CExperiment Core::CTestExperimentGenerator::generate()
     CSimulationsList sims;
     for (int i = 0; i < 5; ++i)
     {
-        sims.push_back(CSimulation(i, QString(c_simNameFormat).arg(i),
+        sims.push_back(CSimulation(i, QString(c_simNameFormat).arg(i), i,
             GridSimConfig::CGridSimConfig::createTestConfig()));
     }
 

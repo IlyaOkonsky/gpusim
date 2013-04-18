@@ -22,11 +22,11 @@
     <Filter Include="Model\Config">
       <UniqueIdentifier>{c7112868-3756-45eb-9821-8d3f9c3e1704}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\MMEGSettingsGenerator">
-      <UniqueIdentifier>{2915dd70-29db-4ea6-898c-470776d2e6b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Model\Config\Helpers">
       <UniqueIdentifier>{f72f0260-cdc1-46cc-ad40-ef7089177c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\NBEGSettingsGenerator">
+      <UniqueIdentifier>{2915dd70-29db-4ea6-898c-470776d2e6b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,28 +43,28 @@
     <ClCompile Include="Model\Config\OptimizerConfig.cpp">
       <Filter>Model\Config</Filter>
     </ClCompile>
-    <ClCompile Include="Model\Config\MMEGSettingsHelpers.cpp">
-      <Filter>Model\Config\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="Model\Config\VaryHelper.cpp">
       <Filter>Model\Config\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.cpp">
-      <Filter>Model\MMEGSettingsGenerator</Filter>
+    <ClCompile Include="Model\Config\NBEGSettingsHelpers.cpp">
+      <Filter>Model\Config\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\NBEGSettingsGenerator\NBEGSettigsGenerator.cpp">
+      <Filter>Model\NBEGSettingsGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model\Config\OptimizerConfig.h">
       <Filter>Model\Config</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Config\MMEGSettingsHelpers.h">
-      <Filter>Model\Config\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Model\Config\VaryHelper.h">
       <Filter>Model\Config\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Model\MMEGSettingsGenerator\MMEGSettigsGenerator.h">
-      <Filter>Model\MMEGSettingsGenerator</Filter>
+    <ClInclude Include="Model\Config\NBEGSettingsHelpers.h">
+      <Filter>Model\Config\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\NBEGSettingsGenerator\NBEGSettigsGenerator.h">
+      <Filter>Model\NBEGSettingsGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

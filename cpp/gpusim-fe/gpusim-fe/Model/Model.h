@@ -12,7 +12,7 @@ public:
 public slots:
     void close();
 
-    void performExperiment(quint64 minMatrixSize, quint64 maxMatrixSize, quint64 matrixSizeIncrement, quint64 blockSize);
+    void performExperiment(quint32 minN, quint32 maxN, quint32 minThreadsPerBlock, quint32 maxThreadsPerBlock);
     void cancelExperiment();
     
 signals:
@@ -37,7 +37,7 @@ private:
     Core::CExperimenter m_experimenter;
 
 private:
-    static const QString c_mmegSettingsFilePath;
+    static const QString c_genSettingsFilePath;
     static const QString c_simulatorJarPath;
     static const QString c_experimentsWorkingDir;
 };

@@ -8,36 +8,37 @@ using namespace Core::Serialization;
 // Constants
 ////////////////////////////////////////////////////////////////////////// 
 #pragma region Public constants
-const quint32 CNBodyExperimentGeneratorSettings::c_defaultCPUMachinePECount  = 8;
-const quint32 CNBodyExperimentGeneratorSettings::c_defaultCPUMachinePERating = 100;
-const quint32 CNBodyExperimentGeneratorSettings::c_defaultGPUMachinePECount  = 128;
-const quint32 CNBodyExperimentGeneratorSettings::c_defaultGPUMachinePERating = 20;
+const quint32 CNBodyExperimentGeneratorSettings::c_defaultGPUCoreRating      = 1000;
 
-const QString CNBodyExperimentGeneratorSettings::c_defaultResourceArch       = QString("Matrix Multiply Experiment Arch");
-const QString CNBodyExperimentGeneratorSettings::c_defaultResourceOS         = QString("Matrix Multiply Experiment OS");
+const QString CNBodyExperimentGeneratorSettings::c_defaultResourceArch       = QString("N-Body Experiment Arch");
+const QString CNBodyExperimentGeneratorSettings::c_defaultResourceOS         = QString("N-Body Experiment OS");
 const double  CNBodyExperimentGeneratorSettings::c_defaultResourceBaudRate   = 10000000000.0f; // (10 Gbps)
 const double  CNBodyExperimentGeneratorSettings::c_defaultResourceCostPerSec = 1.0f; // default cost?
 const double  CNBodyExperimentGeneratorSettings::c_defaultLinkBaudRate       = 10000000000.0f; // (10 Gbps)
 
-const double  CNBodyExperimentGeneratorSettings::c_defaultLoadOperationCost  = 10.0f;
-const double  CNBodyExperimentGeneratorSettings::c_defaultSaveOperationCost  = 100.0f;
+const double  CNBodyExperimentGeneratorSettings::c_defaultLimitationsDivider               = 128.0f;
+const double  CNBodyExperimentGeneratorSettings::c_defaultSmallTPBPenaltyWeight            = 1.0f;
+const double  CNBodyExperimentGeneratorSettings::c_defaultLargeTPBPenaltyWeight            = 0.5f;
+const double  CNBodyExperimentGeneratorSettings::c_defaultMultiplicativeLengthScaleFactor  = 0.111f;
+const double  CNBodyExperimentGeneratorSettings::c_defaultAdditiveLengthScaleFactor        = 0.0f;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const QString CNBodyExperimentGeneratorSettings::c_className                  = QString("gpusim-fe.MMEG-settings");
-const QString CNBodyExperimentGeneratorSettings::c_cpuMachinePECountPropName  = QString("cpuMachineCount");
-const QString CNBodyExperimentGeneratorSettings::c_cpuMachinePERatingPropName = QString("cpuMachineRating");
-const QString CNBodyExperimentGeneratorSettings::c_gpuMachinePECountPropName  = QString("gpuMachineCount");
-const QString CNBodyExperimentGeneratorSettings::c_gpuMachinePERatingPropName = QString("gpuMachineRating");
-const QString CNBodyExperimentGeneratorSettings::c_resourceArchPropName       = QString("resourceArch");
-const QString CNBodyExperimentGeneratorSettings::c_resourceOSPropName         = QString("resourceOS");
-const QString CNBodyExperimentGeneratorSettings::c_resourceBaudRatePropName   = QString("resourceBaudRate");
-const QString CNBodyExperimentGeneratorSettings::c_resourceCostPerSecPropName = QString("resourceCostPerSec");
-const QString CNBodyExperimentGeneratorSettings::c_linkBaudRatePropName       = QString("linkBaudRate");
-const QString CNBodyExperimentGeneratorSettings::c_loadOperationCostPropName  = QString("loadOperationCost");
-const QString CNBodyExperimentGeneratorSettings::c_saveOperationCostPropName  = QString("saveOperationCost");
+const QString CNBodyExperimentGeneratorSettings::c_className                               = QString("gpusim-fe.NBEG-settings");
+const QString CNBodyExperimentGeneratorSettings::c_gpuCoreRatingPropName                   = QString("gpuCoreRating");
+const QString CNBodyExperimentGeneratorSettings::c_resourceArchPropName                    = QString("resourceArch");
+const QString CNBodyExperimentGeneratorSettings::c_resourceOSPropName                      = QString("resourceOS");
+const QString CNBodyExperimentGeneratorSettings::c_resourceBaudRatePropName                = QString("resourceBaudRate");
+const QString CNBodyExperimentGeneratorSettings::c_resourceCostPerSecPropName              = QString("resourceCostPerSec");
+const QString CNBodyExperimentGeneratorSettings::c_linkBaudRatePropName                    = QString("linkBaudRate");
+const QString CNBodyExperimentGeneratorSettings::c_limitationsDividerPropName              = QString("limitationsDivider");
+const QString CNBodyExperimentGeneratorSettings::c_smallTPBPenaltyWeightPropName           = QString("smallTPBPenaltyWeight");
+const QString CNBodyExperimentGeneratorSettings::c_largeTPBPenaltyWeightPropName           = QString("largeTPBPenaltyWeight");
+const QString CNBodyExperimentGeneratorSettings::c_multiplicativeLengthScaleFactorPropName = QString("multiplicativeLengthScaleFactor");
+const QString CNBodyExperimentGeneratorSettings::c_additiveLengthScaleFactorPropName       = QString("additiveLengthScale");
+
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
@@ -47,12 +48,12 @@ const QString CNBodyExperimentGeneratorSettings::c_saveOperationCostPropName  = 
 #pragma region Constructor and comparision support
 CNBodyExperimentGeneratorSettings::CNBodyExperimentGeneratorSettings()
     :IJavaXMLSerialize(c_className),
-    m_cpuMachinePECount(c_defaultCPUMachinePECount), m_cpuMachinePERating(c_defaultCPUMachinePERating),
-    m_gpuMachinePECount(c_defaultGPUMachinePECount), m_gpuMachinePERating(c_defaultGPUMachinePERating),
-    m_resourceArch(c_defaultResourceArch), m_resourceOS(c_defaultResourceOS),
+    m_gpuCoreRating(c_defaultGPUCoreRating), m_resourceArch(c_defaultResourceArch), m_resourceOS(c_defaultResourceOS),
     m_resourceBaudRate(c_defaultResourceBaudRate), m_resourceCostPerSec(c_defaultResourceCostPerSec),
-    m_linkBaudRate(c_defaultLinkBaudRate), m_loadOperationCost(c_defaultLoadOperationCost),
-    m_saveOperationCost(c_defaultSaveOperationCost)
+    m_linkBaudRate(c_defaultLinkBaudRate), m_limitationsDivider(c_defaultLimitationsDivider),
+    m_smallTPBPenaltyWeight(c_defaultSmallTPBPenaltyWeight), m_largeTPBPenaltyWeight(c_defaultLargeTPBPenaltyWeight),
+    m_multiplicativeLengthScaleFactor(c_defaultMultiplicativeLengthScaleFactor),
+    m_additiveLengthScaleFactor(c_defaultAdditiveLengthScaleFactor)
 {
 
 }
@@ -60,17 +61,17 @@ CNBodyExperimentGeneratorSettings::CNBodyExperimentGeneratorSettings()
 bool CNBodyExperimentGeneratorSettings::operator==(const CNBodyExperimentGeneratorSettings& other) const
 {
     return
-        (m_cpuMachinePECount  == other.m_cpuMachinePECount ) &&
-        (m_cpuMachinePERating == other.m_cpuMachinePERating) &&
-        (m_gpuMachinePECount  == other.m_gpuMachinePECount ) &&
-        (m_gpuMachinePERating == other.m_gpuMachinePERating) &&
-        (m_resourceArch       == other.m_resourceArch      ) &&
-        (m_resourceOS         == other.m_resourceOS        ) &&
-        (m_resourceBaudRate   == other.m_resourceBaudRate  ) &&
-        (m_resourceCostPerSec == other.m_resourceCostPerSec) &&
-        (m_linkBaudRate       == other.m_linkBaudRate      ) &&
-        (m_loadOperationCost  == other.m_loadOperationCost ) &&
-        (m_saveOperationCost  == other.m_saveOperationCost );
+        (m_gpuCoreRating                   == other.m_gpuCoreRating                  ) &&
+        (m_resourceArch                    == other.m_resourceArch                   ) &&
+        (m_resourceOS                      == other.m_resourceOS                     ) &&
+        (m_resourceBaudRate                == other.m_resourceBaudRate               ) &&
+        (m_resourceCostPerSec              == other.m_resourceCostPerSec             ) &&
+        (m_linkBaudRate                    == other.m_linkBaudRate                   ) &&
+        (m_limitationsDivider              == other.m_limitationsDivider             ) &&
+        (m_smallTPBPenaltyWeight           == other.m_smallTPBPenaltyWeight          ) &&
+        (m_largeTPBPenaltyWeight           == other.m_largeTPBPenaltyWeight          ) &&
+        (m_multiplicativeLengthScaleFactor == other.m_multiplicativeLengthScaleFactor) &&
+        (m_additiveLengthScaleFactor       == other.m_additiveLengthScaleFactor      );
 }
 
 bool CNBodyExperimentGeneratorSettings::operator!=(const CNBodyExperimentGeneratorSettings& other) const
@@ -80,17 +81,8 @@ bool CNBodyExperimentGeneratorSettings::operator!=(const CNBodyExperimentGenerat
 
 bool CNBodyExperimentGeneratorSettings::operator<(const CNBodyExperimentGeneratorSettings& other) const
 {
-    if (m_cpuMachinePECount != other.m_cpuMachinePECount)
-        return m_cpuMachinePECount < other.m_cpuMachinePECount;
-
-    if (m_cpuMachinePERating != other.m_cpuMachinePERating)
-        return m_cpuMachinePERating < other.m_cpuMachinePERating;
-
-    if (m_gpuMachinePECount != other.m_gpuMachinePECount)
-        return m_gpuMachinePECount < other.m_gpuMachinePECount;
-
-    if (m_gpuMachinePERating != other.m_gpuMachinePERating)
-        return m_gpuMachinePERating < other.m_gpuMachinePERating;
+    if (m_gpuCoreRating != other.m_gpuCoreRating)
+        return m_gpuCoreRating < other.m_gpuCoreRating;
 
     if (m_resourceBaudRate != other.m_resourceBaudRate)
         return m_resourceBaudRate < other.m_resourceBaudRate;
@@ -101,10 +93,20 @@ bool CNBodyExperimentGeneratorSettings::operator<(const CNBodyExperimentGenerato
     if (m_linkBaudRate != other.m_linkBaudRate)
         return m_linkBaudRate < other.m_linkBaudRate;
 
-    if (m_loadOperationCost != other.m_loadOperationCost)
-        return m_loadOperationCost < other.m_loadOperationCost;
 
-    return m_saveOperationCost < other.m_saveOperationCost;
+    if (m_limitationsDivider != other.m_limitationsDivider)
+        return m_limitationsDivider < other.m_limitationsDivider;
+
+    if (m_smallTPBPenaltyWeight != other.m_smallTPBPenaltyWeight)
+        return m_smallTPBPenaltyWeight < other.m_smallTPBPenaltyWeight;
+
+    if (m_largeTPBPenaltyWeight != other.m_largeTPBPenaltyWeight)
+        return m_largeTPBPenaltyWeight < other.m_largeTPBPenaltyWeight;
+
+    if (m_multiplicativeLengthScaleFactor != other.m_multiplicativeLengthScaleFactor)
+        return m_multiplicativeLengthScaleFactor < other.m_multiplicativeLengthScaleFactor;
+
+    return m_additiveLengthScaleFactor < other.m_additiveLengthScaleFactor;
 }
 
 #pragma endregion
@@ -112,51 +114,15 @@ bool CNBodyExperimentGeneratorSettings::operator<(const CNBodyExperimentGenerato
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Properties
-#pragma region CPUMachinePECount property
-quint32 CNBodyExperimentGeneratorSettings::getCPUMachinePECount() const
+#pragma region GPUCoreRating property
+quint32 CNBodyExperimentGeneratorSettings::getGPUCoreRating() const
 {
-    return m_cpuMachinePECount;
+    return m_gpuCoreRating;
 }
 
-void CNBodyExperimentGeneratorSettings::setCPUMachinePECount(quint32 cpuMachineCount)
+void CNBodyExperimentGeneratorSettings::setGPUCoreRating(quint32 gpuCoreRating)
 {
-    m_cpuMachinePECount = cpuMachineCount;
-}
-#pragma endregion
-
-#pragma region CPUMachinePERating property
-quint32 CNBodyExperimentGeneratorSettings::getCPUMachinePERating() const
-{
-    return m_cpuMachinePERating;
-}
-
-void CNBodyExperimentGeneratorSettings::setCPUMachinePERating(quint32 cpuMachineRating)
-{
-    m_cpuMachinePERating = cpuMachineRating;
-}
-#pragma endregion
-
-#pragma region GPUMachinePECount property
-quint32 CNBodyExperimentGeneratorSettings::getGPUMachinePECount() const
-{
-    return m_gpuMachinePECount;
-}
-
-void CNBodyExperimentGeneratorSettings::setGPUMachinePECount(quint32 gpuMachineCount)
-{
-    m_gpuMachinePECount = gpuMachineCount;
-}
-#pragma endregion
-
-#pragma region GPUMachinePERating property
-quint32 CNBodyExperimentGeneratorSettings::getGPUMachinePERating() const
-{
-    return m_gpuMachinePERating;
-}
-
-void CNBodyExperimentGeneratorSettings::setGPUMachinePERating(quint32 gpuMachineRating)
-{
-    m_gpuMachinePERating = gpuMachineRating;
+    m_gpuCoreRating= gpuCoreRating;
 }
 #pragma endregion
 
@@ -220,27 +186,63 @@ void CNBodyExperimentGeneratorSettings::setLinkBaudRate(double linkBaudRate)
 }
 #pragma endregion
 
-#pragma region LoadOperationCost property
-double CNBodyExperimentGeneratorSettings::getLoadOperationCost() const
+#pragma region LimitationsDivider property
+double CNBodyExperimentGeneratorSettings::getLimitationsDivider() const
 {
-    return m_loadOperationCost;
+    return m_limitationsDivider;
 }
 
-void CNBodyExperimentGeneratorSettings::setLoadOperationCost(double loadOperationCost)
+void CNBodyExperimentGeneratorSettings::setLimitationsDivider(double limitationsDivider)
 {
-    m_loadOperationCost = loadOperationCost;
+    m_limitationsDivider = limitationsDivider;
 }
 #pragma endregion
 
-#pragma region SaveOperationCost property
-double CNBodyExperimentGeneratorSettings::getSaveOperationCost() const
+#pragma region SmallTPBPenaltyWeight property
+double CNBodyExperimentGeneratorSettings::getSmallTPBPenaltyWeight() const
 {
-    return m_saveOperationCost;
+    return m_smallTPBPenaltyWeight;
 }
 
-void CNBodyExperimentGeneratorSettings::setSaveOperationCost(double saveOperationCost)
+void CNBodyExperimentGeneratorSettings::setSmallTPBPenaltyWeight(double smallTPBPenaltyWeight)
 {
-    m_saveOperationCost = saveOperationCost;
+    m_smallTPBPenaltyWeight = smallTPBPenaltyWeight;
+}
+#pragma endregion
+
+#pragma region LargeTPBPenaltyWeight property
+double CNBodyExperimentGeneratorSettings::getLargeTPBPenaltyWeight() const
+{
+    return m_largeTPBPenaltyWeight;
+}
+
+void CNBodyExperimentGeneratorSettings::setLargeTPBPenaltyWeight(double largeTPBPenaltyWeight)
+{
+    m_largeTPBPenaltyWeight = largeTPBPenaltyWeight;
+}
+#pragma endregion
+
+#pragma region MultiplicativeLengthScaleFactor property
+double CNBodyExperimentGeneratorSettings::getMultiplicativeLengthScaleFactor() const
+{
+    return m_multiplicativeLengthScaleFactor;
+}
+
+void CNBodyExperimentGeneratorSettings::setMultiplicativeLengthScaleFactor(double multiplicativeLengthScaleFactor)
+{
+    m_multiplicativeLengthScaleFactor = multiplicativeLengthScaleFactor;
+}
+#pragma endregion
+
+#pragma region AdditiveLengthScaleFactor property
+double CNBodyExperimentGeneratorSettings::getAdditiveLengthScaleFactor() const
+{
+    return m_additiveLengthScaleFactor;
+}
+
+void CNBodyExperimentGeneratorSettings::setAdditiveLengthScaleFactor(double additiveLengthScaleFactor)
+{
+    m_additiveLengthScaleFactor = additiveLengthScaleFactor;
 }
 #pragma endregion
 #pragma endregion
@@ -256,25 +258,22 @@ bool CNBodyExperimentGeneratorSettings::isValid() const
 
 void CNBodyExperimentGeneratorSettings::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) const
 {
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_cpuMachinePECountPropName,  getCPUMachinePECount()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_cpuMachinePERatingPropName, getCPUMachinePERating()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_gpuMachinePECountPropName,  getGPUMachinePECount()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_gpuMachinePERatingPropName, getGPUMachinePERating()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceArchPropName,       getResourceArch()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceOSPropName,         getResourceOS()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceBaudRatePropName,   getResourceBaudRate()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceCostPerSecPropName, getResourceCostPerSec()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_linkBaudRatePropName,       getLinkBaudRate()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_loadOperationCostPropName,  getLoadOperationCost()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_saveOperationCostPropName,  getSaveOperationCost()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_gpuCoreRatingPropName,                   getGPUCoreRating()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceArchPropName,                    getResourceArch()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceOSPropName,                      getResourceOS()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceBaudRatePropName,                getResourceBaudRate()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_resourceCostPerSecPropName,              getResourceCostPerSec()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_linkBaudRatePropName,                    getLinkBaudRate()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_limitationsDividerPropName,              getLimitationsDivider()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_smallTPBPenaltyWeightPropName,           getSmallTPBPenaltyWeight()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_largeTPBPenaltyWeightPropName,           getLargeTPBPenaltyWeight()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_multiplicativeLengthScaleFactorPropName, getMultiplicativeLengthScaleFactor()));
+    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_additiveLengthScaleFactorPropName,       getAdditiveLengthScaleFactor()));
 }
 
 void CNBodyExperimentGeneratorSettings::loadDataFromXMLNode(const QDomElement &elem)
 {
-    quint32 cpuMachinePECount;
-    quint32 cpuMachinePERating;
-    quint32 gpuMachinePECount;
-    quint32 gpuMachinePERating;
+    quint32 gpuCoreRating;
 
     QString resourceArch;
     QString resourceOS;
@@ -282,32 +281,36 @@ void CNBodyExperimentGeneratorSettings::loadDataFromXMLNode(const QDomElement &e
     double resourceCostPerSec;
     double linkBaudRate;
 
-    double loadOperationCost;
-    double saveOperationCost;
+    double limitationsDivider;
+    double smallTPBPenaltyWeight;
+    double largeTPBPenaltyWeight;
+    double multiplicativeLengthScaleFactor;
+    double additiveLengthScaleFactor;
 
-    CJavaXMLHelper::getPropertyValue(elem, c_cpuMachinePECountPropName,  cpuMachinePECount,   c_defaultCPUMachinePECount );
-    CJavaXMLHelper::getPropertyValue(elem, c_cpuMachinePERatingPropName, cpuMachinePERating,  c_defaultCPUMachinePERating);
-    CJavaXMLHelper::getPropertyValue(elem, c_gpuMachinePECountPropName,  gpuMachinePECount,   c_defaultGPUMachinePECount );
-    CJavaXMLHelper::getPropertyValue(elem, c_gpuMachinePERatingPropName, gpuMachinePERating,  c_defaultGPUMachinePERating);
-    CJavaXMLHelper::getPropertyValue(elem, c_resourceArchPropName,       resourceArch,        c_defaultResourceArch      );
-    CJavaXMLHelper::getPropertyValue(elem, c_resourceOSPropName,         resourceOS,          c_defaultResourceOS        );
-    CJavaXMLHelper::getPropertyValue(elem, c_resourceBaudRatePropName,   resourceBaudRate,    c_defaultResourceBaudRate  );
-    CJavaXMLHelper::getPropertyValue(elem, c_resourceCostPerSecPropName, resourceCostPerSec,  c_defaultResourceCostPerSec);
-    CJavaXMLHelper::getPropertyValue(elem, c_linkBaudRatePropName,       linkBaudRate,        c_defaultLinkBaudRate      );
-    CJavaXMLHelper::getPropertyValue(elem, c_loadOperationCostPropName,  loadOperationCost,   c_defaultLoadOperationCost );
-    CJavaXMLHelper::getPropertyValue(elem, c_saveOperationCostPropName,  saveOperationCost,   c_defaultSaveOperationCost );
+    CJavaXMLHelper::getPropertyValue(elem, c_gpuCoreRatingPropName,                   gpuCoreRating,                   c_defaultGPUCoreRating                  );
+    CJavaXMLHelper::getPropertyValue(elem, c_resourceArchPropName,                    resourceArch,                    c_defaultResourceArch                   );
+    CJavaXMLHelper::getPropertyValue(elem, c_resourceOSPropName,                      resourceOS,                      c_defaultResourceOS                     );
+    CJavaXMLHelper::getPropertyValue(elem, c_resourceBaudRatePropName,                resourceBaudRate,                c_defaultResourceBaudRate               );
+    CJavaXMLHelper::getPropertyValue(elem, c_resourceCostPerSecPropName,              resourceCostPerSec,              c_defaultResourceCostPerSec             );
+    CJavaXMLHelper::getPropertyValue(elem, c_linkBaudRatePropName,                    linkBaudRate,                    c_defaultLinkBaudRate                   );
+    CJavaXMLHelper::getPropertyValue(elem, c_limitationsDividerPropName,              limitationsDivider,              c_defaultLimitationsDivider             );
+    CJavaXMLHelper::getPropertyValue(elem, c_smallTPBPenaltyWeightPropName,           smallTPBPenaltyWeight,           c_defaultSmallTPBPenaltyWeight          );
+    CJavaXMLHelper::getPropertyValue(elem, c_largeTPBPenaltyWeightPropName,           largeTPBPenaltyWeight,           c_defaultLargeTPBPenaltyWeight          );
+    CJavaXMLHelper::getPropertyValue(elem, c_multiplicativeLengthScaleFactorPropName, multiplicativeLengthScaleFactor, c_defaultMultiplicativeLengthScaleFactor);
+    CJavaXMLHelper::getPropertyValue(elem, c_additiveLengthScaleFactorPropName,       additiveLengthScaleFactor,       c_defaultAdditiveLengthScaleFactor      );
+    
 
-    setCPUMachinePECount(cpuMachinePECount);
-    setCPUMachinePERating(cpuMachinePERating);
-    setGPUMachinePECount(gpuMachinePECount);
-    setGPUMachinePERating(gpuMachinePERating);
+    setGPUCoreRating(gpuCoreRating);
     setResourceArch(resourceArch);
     setResourceOS(resourceOS);
     setResourceBaudRate(resourceBaudRate);
     setResourceCostPerSec(resourceCostPerSec);
     setLinkBaudRate(linkBaudRate);
-    setLoadOperationCost(loadOperationCost);
-    setSaveOperationCost(saveOperationCost);
+    setLimitationsDivider(limitationsDivider);
+    setSmallTPBPenaltyWeight(smallTPBPenaltyWeight);
+    setLargeTPBPenaltyWeight(largeTPBPenaltyWeight);
+    setAdditiveLengthScaleFactor(additiveLengthScaleFactor);
+    setMultiplicativeLengthScaleFactor(multiplicativeLengthScaleFactor);
 }
 
 IJavaXMLSerializePtr CNBodyExperimentGeneratorSettings::create() const
