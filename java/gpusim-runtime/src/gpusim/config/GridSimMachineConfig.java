@@ -4,34 +4,19 @@ import java.io.Serializable;
 
 public class GridSimMachineConfig implements Serializable {
     //<editor-fold defaultstate="collapsed" desc="Internal fields">
-    private int _id;
     private int _peCount;
     private int _peRating;
+    private int _count;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructors">
     public GridSimMachineConfig() {
-        _id = 0;
         _peCount = 1;
         _peRating = 1;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
-    //<editor-fold defaultstate="collapsed" desc="ID property">
-    public int getID() {
-        return _id;
-    }
-    
-    public void setID(int id) {
-        if (id < 0) {
-            throw new AssertionError(id >= 0);
-        }
-        
-        _id = id;
-    }
-    //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc="PECount property">
     public int getPECount() {
         return _peCount;
@@ -59,5 +44,19 @@ public class GridSimMachineConfig implements Serializable {
         _peRating = peRating;
     }
     //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Count property">
+    public int getCount() {
+        return _count;
+    }
+    
+    public void setCount(int count) {
+        if (count < 1) {
+            throw new AssertionError(count >= 1);
+        }
+        
+        _count = count;
+    }
+    //</editor-fold>    
     //</editor-fold>
 }

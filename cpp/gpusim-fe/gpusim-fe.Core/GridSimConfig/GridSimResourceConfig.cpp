@@ -1,11 +1,9 @@
 #include "GridSimResourceConfig.h"
-#include "../Serialization/JavaXMLHelper.h"
-#include "../Serialization/JavaXMLListSerialize.hpp"
-
-#include <QRegExp>
+#include "Serialization/JavaXMLHelper.h"
+#include "Serialization/JavaXMLListSerialize.hpp"
 
 using namespace Core::GridSimConfig;
-using namespace Core::Serialization;
+using namespace Core::GridSimConfig::Serialization;
 
 //////////////////////////////////////////////////////////////////////////
 // Constants
@@ -17,26 +15,21 @@ const double  CGridSimResourceConfig::c_maxTimeZone    = 13.0f;
 const quint32 CGridSimResourceConfig::c_minAllocPolicy = 0;
 const quint32 CGridSimResourceConfig::c_maxAllocPolicy = 1;
 const double  CGridSimResourceConfig::c_minBaudRate    = 0.0f;
-const quint64 CGridSimResourceConfig::c_minCount           = 1;
+const quint32 CGridSimResourceConfig::c_minCount       = 1;
 
-const QString CGridSimResourceConfig::c_defaultName        = QString("Resource_0");
 const QString CGridSimResourceConfig::c_defaultArch        = QString("Unnamed Architecture");
 const QString CGridSimResourceConfig::c_defaultOS          = QString("Unnamed OS");
 const double  CGridSimResourceConfig::c_defaultCostPerSec  = c_minCostPerSec;
 const double  CGridSimResourceConfig::c_defaultTimeZone    = 0.0f;
 const quint32 CGridSimResourceConfig::c_defaultAllocPolicy = c_minAllocPolicy;
 const double  CGridSimResourceConfig::c_defaultBaudRate    = 1.0f;
-const quint64 CGridSimResourceConfig::c_defaultCount       = c_minCount;
+const quint32 CGridSimResourceConfig::c_defaultCount       = c_minCount;
 #pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Private constants
-const QString CGridSimResourceConfig::c_nameFormat = QString("Resource_%1");
-const QString CGridSimResourceConfig::c_nameRegExp = QString("Resource_\\d+");
-
 const QString CGridSimResourceConfig::c_className           = QString("gpusim.config.GridSimResourceConfig");
-const QString CGridSimResourceConfig::c_namePropName        = QString("name");
 const QString CGridSimResourceConfig::c_archPropName        = QString("arch");
 const QString CGridSimResourceConfig::c_osPropName          = QString("OS");
 const QString CGridSimResourceConfig::c_costPerSecPropName  = QString("costPerSec");
@@ -53,7 +46,6 @@ const QString CGridSimResourceConfig::c_countPropName       = QString("count");
 
 #pragma region Constructor and equality comparision support
 CGridSimResourceConfig::CGridSimResourceConfig(
-    const QString &name /*= c_defaultName*/,
     const QString &arch /*= c_defaultArch*/,
     const QString &os   /*= c_defaultOS*/,
     double costPerSec   /*= c_defaultCostPerSec*/,
@@ -61,12 +53,11 @@ CGridSimResourceConfig::CGridSimResourceConfig(
     qint32 allocPolicy  /*= c_defaultAllocPolicy*/,
     double baudRate     /*= c_defaultBaudRate*/,
     const CGridSimMachinesConfig &machines /*= CGridSimMachinesConfig()*/,
-    quint64 count       /*= c_defaultCount*/)
-    :IJavaXMLSerialize(c_className), m_name(c_defaultName), m_arch(c_defaultArch), m_os(c_defaultOS),
-    m_costPerSec(c_defaultCostPerSec), m_timeZone(c_defaultTimeZone), m_allocPolicy(c_defaultAllocPolicy),
-    m_baudRate(c_defaultBaudRate), m_count(c_defaultCount)
+    quint32 count       /*= c_defaultCount*/)
+    :IJavaXMLSerialize(c_className), m_arch(c_defaultArch), m_os(c_defaultOS), m_costPerSec(c_defaultCostPerSec),
+    m_timeZone(c_defaultTimeZone), m_allocPolicy(c_defaultAllocPolicy), m_baudRate(c_defaultBaudRate),
+    m_count(c_defaultCount)
 {
-    setName(name);
     setArch(arch);
     setOS(os);
     setCostPerSec(costPerSec);
@@ -80,7 +71,6 @@ CGridSimResourceConfig::CGridSimResourceConfig(
 bool CGridSimResourceConfig::operator==(const CGridSimResourceConfig& other) const
 {
     return
-        (m_name        == other.m_name       ) &&
         (m_arch        == other.m_arch       ) &&
         (m_os          == other.m_os         ) &&
         (m_costPerSec  == other.m_costPerSec ) &&
@@ -100,28 +90,6 @@ bool CGridSimResourceConfig::operator!=(const CGridSimResourceConfig& other) con
 //////////////////////////////////////////////////////////////////////////
 
 #pragma region Properties
-#pragma region Name property
-QString CGridSimResourceConfig::getName() const
-{
-    return m_name;
-}
-
-void CGridSimResourceConfig::setName(const QString &name)
-{
-    if (m_name == name)
-        return;
-
-    Q_ASSERT(checkName(name));
-    m_name = name;
-}
-
-QString CGridSimResourceConfig::buildName(quint32 resourceID)
-{
-    return c_nameFormat.arg(resourceID);
-}
-
-#pragma endregion
-
 #pragma region Arch property
 QString CGridSimResourceConfig::getArch() const
 {
@@ -240,12 +208,12 @@ void CGridSimResourceConfig::setMachines(const CGridSimMachinesConfig &machines)
 #pragma endregion
 
 #pragma region Count property
-quint64 CGridSimResourceConfig::getCount() const
+quint32 CGridSimResourceConfig::getCount() const
 {
     return m_count;
 }
 
-void CGridSimResourceConfig::setCount(quint64 count)
+void CGridSimResourceConfig::setCount(quint32 count)
 {
     if (m_count == count)
         return;
@@ -261,9 +229,6 @@ void CGridSimResourceConfig::setCount(quint64 count)
 #pragma region Serialization support
 bool CGridSimResourceConfig::isValid() const
 {
-    if (!checkName(m_name))
-        return false;
-
     if (m_arch.isEmpty() || m_os.isEmpty())
         return false;
 
@@ -282,12 +247,11 @@ bool CGridSimResourceConfig::isValid() const
     if (m_machines.isEmpty())
         return false;
 
-    return m_count >= 1;
+    return m_count >= c_minCount;
 }
 
 void CGridSimResourceConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) const
 {
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_namePropName,        getName()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_archPropName,        getArch()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_osPropName,          getOS()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_costPerSecPropName,  getCostPerSec()));
@@ -301,7 +265,6 @@ void CGridSimResourceConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &e
 
 void CGridSimResourceConfig::loadDataFromXMLNode(const QDomElement &elem)
 {
-    QString name;
     QString arch;
     QString os;
     double costPerSec;
@@ -309,9 +272,8 @@ void CGridSimResourceConfig::loadDataFromXMLNode(const QDomElement &elem)
     qint32 allocPolicy;
     double baudRate;
     CGridSimMachinesConfig machines;
-    quint64 count;
+    quint32 count;
 
-    CJavaXMLHelper::getPropertyValue(elem, c_namePropName,        name,        c_defaultName);
     CJavaXMLHelper::getPropertyValue(elem, c_archPropName,        arch,        c_defaultArch);
     CJavaXMLHelper::getPropertyValue(elem, c_osPropName,          os,          c_defaultOS);
     CJavaXMLHelper::getPropertyValue(elem, c_costPerSecPropName,  costPerSec,  c_defaultCostPerSec);
@@ -322,7 +284,6 @@ void CGridSimResourceConfig::loadDataFromXMLNode(const QDomElement &elem)
 
     getListPropertyValue(elem, c_machinesPropName, std::back_inserter(machines));
 
-    setName(name);
     setArch(arch);
     setOS(os);
     setCostPerSec(costPerSec);
@@ -342,18 +303,5 @@ void CGridSimResourceConfig::copy(const IJavaXMLSerializePtr &from)
 {
     auto ptr = from.staticCast<CGridSimResourceConfig>();
     *this = *ptr;
-}
-#pragma endregion
-
-//////////////////////////////////////////////////////////////////////////
-
-#pragma region Tools
-bool CGridSimResourceConfig::checkName(const QString &name)
-{
-    // Check name for format "Resource_<resource_id_start_from_0>
-    //
-    QRegExp nameRegExp(c_nameRegExp);
-    nameRegExp.setCaseSensitivity(Qt::CaseSensitive);
-    return nameRegExp.exactMatch(name);
 }
 #pragma endregion

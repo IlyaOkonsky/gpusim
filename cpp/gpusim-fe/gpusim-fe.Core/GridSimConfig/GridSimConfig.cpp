@@ -1,9 +1,9 @@
 #include "GridSimConfig.h"
-#include "../Serialization/JavaXMLHelper.h"
-#include "../Serialization/JavaXMLListSerialize.hpp"
+#include "Serialization/JavaXMLHelper.h"
+#include "Serialization/JavaXMLListSerialize.hpp"
 
 using namespace Core::GridSimConfig;
-using namespace Core::Serialization;
+using namespace Core::GridSimConfig::Serialization;
 
 //////////////////////////////////////////////////////////////////////////
 // Constants
@@ -12,7 +12,6 @@ using namespace Core::Serialization;
 const quint32 CGridSimConfig::c_minVersion           = 1;
 const double  CGridSimConfig::c_minLinkBaudRate      = 1.0f;
 const quint32 CGridSimConfig::c_currentConfigVersion = 1;
-const QString CGridSimConfig::c_defaultName          = QString("Unnamed GridSim Configuration");
 const double  CGridSimConfig::c_defaultLinkBaudRate  = 1.0f;
 #pragma endregion
 
@@ -21,7 +20,6 @@ const double  CGridSimConfig::c_defaultLinkBaudRate  = 1.0f;
 #pragma region Private constants
 const QString CGridSimConfig::c_className            = QString("gpusim.config.GridSimConfig");
 const QString CGridSimConfig::c_versionPropName      = QString("version");
-const QString CGridSimConfig::c_namePropName         = QString("name");
 const QString CGridSimConfig::c_linkBaudRatePropName = QString("linkBaudRate");
 const QString CGridSimConfig::c_resourcesPropName    = QString("resources");
 const QString CGridSimConfig::c_gridletsPropName     = QString("gridlets");
@@ -32,14 +30,11 @@ const QString CGridSimConfig::c_gridletsPropName     = QString("gridlets");
 ////////////////////////////////////////////////////////////////////////// 
 
 #pragma region Constructor and equality comparision support
-CGridSimConfig::CGridSimConfig(const QString &name /*= c_defaultName*/,
-    double linkBaudRate /*= c_defaultLinkBaudRate*/,
+CGridSimConfig::CGridSimConfig(double linkBaudRate /*= c_defaultLinkBaudRate*/,
     const CGridSimResourcesConfig &resources /*= CGridSimResourcesConfig()*/,
     const CGridSimGridletsConfig &gridlets /*= CGridSimGridletsConfig()*/)
-    :IJavaXMLSerialize(c_className), m_version(c_currentConfigVersion), m_name(c_defaultName),
-    m_linkBaudRate(c_defaultLinkBaudRate)
+    : IJavaXMLSerialize(c_className), m_version(c_currentConfigVersion), m_linkBaudRate(c_defaultLinkBaudRate)
 {
-    setName(name);
     setLinkBaudRate(linkBaudRate);
     setResources(resources);
     setGridlets(gridlets);
@@ -48,7 +43,6 @@ CGridSimConfig::CGridSimConfig(const QString &name /*= c_defaultName*/,
 bool CGridSimConfig::operator==(const CGridSimConfig& other) const
 {
     return
-        (m_name      == other.m_name     ) &&
         (m_version   == other.m_version  ) &&
         (m_resources == other.m_resources) &&
         (m_gridlets  == other.m_gridlets );
@@ -76,22 +70,6 @@ void CGridSimConfig::setVersion(quint32 version)
 
     Q_ASSERT(version >= c_minVersion);
     m_version = version;
-}
-#pragma endregion
-
-#pragma region Name property
-QString CGridSimConfig::getName() const
-{
-    return m_name;
-}
-
-void CGridSimConfig::setName(const QString &name)
-{
-    if (m_name == name)
-        return;
-
-    Q_ASSERT(!name.isEmpty());
-    m_name = name;
 }
 #pragma endregion
 
@@ -160,13 +138,12 @@ void CGridSimConfig::setGridlets(const CGridSimGridletsConfig &gridlets)
 bool CGridSimConfig::isValid() const
 {
     return (m_version >= c_minVersion) && (m_linkBaudRate >= c_minLinkBaudRate) &&
-        (!(m_name.isEmpty() || m_resources.isEmpty() || m_gridlets.isEmpty()));
+        (!(m_resources.isEmpty() || m_gridlets.isEmpty()));
 }
 
 void CGridSimConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) const
 {
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_versionPropName,      getVersion()));
-    elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_namePropName,         getName()));
     elem.appendChild(CJavaXMLHelper::createPropertyElement(doc, c_linkBaudRatePropName, getLinkBaudRate()));
 
     elem.appendChild(createListPropertyElement(doc, c_resourcesPropName, getResourcesRef().constBegin(),
@@ -178,20 +155,17 @@ void CGridSimConfig::saveDataToXMLNode(QDomDocument &doc, QDomElement &elem) con
 void CGridSimConfig::loadDataFromXMLNode(const QDomElement &elem)
 {
     quint32 version;
-    QString name;
     double linkBaudRate;
     CGridSimResourcesConfig resources;
     CGridSimGridletsConfig gridlets;
 
     CJavaXMLHelper::getPropertyValue(elem, c_versionPropName,      version,      c_currentConfigVersion);
-    CJavaXMLHelper::getPropertyValue(elem, c_namePropName,         name,         c_defaultName);
     CJavaXMLHelper::getPropertyValue(elem, c_linkBaudRatePropName, linkBaudRate, c_defaultLinkBaudRate);
 
     Serialization::getListPropertyValue(elem, c_resourcesPropName, std::back_inserter(resources));
     Serialization::getListPropertyValue(elem, c_gridletsPropName,  std::back_inserter(gridlets));
 
     setVersion(version);
-    setName(name);
     setLinkBaudRate(linkBaudRate);
     setResources(resources);
     setGridlets(gridlets);
@@ -217,18 +191,16 @@ CGridSimConfig CGridSimConfig::createTestConfig()
     // Machines list
     //
     CGridSimMachinesConfig machines;
-    for (int i = 0; i < 5; ++i)
-        machines.append(CGridSimMachineConfig(i, 6, 3));
+    machines.append(CGridSimMachineConfig(6, 3, 5));
 
     //
-    // Resources list with only one resource
+    // Resources list
     //
-    CGridSimResourceConfig resource;
-    resource.setArch("Test Architecture");
-    resource.setOS("Test OS");
+    CGridSimResourceConfig resource("Test Architecture", "Test OS");
     resource.setBaudRate(100.0f);
     resource.setCostPerSec(55.0f);
     resource.setMachines(machines);
+    resource.setCount(2);
 
     CGridSimResourcesConfig resources;
     resources.append(resource);
@@ -236,11 +208,10 @@ CGridSimConfig CGridSimConfig::createTestConfig()
     // Gridlets list
     //
     CGridSimGridletsConfig gridltes;
-    for (int i = 0; i < 10; ++i)
-        gridltes.append(CGridSimGridletConfig(i, 100.0f, 50, 30));
+    gridltes.append(CGridSimGridletConfig(100.0f, 50, 30, 10));
 
     // And finally config
     //
-    return CGridSimConfig("gpusim-fe test configuration", 560.0f, resources, gridltes);
+    return CGridSimConfig(560.0f, resources, gridltes);
 }
 #pragma endregion

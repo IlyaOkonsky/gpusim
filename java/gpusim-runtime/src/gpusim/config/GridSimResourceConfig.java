@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 public class GridSimResourceConfig implements Serializable {
     //<editor-fold defaultstate="collapsed" desc="Internal fields">
-    private String _name;
     private String _arch;
     private String _os;
     private double _costPerSec;
@@ -13,12 +12,11 @@ public class GridSimResourceConfig implements Serializable {
     private int _allocPolicy;
     private double _baudRate;
     private LinkedList<GridSimMachineConfig> _machines;
-    private long _count;
+    private int _count;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructors">
     public GridSimResourceConfig() {
-        _name = "Resource_0";
         _arch = "Unnamed Architecture";
         _os = "Unnamed OS";
         _costPerSec = 0.0f;
@@ -31,20 +29,6 @@ public class GridSimResourceConfig implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
-    //<editor-fold defaultstate="collapsed" desc="Name property">
-    public String getName() {
-        return _name;
-    }
-    
-    public void setName(String name) {
-        if (name == null) {
-            throw new AssertionError(name != null);
-        }
-        
-        _name = name;
-    }
-    //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc="Arch property">
     public String getArch() {
         return _arch;
@@ -147,11 +131,11 @@ public class GridSimResourceConfig implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Count property">
-    public long getCount() {
+    public int getCount() {
         return _count;
     }
 
-    public void setCount(long count) {
+    public void setCount(int count) {
         if (count < 1) {
             throw new AssertionError(count >= 1);
         }

@@ -1,26 +1,26 @@
 #pragma once
 
-#include "../Serialization/IJavaXMLSerialize.h"
+#include "Serialization/IJavaXMLSerialize.h"
 
 #include <QVector>
-#include <QMetaType>
 
 namespace Core
 {
     namespace GridSimConfig
     {
-        class GPUSIM_FE_CORE_EXPORT CGridSimMachineConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimMachineConfig: public Serialization::IJavaXMLSerialize
         {
         public:
             static const quint32 c_minPECount;
             static const quint32 c_minPERating;
+            static const quint32 c_minCount;
 
-            static const quint32 c_defaultlID;
             static const quint32 c_defaultPECount;
             static const quint32 c_defaultPERating;
+            static const quint32 c_defaultCount;
         public:
-            CGridSimMachineConfig(quint32 id = c_defaultlID, quint32 peCount = c_defaultPECount,
-                quint32 peRating = c_defaultPERating);
+            CGridSimMachineConfig(quint32 peCount = c_defaultPECount,
+                quint32 peRating = c_defaultPERating, quint32 count = c_defaultCount);
 
             bool operator == (const CGridSimMachineConfig& other) const;
             bool operator != (const CGridSimMachineConfig& other) const;
@@ -33,6 +33,9 @@ namespace Core
 
             quint32 getPERating() const;
             void setPERating(quint32 peRating);
+
+            quint32 getCount() const;
+            void setCount(quint32 count);
 
             virtual bool isValid() const;
 
@@ -52,17 +55,16 @@ namespace Core
             quint32 m_id;
             quint32 m_peCount;
             quint32 m_peRating;
+            quint32 m_count;
 
         private:
             static const QString c_className;
             static const QString c_idPropName;
             static const QString c_peCountPropName;
             static const QString c_peRatingPropName;
+            static const QString c_countPropName;
         };
 
         typedef QVector<CGridSimMachineConfig> CGridSimMachinesConfig;
     }
 }
-
-Q_DECLARE_METATYPE(Core::GridSimConfig::CGridSimMachineConfig);
-Q_DECLARE_METATYPE(Core::GridSimConfig::CGridSimMachinesConfig);

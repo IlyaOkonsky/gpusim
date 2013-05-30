@@ -7,19 +7,17 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class GPUSIM_FE_CORE_EXPORT CGridSimConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimConfig: public Serialization::IJavaXMLSerialize
         {
         public:
             static const quint32 c_minVersion;
             static const double  c_minLinkBaudRate;
 
             static const quint32 c_currentConfigVersion;
-            static const QString c_defaultName;
             static const double  c_defaultLinkBaudRate;
 
         public:
-            CGridSimConfig(const QString &name = c_defaultName,
-                double linkBaudRate = c_defaultLinkBaudRate,
+            CGridSimConfig(double linkBaudRate = c_defaultLinkBaudRate,
                 const CGridSimResourcesConfig &resources =  CGridSimResourcesConfig(),
                 const CGridSimGridletsConfig &gridlets = CGridSimGridletsConfig());
 
@@ -28,9 +26,6 @@ namespace Core
 
             quint32 getVersion() const;
             void setVersion(quint32 version);
-
-            QString getName() const;
-            void setName(const QString &name);
 
             double getLinkBaudRate() const;
             void setLinkBaudRate(double linkBaudRate);
@@ -61,7 +56,6 @@ namespace Core
 
         private:
             quint32 m_version;
-            QString m_name;
             double m_linkBaudRate;
             CGridSimResourcesConfig m_resources;
             CGridSimGridletsConfig m_gridlets;
@@ -69,12 +63,9 @@ namespace Core
         private:
             static const QString c_className;
             static const QString c_versionPropName;
-            static const QString c_namePropName;
             static const QString c_linkBaudRatePropName;
             static const QString c_resourcesPropName;
             static const QString c_gridletsPropName;
         };
     }
 }
-
-Q_DECLARE_METATYPE(Core::GridSimConfig::CGridSimConfig);

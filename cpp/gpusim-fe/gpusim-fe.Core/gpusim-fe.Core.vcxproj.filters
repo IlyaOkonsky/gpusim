@@ -9,24 +9,6 @@
     <Filter Include="Global">
       <UniqueIdentifier>{1d9baaff-51f8-432f-a113-f35507768f46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Experiment">
-      <UniqueIdentifier>{dbe2a80f-c175-4350-a0ee-8fc2593fd2e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Experimenter">
-      <UniqueIdentifier>{a1c17f35-4f7b-4a62-9435-4609faf51f46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExperimentGenerators">
-      <UniqueIdentifier>{21fe76ff-5d56-4aff-8b49-86820a3426ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExperimentGenerators\MatrixMultiply">
-      <UniqueIdentifier>{a8569cc1-8af8-4a0b-8196-e947578b6c53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExperimentGenerators\MatrixMultiply\Settings">
-      <UniqueIdentifier>{559daf6f-f219-4242-8c5d-7f6a8e58de97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExperimentGenerators\Test">
-      <UniqueIdentifier>{b02a42b4-089b-4174-8f07-e956d80e79f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GridSimConfig">
       <UniqueIdentifier>{d66a6bbd-d6f1-459c-948b-86ae698e0bb3}</UniqueIdentifier>
     </Filter>
@@ -36,9 +18,6 @@
     <Filter Include="GridSimConfig\GridSimGridletConfig">
       <UniqueIdentifier>{f73a856f-8cda-4c27-8b40-71d520cdc028}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GridSimConfig\GridSimGridletOutput">
-      <UniqueIdentifier>{d2dd1cd0-6c5d-458e-9114-a445bb0716fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GridSimConfig\GridSimMachineConfig">
       <UniqueIdentifier>{48c4f655-0961-4d0e-a467-d6cc5bff6b26}</UniqueIdentifier>
     </Filter>
@@ -47,15 +26,6 @@
     </Filter>
     <Filter Include="GridSimConfig\GridSimResourceConfig">
       <UniqueIdentifier>{5e88077d-521b-4f6b-b6d6-dfbca793fbe8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Serialization">
-      <UniqueIdentifier>{e42a6aba-9b4b-4b69-9fd4-a7f5e8e76b4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Simulation">
-      <UniqueIdentifier>{553d9508-70f9-4ccd-8693-b5547ae2a6cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Simulator">
-      <UniqueIdentifier>{60d178d1-f896-45d7-96dc-1d4e8cf8d365}</UniqueIdentifier>
     </Filter>
     <Filter Include="Generated Files\Debug">
       <UniqueIdentifier>{5fc0957e-d046-4951-89a5-ba8aaa885628}</UniqueIdentifier>
@@ -73,55 +43,46 @@
     <Filter Include="Global\MetaTypes">
       <UniqueIdentifier>{8ef7657f-d4c0-47d3-9f67-532132d77753}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Originals">
-      <UniqueIdentifier>{3d2a71f7-5c02-4e07-befb-61554b65621c}</UniqueIdentifier>
+    <Filter Include="GridSimConfig\Serialization">
+      <UniqueIdentifier>{e42a6aba-9b4b-4b69-9fd4-a7f5e8e76b4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Originals\Reader">
-      <UniqueIdentifier>{9dcc9bc6-fde9-48da-a1e2-38459adeddd5}</UniqueIdentifier>
+    <Filter Include="Simulation">
+      <UniqueIdentifier>{abe5ac28-d27d-4cd4-a732-41419a5f6f78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Originals\Helpers">
-      <UniqueIdentifier>{299cb148-887a-4bd7-8515-1277365bfd21}</UniqueIdentifier>
+    <Filter Include="Experiment">
+      <UniqueIdentifier>{a3b0b068-ae12-4c93-a7ad-4bf2ce9e24f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExperimentGenerators\NBody">
-      <UniqueIdentifier>{14e947bd-a75b-4f94-88d1-9eb38eaf90c0}</UniqueIdentifier>
+    <Filter Include="IGenerator">
+      <UniqueIdentifier>{3f87ea43-bec7-4ac7-bafd-0183ecdee442}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExperimentGenerators\NBody\Settings">
-      <UniqueIdentifier>{8718065a-0563-4dc8-88cd-72a3f4b6beb0}</UniqueIdentifier>
+    <Filter Include="Experiment\Experimenter">
+      <UniqueIdentifier>{7c604ab3-5790-4163-b7c4-600747d68080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simulation\Simulator">
+      <UniqueIdentifier>{c8a38db4-214c-4aa3-aa9a-0b56b438a94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets">
+      <UniqueIdentifier>{ec8411dd-8681-4c3f-9208-0a8b2089afe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\IGeneratorSettingsEditorWidget">
+      <UniqueIdentifier>{3052a06a-fd12-4ea7-adba-fd410d9e28c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plot">
+      <UniqueIdentifier>{e803f609-9883-461b-a410-a989ed926561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\IGeneratorBoundaryConditionsEditorWidget">
+      <UniqueIdentifier>{1202c714-f553-495f-9acf-c17d95c7315b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CalibrationHelper">
+      <UniqueIdentifier>{eccc7c8a-b759-465d-911e-62e26da17afd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Experiment.cpp">
-      <Filter>Experiment</Filter>
-    </ClCompile>
-    <ClCompile Include="Experimenter.cpp">
-      <Filter>Experimenter</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_Experimenter.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_Experimenter.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="IExperimentGenerator.cpp">
-      <Filter>ExperimentGenerators</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentGenerators\TestExperimentGenerator.cpp">
-      <Filter>ExperimentGenerators\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.cpp">
-      <Filter>ExperimentGenerators\MatrixMultiply</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.cpp">
-      <Filter>ExperimentGenerators\MatrixMultiply\Settings</Filter>
-    </ClCompile>
     <ClCompile Include="GridSimConfig\GridSimConfig.cpp">
       <Filter>GridSimConfig\GridSimConfig</Filter>
     </ClCompile>
     <ClCompile Include="GridSimConfig\GridSimGridletConfig.cpp">
       <Filter>GridSimConfig\GridSimGridletConfig</Filter>
-    </ClCompile>
-    <ClCompile Include="GridSimConfig\GridSimGridletOutput.cpp">
-      <Filter>GridSimConfig\GridSimGridletOutput</Filter>
     </ClCompile>
     <ClCompile Include="GridSimConfig\GridSimMachineConfig.cpp">
       <Filter>GridSimConfig\GridSimMachineConfig</Filter>
@@ -132,8 +93,17 @@
     <ClCompile Include="GridSimConfig\GridSimResourceConfig.cpp">
       <Filter>GridSimConfig\GridSimResourceConfig</Filter>
     </ClCompile>
-    <ClCompile Include="Simulator.cpp">
-      <Filter>Simulator</Filter>
+    <ClCompile Include="MetaTypes.cpp">
+      <Filter>Global\MetaTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Enums.cpp">
+      <Filter>Global\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\Serialization\IJavaXMLSerialize.cpp">
+      <Filter>GridSimConfig\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSimConfig\Serialization\JavaXMLHelper.cpp">
+      <Filter>GridSimConfig\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_Simulator.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -141,64 +111,64 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Simulator.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="Simulation.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_Experimenter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Experimenter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets\IGeneratorSettingsEditorWidget.cpp">
+      <Filter>Widgets\IGeneratorSettingsEditorWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_IGeneratorSettingsEditorWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_IGeneratorSettingsEditorWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\Simulator.cpp">
+      <Filter>Simulation\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation\Simulation.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization\IJavaXMLSerialize.cpp">
-      <Filter>Serialization</Filter>
+    <ClCompile Include="Experiment\Experimenter.cpp">
+      <Filter>Experiment\Experimenter</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization\JavaXMLHelper.cpp">
-      <Filter>Serialization</Filter>
+    <ClCompile Include="Experiment\Experiment.cpp">
+      <Filter>Experiment</Filter>
     </ClCompile>
-    <ClCompile Include="MetaTypes.cpp">
-      <Filter>Global\MetaTypes</Filter>
+    <ClCompile Include="IGenerator\IGenerator.cpp">
+      <Filter>IGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Enums.cpp">
-      <Filter>Global\Enums</Filter>
+    <ClCompile Include="GeneratedFiles\Debug\moc_IGeneratorBoundaryConditionsEditorWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Originals\Original.cpp">
-      <Filter>Originals</Filter>
+    <ClCompile Include="GeneratedFiles\Release\moc_IGeneratorBoundaryConditionsEditorWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="Originals\OriginalsReader.cpp">
-      <Filter>Originals\Reader</Filter>
+    <ClCompile Include="Widgets\IGeneratorBoundaryConditionsEditorWidget.cpp">
+      <Filter>Widgets\IGeneratorBoundaryConditionsEditorWidget</Filter>
     </ClCompile>
-    <ClCompile Include="Originals\OriginalsHelpers.cpp">
-      <Filter>Originals\Helpers</Filter>
+    <ClCompile Include="CalibrationHelper\CalibrationHelper.cpp">
+      <Filter>CalibrationHelper</Filter>
     </ClCompile>
-    <ClCompile Include="ExperimentGenerators\NBodyExperimentGenerator.cpp">
-      <Filter>ExperimentGenerators\NBody</Filter>
+    <ClCompile Include="Plot\Plot.cpp">
+      <Filter>Plot</Filter>
     </ClCompile>
-    <ClCompile Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.cpp">
-      <Filter>ExperimentGenerators\NBody\Settings</Filter>
+    <ClCompile Include="Plot\PlotCurve.cpp">
+      <Filter>Plot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core_global.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="Experiment.h">
-      <Filter>Experiment</Filter>
-    </ClInclude>
-    <ClInclude Include="IExperimentGenerator.h">
-      <Filter>ExperimentGenerators</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentGenerators\TestExperimentGenerator.h">
-      <Filter>ExperimentGenerators\Test</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentGenerators\MatrixMultiplyExperimentGenerator.h">
-      <Filter>ExperimentGenerators\MatrixMultiply</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentGenerators\MatrixMultiplyExperimentGeneratorSettings.h">
-      <Filter>ExperimentGenerators\MatrixMultiply\Settings</Filter>
-    </ClInclude>
     <ClInclude Include="GridSimConfig\GridSimConfig.h">
       <Filter>GridSimConfig\GridSimConfig</Filter>
     </ClInclude>
     <ClInclude Include="GridSimConfig\GridSimGridletConfig.h">
       <Filter>GridSimConfig\GridSimGridletConfig</Filter>
-    </ClInclude>
-    <ClInclude Include="GridSimConfig\GridSimGridletOutput.h">
-      <Filter>GridSimConfig\GridSimGridletOutput</Filter>
     </ClInclude>
     <ClInclude Include="GridSimConfig\GridSimMachineConfig.h">
       <Filter>GridSimConfig\GridSimMachineConfig</Filter>
@@ -209,46 +179,61 @@
     <ClInclude Include="GridSimConfig\GridSimResourceConfig.h">
       <Filter>GridSimConfig\GridSimResourceConfig</Filter>
     </ClInclude>
-    <ClInclude Include="Simulation.h">
-      <Filter>Simulation</Filter>
-    </ClInclude>
-    <ClInclude Include="Serialization\IJavaXMLSerialize.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="Serialization\JavaXMLHelper.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="Serialization\JavaXMLListSerialize.hpp">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="MetaTypes.h">
       <Filter>Global\MetaTypes</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
       <Filter>Global\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="Originals\Original.h">
-      <Filter>Originals</Filter>
+    <ClInclude Include="GridSimConfig\Serialization\IJavaXMLSerialize.h">
+      <Filter>GridSimConfig\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="Originals\OriginalsReader.h">
-      <Filter>Originals\Reader</Filter>
+    <ClInclude Include="GridSimConfig\Serialization\JavaXMLHelper.h">
+      <Filter>GridSimConfig\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="Originals\OriginalsHelpers.h">
-      <Filter>Originals\Helpers</Filter>
+    <ClInclude Include="GridSimConfig\Serialization\JavaXMLListSerialize.hpp">
+      <Filter>GridSimConfig\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="ExperimentGenerators\NBodyExperimentGenerator.h">
-      <Filter>ExperimentGenerators\NBody</Filter>
+    <ClInclude Include="Simulation\Simulation.h">
+      <Filter>Simulation</Filter>
     </ClInclude>
-    <ClInclude Include="ExperimentGenerators\NBodyExperimentGeneratorSettings.h">
-      <Filter>ExperimentGenerators\NBody\Settings</Filter>
+    <ClInclude Include="Experiment\Experiment.h">
+      <Filter>Experiment</Filter>
+    </ClInclude>
+    <ClInclude Include="IGenerator\GeneratorInput.h">
+      <Filter>IGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="IGenerator\GeneratorSettings.h">
+      <Filter>IGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="IGenerator\IGenerator.h">
+      <Filter>IGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="IGenerator\GeneratorBorderConditions.h">
+      <Filter>IGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibrationHelper\CalibrationHelper.h">
+      <Filter>CalibrationHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Plot\Plot.h">
+      <Filter>Plot</Filter>
+    </ClInclude>
+    <ClInclude Include="Plot\PlotCurve.h">
+      <Filter>Plot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="Experimenter.h">
-      <Filter>Experimenter</Filter>
+    <CustomBuild Include="Widgets\IGeneratorSettingsEditorWidget.h">
+      <Filter>Widgets\IGeneratorSettingsEditorWidget</Filter>
     </CustomBuild>
-    <CustomBuild Include="Simulator.h">
-      <Filter>Simulator</Filter>
+    <CustomBuild Include="Simulation\Simulator.h">
+      <Filter>Simulation\Simulator</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Experiment\Experimenter.h">
+      <Filter>Experiment\Experimenter</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Widgets\IGeneratorBoundaryConditionsEditorWidget.h">
+      <Filter>Widgets\IGeneratorBoundaryConditionsEditorWidget</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

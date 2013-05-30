@@ -97,48 +97,48 @@ public class GridSimRunTime {
     public static void createTestConfig(String filePath) throws FileNotFoundException {
         printRuntimeMessage("Creating and saving test configuration to file: " + filePath);
         
+        //
         // Machines list
         //
+        GridSimMachineConfig machine = new GridSimMachineConfig();
+        machine.setPECount(6);
+        machine.setPERating(3);
+        machine.setCount(5);
+
         LinkedList<GridSimMachineConfig> machines = new LinkedList<GridSimMachineConfig>();
-        for (int i = 0; i < 5; ++i) {
-            GridSimMachineConfig machineConfig = new GridSimMachineConfig();
-            machineConfig.setID(i);
-            machineConfig.setPECount(6);
-            machineConfig.setPERating(3);
-            machines.add(machineConfig);
-        }
+        machines.add(machine);
         
         //
-        // Resources list with only one resource
+        // Resources list
         //
-        GridSimResourceConfig resConfig = new GridSimResourceConfig();
-        resConfig.setName("Resource_0");
-        resConfig.setArch("Test Architecture");
-        resConfig.setOS("Test OS");
-        resConfig.setBaudRate(100.0f);
-        resConfig.setCostPerSec(55.0f);
-        resConfig.setMachines(machines);
+        GridSimResourceConfig resource = new GridSimResourceConfig();
+        resource.setArch("Test Architecture");
+        resource.setOS("Test OS");
+        resource.setBaudRate(100.0f);
+        resource.setCostPerSec(55.0f);
+        resource.setMachines(machines);
+        resource.setCount(2);
 
         LinkedList<GridSimResourceConfig> resources = new LinkedList<GridSimResourceConfig>();
-        resources.add(resConfig);
+        resources.add(resource);
         
+        //
         // Gridlets list
         //
-        LinkedList<GridSimGridletConfig> gridlets = new LinkedList<GridSimGridletConfig>();
-
         GridSimGridletConfig gridlet = new GridSimGridletConfig();
-        gridlet.setID(0);
         gridlet.setLength(100.0f);
         gridlet.setInputSize(50);
         gridlet.setOutputSize(30);
         gridlet.setCount(10);
+
+        LinkedList<GridSimGridletConfig> gridlets = new LinkedList<GridSimGridletConfig>();
+        gridlets.add(gridlet);
 
         
         // Total configuration
         //
         GridSimConfig config = new GridSimConfig();
         config.setLinkBaudRate(560.0f);
-        config.setName("GridSimRunTime test configuration");
         config.setResources(resources);
         config.setGridlets(gridlets);
         
@@ -169,7 +169,6 @@ public class GridSimRunTime {
         String[] exclude_from_processing = {""};
 
         // The name of a report file to be written.
-        // TODO: eplore report-files GridSim-feature.
         String report_name = null;
 
         // Initialize the GridSim package
@@ -183,10 +182,13 @@ public class GridSimRunTime {
     public void createResources() throws GridSimRunTimeException {
         printRuntimeMessage("Creating resouces");
         
+        int currentResourceID = 0;
         for (GridSimResourceConfig resConfig: _config.getResources()) {
             MachineList machines = new MachineList();
+            int currentMachineID = 0;
             for (GridSimMachineConfig mc: resConfig.getMachines()) {
-                machines.add(new Machine(mc.getID(), mc.getPECount(), mc.getPERating()));
+                machines.add(new Machine(currentMachineID, mc.getPECount(), mc.getPERating()));
+                ++currentMachineID;
             }
             
             ResourceCharacteristics rc = new ResourceCharacteristics(resConfig.getArch(), resConfig.getOS(),
@@ -198,8 +200,7 @@ public class GridSimRunTime {
 
             for (long i = 0; i < resConfig.getCount(); ++i) {
                 GridResource resource;
-                //String resName = resConfig.getName();
-                String resName = String.format("Resource_%1$d", i);
+                String resName = String.format("Resource_%1$d", currentResourceID);
 
                 try {
                     printRuntimeMessage("Creating resource " + resName);
@@ -210,6 +211,8 @@ public class GridSimRunTime {
                     printRuntimeMessage(desc);
                     throw new GridSimRunTimeException(desc);
                 }
+                
+                ++currentResourceID;
             }
         }
         

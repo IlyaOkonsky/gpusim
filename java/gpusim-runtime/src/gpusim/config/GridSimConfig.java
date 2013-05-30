@@ -13,7 +13,6 @@ public class GridSimConfig implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Internal fields">
     private int _version;
-    private String _name;
     private double _linkBaudRate;
     private LinkedList<GridSimResourceConfig> _resources;
     private LinkedList<GridSimGridletConfig> _gridlets;
@@ -22,7 +21,6 @@ public class GridSimConfig implements Serializable {
     //<editor-fold defaultstate="collapsed" desc="Constructors">
     public GridSimConfig() {
         _version = CURRENT_CONFIG_VERSION;
-        _name = "Unnamed GridSim Configuration";
         _linkBaudRate = 1.0f;
         _resources = new LinkedList<GridSimResourceConfig>();
         _gridlets = new LinkedList<GridSimGridletConfig>();
@@ -41,20 +39,6 @@ public class GridSimConfig implements Serializable {
         }
 
         _version = version;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Name property">
-    public String getName() {
-        return _name;
-    }
-
-    public void setName(String name) {
-        if (name == null) {
-            throw new AssertionError(name != null);
-        }
-
-        _name = name;
     }
     //</editor-fold>
 

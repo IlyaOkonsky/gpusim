@@ -2,7 +2,6 @@ package gpusim.runtime;
 
 import gridsim.GridSim;
 import gridsim.Gridlet;
-import gridsim.GridletList;
 import java.util.LinkedList;
 
 public class GpuSimUser extends GridSim {

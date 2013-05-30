@@ -6,7 +6,7 @@ namespace Core
 {
     namespace GridSimConfig
     {
-        class GPUSIM_FE_CORE_EXPORT CGridSimResourceConfig: public Core::Serialization::IJavaXMLSerialize
+        class GPUSIM_FE_CORE_EXPORT CGridSimResourceConfig: public Serialization::IJavaXMLSerialize
         {
         public:
             static const double  c_minCostPerSec;
@@ -15,20 +15,18 @@ namespace Core
             static const quint32 c_minAllocPolicy;
             static const quint32 c_maxAllocPolicy;
             static const double  c_minBaudRate;
-            static const quint64 c_minCount;
+            static const quint32 c_minCount;
 
-            static const QString c_defaultName;
             static const QString c_defaultArch;
             static const QString c_defaultOS;
             static const double  c_defaultCostPerSec;
             static const double  c_defaultTimeZone;
             static const quint32 c_defaultAllocPolicy;
             static const double  c_defaultBaudRate;
-            static const quint64 c_defaultCount;
+            static const quint32 c_defaultCount;
 
         public:
             CGridSimResourceConfig(
-                const QString &name = c_defaultName,
                 const QString &arch = c_defaultArch,
                 const QString &os   = c_defaultOS,
                 double costPerSec   = c_defaultCostPerSec,
@@ -36,15 +34,10 @@ namespace Core
                 qint32 allocPolicy  = c_defaultAllocPolicy,
                 double baudRate     = c_defaultBaudRate,
                 const CGridSimMachinesConfig &machines = CGridSimMachinesConfig(),
-                quint64 count       = c_defaultCount);
+                quint32 count       = c_defaultCount);
 
             bool operator == (const CGridSimResourceConfig& other) const;
             bool operator != (const CGridSimResourceConfig& other) const;
-
-            QString getName() const;
-            void setName(const QString &name);
-
-            static QString buildName(quint32 resourceID);
 
             QString getArch() const;
             void setArch(const QString &arch);
@@ -68,8 +61,8 @@ namespace Core
             const CGridSimMachinesConfig &getMachinesRef() const;
             void setMachines(const CGridSimMachinesConfig &machines);
 
-            quint64 getCount() const;
-            void setCount(quint64 count);
+            quint32 getCount() const;
+            void setCount(quint32 count);
 
             virtual bool isValid() const;
 
@@ -86,10 +79,6 @@ namespace Core
             virtual void copy(const Serialization::IJavaXMLSerializePtr &from);
 
         private:
-            static bool checkName(const QString &name);
-
-        private:
-            QString m_name;
             QString m_arch;
             QString m_os;
             double m_costPerSec;
@@ -97,14 +86,10 @@ namespace Core
             qint32 m_allocPolicy;
             double m_baudRate;
             CGridSimMachinesConfig m_machines;
-            quint64 m_count;
+            quint32 m_count;
 
         private:
-            static const QString c_nameFormat;            
-            static const QString c_nameRegExp;
-
             static const QString c_className;
-            static const QString c_namePropName;
             static const QString c_archPropName;
             static const QString c_osPropName;
             static const QString c_costPerSecPropName;
@@ -118,5 +103,3 @@ namespace Core
         typedef QVector<CGridSimResourceConfig> CGridSimResourcesConfig;
     }
 }
-
-Q_DECLARE_METATYPE(Core::GridSimConfig::CGridSimResourceConfig);

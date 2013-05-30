@@ -8,7 +8,7 @@ public final class GridletsContainer {
     private LinkedList<GridSimGridletConfig> _configs;
     private java.util.ListIterator<GridSimGridletConfig> _itCurrentGC;
     private GridSimGridletConfig _currentConfig;
-    private long _currentConfigGridletsCount;
+    private int _currentConfigGridletsCount;
     private int _currentGridletID;
 
     public GridletsContainer()
